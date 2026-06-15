@@ -5,8 +5,8 @@ export class Trash extends Actor {
     #speed = 200;
     constructor() {
         super({
-            width: 90,
-            height: 40,
+            width: 50,
+            height: 20,
             pos: new Vector(1000, 400),
             vel: new Vector(Math.random() * 30 - 180, 0),
         });
@@ -14,8 +14,8 @@ export class Trash extends Actor {
 
 
     onInitialize(engine) {
-        this.graphics.use(Resources.Trash.toSprite());
-
+        this.graphics.use(Resources.AfvalFragment.toSprite());
+        this.scale = new Vector(0.12, 0.12);
     }
 
 
