@@ -2,7 +2,7 @@ import '../css/style.css'
 import { Actor, Engine, Vector, DisplayMode, SolverStrategy } from "excalibur"
 import { Resources, ResourceLoader } from './resources.js'
 import { Start } from './scenes/start.js'
-import { Level1 } from './scenes/levelone.js'
+import { Level1 } from './scenes/levelone/levelone.js'
 
 export class Game extends Engine {
     
