@@ -1,18 +1,25 @@
-import { Label, Scene } from 'excalibur';
-import { Resources } from '../resources.js'
-import { Background } from "../background/background.js"
-
+import { Scene, Label, Vector } from "excalibur";
 
 export class Start extends Scene {
-    
-    onInitialize(engine) {
-        const background = new Background();
-        this.add(background);
 
-        const nameLabel = new Label({
-            text: "SUSTAINSPHERE",
-        })
+    onInitialize(engine) {
+        const title = new Label({
+            text: "Start",
+            pos: new Vector(50, 20),
+            fontSize: 40
+        });
+
+        this.add(title);
     }
 
+    onActivate(context) {
+    const engine = context.engine;
+
+    engine.input.keyboard.on("press", (evt) => {
+        if (evt.key === "Enter"){
+            engine.goToScene("level1");
+        }
+    })
+}
 
 }
