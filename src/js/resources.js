@@ -15,7 +15,7 @@ const Resources = {
     AfvalSchroef2: new ImageSource('images/afvalschroef2.png'),
     AfvalSchroef3: new ImageSource('images/afvalschroef3.png'),
     AfvalSchroef4: new ImageSource('images/afvalschroef4.png'),
-    Pixelfont: new FontSource('fonts/upheavtt.ttf'),
+    PixelFont: new FontSource('fonts/upheavtt.ttf'),
 }
 
 const ResourceLoader = new Loader()

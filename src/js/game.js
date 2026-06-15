@@ -17,8 +17,8 @@ export class Game extends Engine {
     }
 
     startGame() {
-        // this.addScene("start", new Start());
-        // this.goToScene("start");
+        this.addScene("start", new Start());
+        this.goToScene("start");
         this.add(new Background());
     }
 
