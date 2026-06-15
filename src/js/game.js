@@ -1,17 +1,18 @@
-import '../css/style.css'
 import { Actor, Engine, Vector, DisplayMode, SolverStrategy } from "excalibur"
 import { Resources, ResourceLoader } from './resources.js'
+import { Start } from "./scenes/start.js"
+import { Background } from "./background/background.js"
 
 export class Game extends Engine {
-    
+
 
     constructor() {
-        super({ 
+        super({
             width: 1280,
             height: 720,
             maxFps: 60,
             displayMode: DisplayMode.FitScreen,
-         })
+        })
         this.start(ResourceLoader).then(() => this.startGame())
     }
 
