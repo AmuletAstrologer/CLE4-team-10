@@ -1,23 +1,25 @@
-import { Actor, Engine, Vector, DisplayMode, SolverStrategy } from "excalibur"
-import { Resources, ResourceLoader } from '../resources.js'
-import { Background } from "../background/background.js"
+import { Scene, Label, Vector } from "excalibur";
 
-
-export class Start extends Engine {
-    constructor() {
-        super({
-            width: 1280,
-            height: 720,
-            maxFps: 60,
-            displayMode: DisplayMode.FitScreen,
-        })
-        this.start(ResourceLoader).then(() => this.startGame())
-    }
+export class Start extends Scene {
 
     onInitialize(engine) {
-        const background = new Background();
-        this.add(background);
+        const title = new Label({
+            text: "Start",
+            pos: new Vector(50, 20),
+            fontSize: 40
+        });
+
+        this.add(title);
     }
 
+    onActivate(context) {
+    const engine = context.engine;
+
+    engine.input.keyboard.on("press", (evt) => {
+        if (evt.key === "Enter"){
+            engine.goToScene("level1");
+        }
+    })
+}
 
 }
