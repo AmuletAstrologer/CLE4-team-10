@@ -10,7 +10,6 @@ export class Trash extends Actor {
             height: 1,
             collider: Shape.Box(250, 250),
             collisionType: CollisionType.Active,
-            vel: new Vector(Math.random() * 30 - 180, Math.random() * 10 - 50),
         });
     }
 

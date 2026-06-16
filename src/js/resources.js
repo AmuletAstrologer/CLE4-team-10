@@ -16,7 +16,7 @@ const Resources = {
   AfvalSchroef3: new ImageSource("images/afvalschroef3.png"),
   AfvalSchroef4: new ImageSource("images/afvalschroef4.png"),
   Pixelfont: new FontSource("fonts/upheavtt.ttf"),
-  Haak: new ImageSource("images/haak.png"),
+  Hook: new ImageSource("images/hook.png"),
 };
 
 const ResourceLoader = new Loader();
