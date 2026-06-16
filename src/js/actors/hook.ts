@@ -49,7 +49,10 @@ export class Hook extends Actor {
       this.between(this.pos.x, this.x - 5, this.x + 5) &&
       this.between(this.pos.y, this.y - 5, this.y + 5)
     ) {
-      this.removeAllChildren();
+      if (this.#hasObject) {
+        this.scene?.addScore();
+        this.removeAllChildren();
+      }
 
       this.pos = vec(this.x, this.y);
       this.vel = vec(0, 0);
