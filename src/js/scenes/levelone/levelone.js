@@ -47,13 +47,21 @@ export class Level1 extends Scene {
       new Vector(0, -1),
     ];
 
-    for (const dir of directions) {
-      const bolt = new Bolt();
-      const index = rand.integer(0, sprites.length - 1);
-      bolt.graphics.use(sprites[index]);
-      bolt.vel = dir.scale(speed);
-      bolt.pos = new Vector(x, y);
-      this.add(bolt);
+        for (const dir of directions) {
+            const bolt = new Bolt();
+            const index = rand.integer(0, sprites.length - 1);
+            bolt.graphics.use(sprites[index]);
+            bolt.vel = dir.scale(speed);
+            bolt.pos = new Vector(x, y)
+            this.add(bolt);
+            
+        }
+        thisremoveScore()
+
     }
-  }
+    removeScore(){
+        this.score--;
+        this.ui.updateScore(this.score)
+    }
+
 }
