@@ -49,8 +49,14 @@ export class Level1 extends Scene {
             bolt.vel = dir.scale(speed);
             bolt.pos = new Vector(x, y)
             this.add(bolt);
+            
         }
+        thisremoveScore()
 
+    }
+    removeScore(){
+        this.score--;
+        this.ui.updateScore(this.score)
     }
 
 }
