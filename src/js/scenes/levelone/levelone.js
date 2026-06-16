@@ -56,7 +56,7 @@ export class Level1 extends Scene {
             this.add(bolt);
             
         }
-        thisremoveScore()
+        this.removeScore()
 
     }
     removeScore(){

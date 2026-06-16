@@ -18,11 +18,11 @@ export class Spawner extends Actor {
         ]
 
         const spawnTimer = new Timer({
-            interval: Math.random() * 5000 + 1000,
+            interval: Math.random() * 8000 + 2000,
             fcn: () => {
                 const trash = new Trash();
-
-                trash.pos = new Vector(1000, Math.random() * 400 + 50);
+                trash.vel = new Vector(Math.random() * 30 - 180, Math.random() * 90 - 45)
+                trash.pos = new Vector(1240, Math.random() * 400 + 50);
                 const index = rand.integer(0, sprites.length - 1);
                 trash.graphics.use(sprites[index]);
 
