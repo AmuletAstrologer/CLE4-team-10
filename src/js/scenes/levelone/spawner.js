@@ -1,4 +1,4 @@
-import { Actor, Timer, Vector, Random } from "excalibur"
+import { Actor, Timer, Vector, Random, Color } from "excalibur"
 import { Resources, ResourceLoader } from "../../resources"
 import { Trash } from "../../objects/trash"
 
@@ -18,7 +18,7 @@ export class Spawner extends Actor {
         ]
 
         const spawnTimer = new Timer({
-            interval: Math.random() * 8000 + 2000,
+            interval: 3000,
             fcn: () => {
                 const trash = new Trash();
                 trash.vel = new Vector(Math.random() * 30 - 180, Math.random() * 90 - 45)

@@ -51,6 +51,7 @@ export class Hook extends Actor {
     ) {
       if (this.#hasObject) {
         this.scene?.addScore();
+        this.scene?.addObjective();
         this.removeAllChildren();
       }
 
