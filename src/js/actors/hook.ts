@@ -30,7 +30,7 @@ export class Hook extends Actor {
     this.x = x;
     this.y = y;
 
-    const haakSprite = Resources.Haak.toSprite();
+    const haakSprite = Resources.Hook.toSprite();
     haakSprite.scale = vec(0.2, 0.2);
 
     this.graphics.use(haakSprite);
