@@ -19,14 +19,13 @@ export class Game extends Engine {
     }
 
     startGame() {
-        console.log("ello")
         this.addScene("start", new Start());
         this.addScene("level1", new Level1());
         this.addScene("level1Ending", {
             scene: new Level1Ending(),
             transitions: {
-                in: new FadeInOut({ duration: 1000, direction: 'in', color: Color.Black }),
-                out: new FadeInOut({ duration: 1000, direction: 'out', color: Color.Black })
+                in: new FadeInOut({ duration: 1500, direction: 'in', color: Color.Black }),
+                out: new FadeInOut({ duration: 1500, direction: 'out', color: Color.Black })
             }
         })
         this.goToScene("start");

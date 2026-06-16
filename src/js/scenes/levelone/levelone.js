@@ -10,6 +10,10 @@ import { Background } from "../../background/background.js"
 export class Level1 extends Scene {
     score = 0;
     objective = 0;
+    onDeactivate(context = SceneActivationContext) {
+    this.clear();
+    
+  }
 
     onInitialize(engine) {
         const background = new Background();
