@@ -4,12 +4,27 @@ import { Resources } from "./resources.js";
 
 export class DefeatScreen extends Scene {
 
-    constructor(levelToRestart) {
+
+    constructor() {
         super();
 
-        this.levelToRestart = levelToRestart;
-        console.log(levelToRestart); 
+        this.levelToRestart = null;
     }
+
+    onActivate(context) {
+
+        if (context.data) {
+
+            this.levelToRestart =
+                context.data.restartScene;
+
+            console.log("Restart scene:",
+                this.levelToRestart);
+
+        }
+
+    }
+
 
     onInitialize(engine) {
 
@@ -355,7 +370,7 @@ export class DefeatScreen extends Scene {
                 (delta / 1000);
 
             this.returnMenu.opacity =
-            this.restart.opacity;
+                this.restart.opacity;
 
         }
 

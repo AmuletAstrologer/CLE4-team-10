@@ -5,7 +5,9 @@ import { Start } from './scenes/start.js'
 import { Background } from './background/background.js'
 import { DefeatScreen } from "./defeatscreen.js"
 import { Level1 } from './scenes/levelone/levelone.js'
+import { Level3 } from './scenes/levelthree/levelthree.js'
 import { Level1Ending } from './scenes/levelone/leveloneEnding.js'
+import { Level3Ending } from './scenes/levelthree/levelthreeEnding.js'
 
 export class Game extends Engine {
 
@@ -23,7 +25,18 @@ export class Game extends Engine {
     startGame() {
         this.addScene("start", new Start());
         this.addScene("level1", new Level1());
+        this.addScene("level3", new Level3());
+        this.addScene("defeatscreen", new DefeatScreen());
+
+
         this.addScene("level1Ending", {
+            scene: new Level1Ending(),
+            transitions: {
+                in: new FadeInOut({ duration: 1500, direction: 'in', color: Color.Black }),
+                out: new FadeInOut({ duration: 1500, direction: 'out', color: Color.Black })
+            }
+        }),
+         this.addScene("level3Ending", {
             scene: new Level1Ending(),
             transitions: {
                 in: new FadeInOut({ duration: 1500, direction: 'in', color: Color.Black }),
