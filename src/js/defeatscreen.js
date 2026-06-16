@@ -1,11 +1,18 @@
-import {Scene, Actor,Label, Vector, Font, FontUnit, Color,  Keys} from "excalibur";
+import { Scene, Actor, Label, Vector, Font, FontUnit, Color, Keys } from "excalibur";
 import { Resources } from "./resources.js";
+
 
 export class DefeatScreen extends Scene {
 
+    constructor(levelToRestart) {
+        super();
+
+        this.levelToRestart = levelToRestart;
+        console.log(levelToRestart); 
+    }
+
     onInitialize(engine) {
 
-        // Background
         const bg = new Actor({
             pos: new Vector(0, 0),
             anchor: new Vector(0, 0)
@@ -14,13 +21,20 @@ export class DefeatScreen extends Scene {
         bg.graphics.use(Resources.Background.toSprite());
         this.add(bg);
 
-        // Variables
+
+        // Checks if player already saw defeat scene
+        this.firstDefeat =
+            localStorage.getItem("defeatSeen") === null;
+
+
         this.scrollSpeed = 80;
         this.crawlFinished = false;
         this.time = 0;
         this.crawlLines = [];
+        this.titleTimer = 0;
+        this.titleFadeStarted = false;
 
-        // Title
+
         this.title = new Label({
             text: "YOU GOT DEFEATED...",
             pos: new Vector(640, 100),
@@ -32,8 +46,11 @@ export class DefeatScreen extends Scene {
             })
         });
 
+
         this.title.anchor = new Vector(0.5, 0);
         this.add(this.title);
+
+
 
         // Crawl text
         const lines = [
@@ -67,139 +84,321 @@ export class DefeatScreen extends Scene {
             "A SECOND TIME?"
         ];
 
-        const startY = 900;
-        const spacing = 50;
+        //After first defeat
+        if (this.firstDefeat) {
 
-        for (let i = 0; i < lines.length; i++) {
 
-            const label = new Label({
-                text: lines[i],
-                pos: new Vector(
-                    engine.drawWidth / 2,
-                    startY + (i * spacing)
-                ),
-                font: new Font({
-                    family: "Arial",
-                    size: 36,
-                    unit: FontUnit.Px,
-                    color: Color.White
-                })
-            });
+            const startY = 900;
+            const spacing = 50;
 
-            label.anchor = new Vector(0.5, 0);
 
-            this.add(label);
-            this.crawlLines.push(label);
+            for (let i = 0; i < lines.length; i++) {
+
+
+                const label = new Label({
+
+                    text: lines[i],
+
+                    pos: new Vector(
+                        engine.drawWidth / 2,
+                        startY + (i * spacing)
+                    ),
+
+                    font: new Font({
+                        family: "Arial",
+                        size: 46,
+                        unit: FontUnit.Px,
+                        color: Color.White
+                    })
+
+                });
+
+
+                label.anchor = new Vector(0.5, 0);
+
+
+                this.add(label);
+
+                this.crawlLines.push(label);
+
+            }
+
+
+        }
+        else {
+
+            // Skip story instantly
+            this.crawlFinished = true;
+
         }
 
+
+
+
         // Restart text
+
         this.restart = new Label({
+
             text: "PRESS SPACE TO TRY AGAIN",
+
             pos: new Vector(
                 engine.drawWidth / 2,
                 620
             ),
+
             font: new Font({
+
                 family: "Arial",
                 size: 32,
                 unit: FontUnit.Px,
                 color: Color.White
+
             })
+
         });
 
-        this.restart.anchor = new Vector(0.5, 0.5);
-        this.restart.opacity = 0;
+
+        this.restart.anchor =
+            new Vector(0.5, 0.5);
+
+
+        if (this.firstDefeat) {
+
+            this.restart.opacity = 0;
+
+        }
+        else {
+
+            this.restart.opacity = 1;
+
+        }
+
+
 
         this.add(this.restart);
 
+        this.returnMenu = new Label({
+
+            text: "PRESS X TO RETURN",
+
+            pos: new Vector(
+                engine.drawWidth / 2,
+                660
+            ),
+
+            font: new Font({
+                family: "Arial",
+                size: 28,
+                unit: FontUnit.Px,
+                color: Color.White
+            })
+
+        });
+
+        this.returnMenu.anchor = new Vector(0.5, 0.5);
+        this.returnMenu.opacity = 0;
+
+        this.add(this.returnMenu);
+
+
+
         console.log("I AM DEFEAT!!!");
+
     }
+
+
+
+
 
     onPreUpdate(engine, delta) {
 
         this.time += delta;
 
-        if (!this.crawlFinished) {
+
+        // First time crawl
+
+        if (
+            this.firstDefeat &&
+            !this.crawlFinished
+        ) {
+
 
             let visibleLines = 0;
+
+
 
             for (const line of this.crawlLines) {
 
                 // Move upward
+
                 line.pos.y -=
                     this.scrollSpeed *
                     (delta / 1000);
 
-                // Horizon location
+
                 const horizonY = 120;
 
-                // Scale based on distance
-                const factor = Math.max(
-                    0.15,
-                    (line.pos.y - horizonY) / 900
-                );
+                const scale =
+                    Math.max(
+                        0.15,
+                        (line.pos.y - horizonY) / 900
+                    );
 
-                line.scale = new Vector(
-                    factor,
-                    factor
-                );
 
-                // Slight tilt
-                line.rotation = -0.01;
 
-                // Fade near horizon
-                line.opacity = Math.max(
-                    0,
-                    Math.min(
-                        1,
-                        (line.pos.y - horizonY) / 250
-                    )
-                );
+                line.scale =
+                    new Vector(
+                        scale,
+                        scale
+                    );
 
-                // Count visible lines
+
+
+                // Tilt
+
+                line.rotation = -0.05;
+
+
+
+                // Fade into distance
+
+                line.opacity =
+                    Math.max(
+                        0,
+                        Math.min(
+                            1,
+                            (line.pos.y - horizonY) / 250
+                        )
+                    );
+
+
+
                 if (line.pos.y > -100) {
+
                     visibleLines++;
+
                 }
+
             }
 
-            // When all lines are gone
+
+
+
+
+            // Remove crawl when finished
+
             if (visibleLines === 0) {
+
 
                 this.crawlFinished = true;
 
-                // Remove crawl labels
+
+                localStorage.setItem(
+                    "defeatSeen",
+                    "true"
+                );
+
+
+
                 for (const line of this.crawlLines) {
+
                     line.kill();
+
                 }
 
-                this.title.kill();
+
             }
+
+
         }
 
-        // Fade in restart text
+        // Fade title while crawl is happening
+
+        if (
+            this.firstDefeat &&
+            !this.crawlFinished
+        ) {
+
+            this.titleTimer += delta;
+
+
+            // Start title fading after 30 second
+            if (this.titleTimer > 30000) {
+
+                this.titleFadeStarted = true;
+
+            }
+
+
+            if (this.titleFadeStarted && this.title.opacity > 0) {
+
+                this.title.opacity -= delta / 1000;
+
+            }
+
+        }
+
+
+
+
+
+        // Restart fade in
+
         if (
             this.crawlFinished &&
             this.restart.opacity < 1
         ) {
+
+
             this.restart.opacity +=
-                0.95 * (delta / 1000);
+                0.5 *
+                (delta / 1000);
+
+            this.returnMenu.opacity =
+            this.restart.opacity;
+
         }
 
+
+
+
+
+        // Restart text fade speed
 
         if (this.restart.opacity >= 1) {
 
+
             this.restart.opacity =
                 0.75 +
-                Math.sin(this.time / 250) * 0.25;
+                Math.sin(this.time / 250)
+                * 0.25;
+
+
         }
+
+
+        //localStorage.removeItem("defeatSeen")
+
 
         // Restart
 
-        // if (
-        //     this.crawlFinished &&
-        //     engine.input.keyboard.wasPressed(Keys.Space)
-        // ) {
-        //     engine.goToScene("start");
-        // }
+        if (
+            engine.input.keyboard.wasPressed(Keys.Space)
+        ) {
+
+            engine.goToScene(this.levelToRestart);
+
+        }
+
+        if (
+            engine.input.keyboard.wasPressed(Keys.X)
+        ) {
+
+            engine.goToScene("start");
+
+        }
+
+
     }
+
 }
