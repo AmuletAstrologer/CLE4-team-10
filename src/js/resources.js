@@ -16,6 +16,9 @@ const Resources = {
     AfvalSchroef3: new ImageSource('images/afvalschroef3.png'),
     AfvalSchroef4: new ImageSource('images/afvalschroef4.png'),
     PixelFont: new FontSource('fonts/upheavtt.ttf', 'Upheaval'),
+    StartsceneLabel: new    ImageSource('images/startsceneLabel.png'),
+    Greenbutton: new ImageSource('images/greenbutton.png'),
+    GreenbuttonHover: new ImageSource('images/greenbuttonhover.png'),
 }
 
 const ResourceLoader = new Loader()

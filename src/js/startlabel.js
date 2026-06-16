@@ -10,12 +10,12 @@ export class StartLabel extends Actor {
             text: "SUSTAINSPHERE",
             font: Resources.PixelFont.toFont({
                 unit: FontUnit.Px,
-                size: 28,
+                size: 40,
                 color: Color.White
             })
         });
         this.startlabel.anchor = new Vector(0.5, 0.5);
-        this.pos = new Vector(400, 25);
+        this.pos = new Vector(640, 100);
         this.addChild(this.startlabel);
 
         const metrics = this.startlabel.font.measureText(this.startlabel.text);
