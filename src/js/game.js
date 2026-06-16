@@ -2,6 +2,7 @@ import '../css/style.css'
 import { Actor, Engine, Vector, DisplayMode, SolverStrategy, Keys } from "excalibur"
 import { Resources, ResourceLoader } from './resources.js'
 import { Start } from './scenes/start.js'
+import { Background } from './background/background.js'
 import { DefeatScreen } from "./defeatscreen.js"
 import { Level1 } from './scenes/levelone/levelone.js'
 
@@ -19,10 +20,10 @@ export class Game extends Engine {
     }
 
     startGame() {
-        console.log("ello")
+        // console.log("ello")
         this.addScene("start", new Start());
-        this.addScene("level1", new Level1());
-        this.goToScene("start");
+        // this.addScene("level1", new Level1());
+        // this.goToScene("start");
 
         this.add(new Background());
         

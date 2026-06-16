@@ -1,20 +1,11 @@
-import {
-    Scene,
-    Actor,
-    Label,
-    Vector,
-    Font,
-    FontUnit,
-    Color,
-    Keys
-} from "excalibur";
-
+import {Scene, Actor,Label, Vector, Font, FontUnit, Color,  Keys} from "excalibur";
 import { Resources } from "./resources.js";
 
 export class DefeatScreen extends Scene {
 
     onInitialize(engine) {
 
+        // Background
         const bg = new Actor({
             pos: new Vector(0, 0),
             anchor: new Vector(0, 0)
@@ -23,71 +14,105 @@ export class DefeatScreen extends Scene {
         bg.graphics.use(Resources.Background.toSprite());
         this.add(bg);
 
+        // Variables
         this.scrollSpeed = 80;
         this.crawlFinished = false;
         this.time = 0;
-
-        this.crawl = new Actor({
-            pos: new Vector(640, 850)
-        });
-
-        this.add(this.crawl);
+        this.crawlLines = [];
 
         // Title
-        const title = new Label({
+        this.title = new Label({
             text: "YOU GOT DEFEATED...",
-            pos: new Vector(-220, 0),
+            pos: new Vector(640, 100),
             font: new Font({
                 family: "Arial",
-                size: 42,
+                size: 52,
                 unit: FontUnit.Px,
                 color: Color.White
             })
         });
 
-        // Story text
-        const text1 = new Label({
-            text: "IN A GALAXY FAR... FAR... RIGHT HERE",
-            pos: new Vector(-260, 80),
-            font: new Font({
-                family: "Arial",
-                size: 28,
-                unit: FontUnit.Px,
-                color: Color.White
-            })
-        });
+        this.title.anchor = new Vector(0.5, 0);
+        this.add(this.title);
 
-        const text2 = new Label({
-            text: "SPACE IS DOOMED, HUMANITY IS DOOMED!",
-            pos: new Vector(-260, 150),
-            font: new Font({
-                family: "Arial",
-                size: 28,
-                unit: FontUnit.Px,
-                color: Color.White
-            })
-        });
+        // Crawl text
+        const lines = [
+            "IN A GALAXY FAR... FAR... RIGHT HERE",
+            "",
+            "A TERRIBLE DEFEAT HAS OCCURRED.",
+            "",
+            "THE MISSION HAS FAILED.",
+            "",
+            "THE SHIP IS BROKEN.",
+            "THE CREW IS PANICKING.",
+            "THE ENGINEER CLAIMS THIS IS",
+            "SOMEONE ELSE'S FAULT.",
+            "",
+            "SEVERAL IMPORTANT BUTTONS",
+            "WERE PRESSED.",
+            "",
+            "THE WRONG ONES.",
+            "",
+            "THE ENEMY IS CELEBRATING.",
+            "SPACE IS DOOMED.",
+            "HUMANITY IS PROBABLY DOOMED.",
+            "",
+            "HOWEVER...",
+            "",
+            "THE COMMANDER MAY ATTEMPT",
+            "THIS MISSION ONCE MORE.",
+            "",
+            "AFTER ALL,",
+            "WHAT COULD POSSIBLY GO WRONG",
+            "A SECOND TIME?"
+        ];
 
-        this.crawl.addChild(title);
-        this.crawl.addChild(text1);
-        this.crawl.addChild(text2);
+        const startY = 900;
+        const spacing = 50;
 
-      
+        for (let i = 0; i < lines.length; i++) {
+
+            const label = new Label({
+                text: lines[i],
+                pos: new Vector(
+                    engine.drawWidth / 2,
+                    startY + (i * spacing)
+                ),
+                font: new Font({
+                    family: "Arial",
+                    size: 36,
+                    unit: FontUnit.Px,
+                    color: Color.White
+                })
+            });
+
+            label.anchor = new Vector(0.5, 0);
+
+            this.add(label);
+            this.crawlLines.push(label);
+        }
+
+        // Restart text
         this.restart = new Label({
             text: "PRESS SPACE TO TRY AGAIN",
-            pos: new Vector(420, 650),
+            pos: new Vector(
+                engine.drawWidth / 2,
+                620
+            ),
             font: new Font({
                 family: "Arial",
-                size: 28,
+                size: 32,
                 unit: FontUnit.Px,
                 color: Color.White
             })
         });
 
+        this.restart.anchor = new Vector(0.5, 0.5);
         this.restart.opacity = 0;
+
         this.add(this.restart);
 
-        console.log("I am defeat!!!");
+        console.log("I AM DEFEAT!!!");
     }
 
     onPreUpdate(engine, delta) {
@@ -96,32 +121,80 @@ export class DefeatScreen extends Scene {
 
         if (!this.crawlFinished) {
 
-            this.crawl.pos.y -= this.scrollSpeed * (delta / 1000);
+            let visibleLines = 0;
 
-            const scale = Math.max(
-                0.15,
-                this.crawl.pos.y / 850
-            );
+            for (const line of this.crawlLines) {
 
-            this.crawl.scale = new Vector(scale, scale);
+                // Move upward
+                line.pos.y -=
+                    this.scrollSpeed *
+                    (delta / 1000);
 
-            if (this.crawl.pos.y < 150) {
+                // Horizon location
+                const horizonY = 120;
+
+                // Scale based on distance
+                const factor = Math.max(
+                    0.15,
+                    (line.pos.y - horizonY) / 900
+                );
+
+                line.scale = new Vector(
+                    factor,
+                    factor
+                );
+
+                // Slight tilt
+                line.rotation = -0.01;
+
+                // Fade near horizon
+                line.opacity = Math.max(
+                    0,
+                    Math.min(
+                        1,
+                        (line.pos.y - horizonY) / 250
+                    )
+                );
+
+                // Count visible lines
+                if (line.pos.y > -100) {
+                    visibleLines++;
+                }
+            }
+
+            // When all lines are gone
+            if (visibleLines === 0) {
+
                 this.crawlFinished = true;
-                this.crawl.kill(); 
+
+                // Remove crawl labels
+                for (const line of this.crawlLines) {
+                    line.kill();
+                }
+
+                this.title.kill();
             }
         }
 
-        if (this.crawlFinished && this.restart.opacity < 1) {
-            this.restart.opacity += 0.5 * (delta / 1000);
+        // Fade in restart text
+        if (
+            this.crawlFinished &&
+            this.restart.opacity < 1
+        ) {
+            this.restart.opacity +=
+                0.95 * (delta / 1000);
         }
 
-    
+
         if (this.restart.opacity >= 1) {
+
             this.restart.opacity =
-                0.75 + Math.sin(this.time / 250) * 0.25;
+                0.75 +
+                Math.sin(this.time / 250) * 0.25;
         }
 
-        // Restart game
+        // Restart
+
         // if (
         //     this.crawlFinished &&
         //     engine.input.keyboard.wasPressed(Keys.Space)
