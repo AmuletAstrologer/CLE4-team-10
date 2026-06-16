@@ -24,15 +24,13 @@ export class Hook extends Actor {
     super({
       name: "hook",
       pos: vec(x, y),
-      width: 50,
-      height: 50,
-      collisionType: CollisionType.Passive,
       collider: Shape.Circle(64),
+      collisionType: CollisionType.Passive,
     });
     this.x = x;
     this.y = y;
 
-    const haakSprite = Resources.Haak.toSprite();
+    const haakSprite = Resources.Hook.toSprite();
     haakSprite.scale = vec(0.2, 0.2);
 
     this.graphics.use(haakSprite);
@@ -51,13 +49,15 @@ export class Hook extends Actor {
       this.between(this.pos.x, this.x - 5, this.x + 5) &&
       this.between(this.pos.y, this.y - 5, this.y + 5)
     ) {
-      this.removeAllChildren();
+      if (this.#hasObject) {
+        this.scene?.addScore();
+        this.removeAllChildren();
+      }
 
       this.pos = vec(this.x, this.y);
       this.vel = vec(0, 0);
       this.rotation = 0;
       this.#isMoving = false;
-      // this.#hasObject = false;
     }
 
     if (
@@ -92,8 +92,7 @@ export class Hook extends Actor {
   }
 
   onViewportExit(event: ExitViewPortEvent) {
-    this.vel.x = -this.vel.x;
-    this.vel.y = -this.vel.y;
+    this.actions.moveTo(this.x, this.y, 500);
   }
 
   onCollisionStart(
@@ -103,14 +102,15 @@ export class Hook extends Actor {
     contact: CollisionContact,
   ): void {
     if (other.owner instanceof Trash && !this.#hasObject) {
+      other.owner.body.collisionType = CollisionType.PreventCollision;
       other.owner.vel = vec(0, 0);
       other.owner.pos = vec(-10, -25);
 
       this.addChild(other.owner);
       this.#hasObject = true;
 
-      this.vel.x = -this.vel.x / 5;
-      this.vel.y = -this.vel.y / 5;
+      this.actions.clearActions();
+      this.actions.moveTo(this.x, this.y, 500 / 4);
     }
   }
 
