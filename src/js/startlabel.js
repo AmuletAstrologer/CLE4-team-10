@@ -1,5 +1,6 @@
 import { Color, FontUnit, Actor, Shape, Vector, Label } from "excalibur"
 import { Resources } from "./resources.js"
+import { StartMenu } from "./startmenu.js";
 
 export class StartLabel extends Actor {
     

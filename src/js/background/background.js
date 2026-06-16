@@ -4,6 +4,10 @@ import { DefeatScreen } from "../defeatscreen.js";
 
 
 export class Background extends Actor {
+    constructor() {
+        super({ z: -100});
+    }
+
 
     onInitialize(engine) {
         this.graphics.use(Resources.Background.toSprite());
