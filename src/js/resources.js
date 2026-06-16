@@ -16,9 +16,27 @@ const Resources = {
     AfvalSchroef3: new ImageSource('images/afvalschroef3.png'),
     AfvalSchroef4: new ImageSource('images/afvalschroef4.png'),
     PixelFont: new FontSource('fonts/upheavtt.ttf', 'Upheaval'),
-    StartsceneLabel: new    ImageSource('images/startsceneLabel.png'),
+    StartsceneLabel: new ImageSource('images/startsceneLabel.png'),
     Greenbutton: new ImageSource('images/greenbutton.png'),
     GreenbuttonHover: new ImageSource('images/greenbuttonhover.png'),
+    levelArrows: new ImageSource('images/levelarrows.png'),
+    blueringPlanet: new ImageSource('images/blueringplanet.png'),
+    hoverblueringPlanet: new ImageSource('images/hoverblueringplanet.png'),
+    brownPlanet: new ImageSource('images/brownplanet.png'),
+    darkbluePlanet: new ImageSource('images/darkblueplanet.png'),
+    lightbluePlanet: new ImageSource('images/lightblueplanet.png'),
+    hoverlightbluePlanet: new ImageSource('images/hoverlightblueplanet.png'),
+    orangePlanet: new ImageSource('images/orangeplanet.png'),
+    hoverorangePlanet: new ImageSource('images/hoverorangeplanet.png'),
+    recyclePlanet: new ImageSource('images/recycleplanet.png'),
+    redPlanet: new ImageSource('images/redplanet.png'),
+    hoverredPlanet: new ImageSource('images/hoverredplanet.png'),
+    salmonPlanet: new ImageSource('images/salmonplanet.png'),
+    hoversalmonPlanet: new ImageSource('images/hoversalmonplanet.png'),
+    Star: new ImageSource('images/star.png'),
+    yellowringPlanet: new ImageSource('images/yellowringplanet.png'),
+    hoveryellowringPlanet: new ImageSource('images/hoveryellowringplanet.png'),
+    
 }
 
 const ResourceLoader = new Loader()
