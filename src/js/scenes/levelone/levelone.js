@@ -7,6 +7,7 @@ import { Hook } from "../../actors/hook.ts";
 import { Resources, ResourceLoader } from "../../resources.js";
 import { Background } from "../../background/background.js"
 import { saveScores } from "../../scores.ts";
+import { checkAchievements } from "../../achievements.ts";
 
 export class Level1 extends Scene {
     score = 0;
@@ -49,8 +50,9 @@ export class Level1 extends Scene {
     addObjective() {
         this.objective++;
         this.ui.updateObjective(this.objective);
-        if (this.objective >= 10) {
-            saveScores(this.score, "levelOne")                     
+        if (this.objective >= 1) {
+            saveScores(this.score, "levelOne")
+            checkAchievements()                  
 
             this.engine.goToScene("level1Ending", {
                 sceneActivationData: {

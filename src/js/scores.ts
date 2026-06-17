@@ -30,7 +30,7 @@ export function saveScores(score: number, level: keyof LevelScores): void {
     }
     else{
         localStorage.setItem(
-            "levelScore",
+            "levelScores",
             JSON.stringify(scores)
         )
     }
