@@ -52,6 +52,7 @@ export class Hook extends Actor {
       if (this.#hasObject) {
         // @ts-expect-error
         this.scene?.addScore();
+        this.scene?.addObjective();
         this.removeAllChildren();
       }
 
