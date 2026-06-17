@@ -11,7 +11,7 @@ export class Level1Ending extends Scene {
         this.title = new Label({
             text: `You completed level 1! Your score is ${this.score}`,
             pos: new Vector(engine.halfDrawWidth, 360),
-            font: Resources.Pixelfont.toFont({
+            font: Resources.PixelFont.toFont({
                 unit: FontUnit.Px,
                 size: 40,
                 color: Color.White,
@@ -21,7 +21,7 @@ export class Level1Ending extends Scene {
 
         this.continue = new Text({
             text: `Press spacebar to continue`,
-            font: Resources.Pixelfont.toFont({
+            font: Resources.PixelFont.toFont({
                 unit: FontUnit.Px,
                 size: 32,
                 color: Color.White,
