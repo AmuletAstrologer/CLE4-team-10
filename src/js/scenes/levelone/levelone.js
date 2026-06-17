@@ -6,16 +6,21 @@ import { UI } from "./ui.js";
 import { Hook } from "../../actors/hook.ts";
 import { Resources, ResourceLoader } from "../../resources.js";
 import { Background } from "../../background/background.js"
+import { saveScores } from "../../scores.ts";
 
 export class Level1 extends Scene {
     score = 0;
     objective = 0;
+    levelScores = null;
     onDeactivate(context = SceneActivationContext) {
-    this.clear();
-    
-  }
+        this.clear();
+
+    }
 
     onInitialize(engine) {
+        const savedScores = localStorage.getItem('levelScores')
+        this.levelScores = JSON.parse(savedScores)
+
         const background = new Background();
         this.add(background);
 
@@ -44,7 +49,9 @@ export class Level1 extends Scene {
     addObjective() {
         this.objective++;
         this.ui.updateObjective(this.objective);
-        if (this.objective >= 2) {
+        if (this.objective >= 10) {
+            saveScores(this.score, "levelOne")                     
+
             this.engine.goToScene("level1Ending", {
                 sceneActivationData: {
                     score: this.score
@@ -85,5 +92,6 @@ export class Level1 extends Scene {
         this.score--;
         this.ui.updateScore(this.score)
     }
+
 
 }

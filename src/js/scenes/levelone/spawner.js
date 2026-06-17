@@ -19,7 +19,7 @@ export class Spawner extends Actor {
         ]
 
         const spawnTimer = new Timer({
-            interval: 3000,
+            interval: 3600,
             fcn: () => {
                 const trash = new Trash();
                 trash.vel = new Vector(Math.random() * 30 - 180, Math.random() * 90 - 45)
