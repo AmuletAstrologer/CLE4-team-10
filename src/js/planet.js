@@ -15,10 +15,11 @@ export class Planet extends Actor {
         this.graphics.use(this.sprite.toSprite());
         
         this.scale = this.scale;
-        // this.on('pointerup', () => {
-        //     console.log(`Ga naar level ${this.level}`);
-        //     engine.goToScene(`level${this.level}`);
-        // });
+        this.on('pointerup', () => {
+            console.log(`Ga naar level ${this.level}`);
+            engine.goToScene(this.level);
+            console.log(this.level)
+        });
         this.on('pointerenter', () => {
             this.graphics.use(this.hoversprite.toSprite());
         });

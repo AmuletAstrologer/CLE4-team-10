@@ -30,7 +30,7 @@ export class Start extends Scene {
     engine.input.keyboard.on("press", (evt) => {
         if (evt.key === "Enter"){
             // engine.goToScene("level1");
-            engine.goToScene("level3");
+            // engine.goToScene("level3");
         }
     })
 }

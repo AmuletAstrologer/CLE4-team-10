@@ -28,14 +28,14 @@ export class LevelSummary extends Scene {
             {
                 sprite: Resources.salmonPlanet,
                 hoversprite: Resources.hoversalmonPlanet,
-                //level: "one",
+                level: "level1",
                 scale: new Vector(0.5, 0.5),
                 pos: new Vector(380, 610),
             },
             {
                 sprite: Resources.yellowringPlanet,
                 hoversprite: Resources.hoveryellowringPlanet,
-                //level: "three",
+                level: "level3",
                 scale: new Vector(0.5, 0.5),
                 pos: new Vector(700, 590),
             },
