@@ -1,0 +1,51 @@
+import { Actor, Timer, Vector, Random, Color } from "excalibur"
+import { Resources, ResourceLoader } from "../../resources"
+import { Trash } from "../../objects/trash"
+
+export class Spawner extends Actor {
+    onInitialize(engine) {
+        const rand = new Random(1244)
+        const sprites = [
+            Resources.AfvalAirtank(),
+            Resources.AfvalCilinder(),
+            Resources.AfvalPlaat(),
+            Resources.AfvalSatelliet()
+        ]
+
+        const metalTrash = [
+    {
+        name: "AIR TANK",
+        sprite: Resources.AfvalAirtank.toSprite()
+    },
+    {
+        name: "CYLINDER",
+        sprite: Resources.AfvalCilinder.toSprite()
+    },
+    {
+        name: "PLATE",
+        sprite: Resources.AfvalPlaat.toSprite()
+    },
+    {
+        name: "SATELLITE",
+        sprite: Resources.AfvalSatelliet.toSprite()
+    }
+];
+
+        const spawnTimer = new Timer({
+            interval: 3000,
+            fcn: () => {
+                const trash = new Trash();
+                trash.vel = new Vector(Math.random() * 30 - 180, Math.random() * 90 - 45)
+                trash.pos = new Vector(1240, Math.random() * 400 + 50);
+                const index = rand.integer(0, sprites.length - 1);
+                trash.graphics.use(sprites[index]);
+
+                engine.currentScene.add(trash);
+            },
+            repeats: true
+        });
+
+        engine.currentScene.add(spawnTimer);
+        spawnTimer.start();
+    }
+}
