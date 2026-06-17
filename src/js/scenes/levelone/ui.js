@@ -13,7 +13,7 @@ export class UI extends Actor {
         this.#label1 = new Label({
             text: "Score: 0",
             pos: new Vector(1130, 30),
-            font: Resources.Pixelfont.toFont({
+            font: Resources.PixelFont.toFont({
                 unit: FontUnit.Px,
                 size: 32,
                 color: Color.White
@@ -24,7 +24,7 @@ export class UI extends Actor {
          this.#objective = new Label({
             text: "0/10",
             pos: new Vector(600, 30),
-            font: Resources.Pixelfont.toFont({
+            font: Resources.PixelFont.toFont({
                 unit: FontUnit.Px,
                 size: 40,
                 color: Color.White
