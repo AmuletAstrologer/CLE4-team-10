@@ -1,6 +1,7 @@
 import { Actor, Timer, Vector, Random, Color } from "excalibur"
 import { Resources, ResourceLoader } from "../../resources"
 import { Trash } from "../../objects/trash"
+import { Meteor } from "../../objects/meteor"
 
 export class Spawner extends Actor {
     onInitialize(engine) {
@@ -18,7 +19,7 @@ export class Spawner extends Actor {
         ]
 
         const spawnTimer = new Timer({
-            interval: 3000,
+            interval: 3600,
             fcn: () => {
                 const trash = new Trash();
                 trash.vel = new Vector(Math.random() * 30 - 180, Math.random() * 90 - 45)
@@ -27,6 +28,12 @@ export class Spawner extends Actor {
                 trash.graphics.use(sprites[index]);
 
                 engine.currentScene.add(trash);
+                if (Math.random() < 0.2){
+                    const meteor = new Meteor();
+                    meteor.vel = new Vector(-(Math.random() * 600 + 80), 0)
+                    meteor.pos = new Vector(1240, Math.floor(Math.random() * 401) + 200)
+                    engine.currentScene.add(meteor)
+                }
             },
             repeats: true
         });

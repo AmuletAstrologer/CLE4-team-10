@@ -16,10 +16,7 @@ export class Trash extends Actor {
 
     onInitialize(engine) {
         this.scale = new Vector(0.12, 0.12);
-        this.on('pointerdown', () => {
-            this.kill()
-            this.scene?.addScore()
-        });
+    
 
         this.on('collisionstart', (e) => {
             if (e.other.owner instanceof Trash) {

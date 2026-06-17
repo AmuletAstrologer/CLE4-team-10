@@ -12,6 +12,7 @@ import {
 } from "excalibur";
 import { Resources } from "../resources.js";
 import { Trash } from "../objects/trash.js";
+import { Meteor } from "../objects/meteor.js";
 
 export class Hook extends Actor {
   #moveTime = 0;
@@ -112,6 +113,10 @@ export class Hook extends Actor {
       this.#hasObject = true;
 
       this.actions.clearActions();
+      this.actions.moveTo(this.x, this.y, 500 / 4);
+    }
+    if (other.owner instanceof Meteor) {
+      this.#hasObject = true;
       this.actions.moveTo(this.x, this.y, 500 / 4);
     }
   }
