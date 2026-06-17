@@ -6,16 +6,30 @@ export class Spawner extends Actor {
     onInitialize(engine) {
         const rand = new Random(1244)
         const sprites = [
-            Resources.AfvalAirtank.toSprite(),
-            Resources.AfvalCilinder.toSprite(),
-            Resources.AfvalFragment.toSprite(),
-            Resources.AfvalHaak.toSprite(),
-            Resources.AfvalHelm.toSprite(),
-            Resources.AfvalModule.toSprite(),
-            Resources.AfvalPaneel.toSprite(),
-            Resources.AfvalPlaat.toSprite(),
-            Resources.AfvalSatelliet.toSprite()
+            Resources.AfvalAirtank(),
+            Resources.AfvalCilinder(),
+            Resources.AfvalPlaat(),
+            Resources.AfvalSatelliet()
         ]
+
+        const metalTrash = [
+    {
+        name: "AIR TANK",
+        sprite: Resources.AfvalAirtank.toSprite()
+    },
+    {
+        name: "CYLINDER",
+        sprite: Resources.AfvalCilinder.toSprite()
+    },
+    {
+        name: "PLATE",
+        sprite: Resources.AfvalPlaat.toSprite()
+    },
+    {
+        name: "SATELLITE",
+        sprite: Resources.AfvalSatelliet.toSprite()
+    }
+];
 
         const spawnTimer = new Timer({
             interval: 3000,
