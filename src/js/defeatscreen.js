@@ -152,7 +152,7 @@ export class DefeatScreen extends Scene {
 
         this.restart = new Label({
 
-            text: "PRESS SPACE TO TRY AGAIN",
+            text: "PRESS ENTER TO TRY AGAIN",
 
             pos: new Vector(
                 engine.drawWidth / 2,
@@ -392,7 +392,7 @@ export class DefeatScreen extends Scene {
         // Restart
 
         if (
-            engine.input.keyboard.wasPressed(Keys.Space)
+            engine.input.keyboard.wasPressed(Keys.Enter)
         ) {
 
             engine.goToScene(this.levelToRestart);
