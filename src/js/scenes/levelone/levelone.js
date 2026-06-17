@@ -44,7 +44,7 @@ export class Level1 extends Scene {
     addObjective() {
         this.objective++;
         this.ui.updateObjective(this.objective);
-        if (this.objective >= 10) {
+        if (this.objective >= 2) {
             this.engine.goToScene("level1Ending", {
                 sceneActivationData: {
                     score: this.score

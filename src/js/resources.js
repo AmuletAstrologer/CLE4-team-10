@@ -1,4 +1,5 @@
 import { ImageSource, Sound, Resource, Loader, FontSource } from "excalibur";
+import { Meteor } from "./objects/meteor";
 
 const Resources = {
   Background: new ImageSource("images/background.png"),
@@ -15,6 +16,8 @@ const Resources = {
   AfvalSchroef2: new ImageSource("images/afvalschroef2.png"),
   AfvalSchroef3: new ImageSource("images/afvalschroef3.png"),
   AfvalSchroef4: new ImageSource("images/afvalschroef4.png"),
+  SpaceAfval: new ImageSource("images/generiekAfval.png"),
+  Meteor: new ImageSource("images/meteor.png"),
   Pixelfont: new FontSource("fonts/upheavtt.ttf"),
   Hook: new ImageSource("images/hook.png"),
 };
