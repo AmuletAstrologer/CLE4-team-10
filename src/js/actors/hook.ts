@@ -51,8 +51,18 @@ export class Hook extends Actor {
       this.between(this.pos.y, this.y - 5, this.y + 5)
     ) {
       if (this.#hasObject) {
+        if (this.children.length > 0) {
+          const scrap = localStorage.getItem("scrap");
+          if (scrap !== null) {
+            localStorage.setItem("scrap", (Number(scrap) + 1).toString());
+          } else {
+            localStorage.setItem("scrap", "1");
+          }
+        }
+
         // @ts-expect-error
         this.scene?.addScore();
+        // @ts-expect-error
         this.scene?.addObjective();
         this.removeAllChildren();
       }
