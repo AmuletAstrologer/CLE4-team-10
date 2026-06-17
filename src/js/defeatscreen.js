@@ -53,10 +53,9 @@ export class DefeatScreen extends Scene {
         this.title = new Label({
             text: "YOU GOT DEFEATED...",
             pos: new Vector(640, 100),
-            font: new Font({
-                family: "Arial",
-                size: 52,
+            font: Resources.PixelFont.toFont({
                 unit: FontUnit.Px,
+                size: 52,
                 color: Color.White
             })
         });
@@ -119,10 +118,9 @@ export class DefeatScreen extends Scene {
                         startY + (i * spacing)
                     ),
 
-                    font: new Font({
-                        family: "Arial",
-                        size: 46,
+                    font: Resources.PixelFont.toFont({
                         unit: FontUnit.Px,
+                        size: 46,
                         color: Color.White
                     })
 
@@ -154,20 +152,17 @@ export class DefeatScreen extends Scene {
 
         this.restart = new Label({
 
-            text: "PRESS SPACE TO TRY AGAIN",
+            text: "PRESS ENTER TO TRY AGAIN",
 
             pos: new Vector(
                 engine.drawWidth / 2,
                 620
             ),
 
-            font: new Font({
-
-                family: "Arial",
-                size: 32,
+             font: Resources.PixelFont.toFont({
                 unit: FontUnit.Px,
+                size: 32,
                 color: Color.White
-
             })
 
         });
@@ -201,10 +196,9 @@ export class DefeatScreen extends Scene {
                 660
             ),
 
-            font: new Font({
-                family: "Arial",
-                size: 28,
+             font: Resources.PixelFont.toFont({
                 unit: FontUnit.Px,
+                size: 28,
                 color: Color.White
             })
 
@@ -398,7 +392,7 @@ export class DefeatScreen extends Scene {
         // Restart
 
         if (
-            engine.input.keyboard.wasPressed(Keys.Space)
+            engine.input.keyboard.wasPressed(Keys.Enter)
         ) {
 
             engine.goToScene(this.levelToRestart);
