@@ -21,7 +21,7 @@ export class LevelSummary extends Scene {
             {
                 sprite: Resources.recyclePlanet,
                 hoversprite: Resources.hoverrecyclePlanet,
-                //level: "recyclemenu",
+                level: "recyclemenu",
                 scale: new Vector(0.7, 0.7),
                 pos: new Vector(150, 110),
             },
@@ -30,7 +30,7 @@ export class LevelSummary extends Scene {
                 hoversprite: Resources.hoversalmonPlanet,
                 level: "level1",
                 scale: new Vector(0.5, 0.5),
-                pos: new Vector(380, 610),
+                pos: new Vector(365, 625),
             },
             {
                 sprite: Resources.yellowringPlanet,
@@ -42,21 +42,21 @@ export class LevelSummary extends Scene {
             {
                 sprite: Resources.lightbluePlanet,
                 hoversprite: Resources.hoverlightbluePlanet,
-                //level: "four",
+                level: "four",
                 scale: new Vector(0.6, 0.6),
                 pos: new Vector(485, 345),
             },
             {
                 sprite: Resources.orangePlanet,
                 hoversprite: Resources.hoverorangePlanet,
-                //level: "five",
+                level: "five",
                 scale: new Vector(0.4, 0.4),
                 pos: new Vector(1015, 405),
             },
             {
                 sprite: Resources.blueringPlanet,
                 hoversprite: Resources.hoverblueringPlanet,
-                //level: "six",
+                level: "six",
                 scale: new Vector(0.5, 0.5),
                 pos: new Vector(840, 80),
             },
