@@ -6,6 +6,7 @@ import { Background } from './background/background.js'
 import { DefeatScreen } from "./defeatscreen.js"
 import { Level1 } from './scenes/levelone/levelone.js'
 import { Level3 } from './scenes/levelthree/levelthree.js'
+import { RecycleMenu } from "./scenes/recyclemenu/recyclemenu.js";
 import { Level1Ending } from './scenes/levelone/leveloneEnding.js'
 import { Level3Ending } from './scenes/levelthree/levelthreeEnding.js'
 import { LevelSummary } from "./scenes/levelsummary.js"
@@ -48,6 +49,7 @@ export class Game extends Engine {
         this.goToScene("start");
     }
 
+    this.addScene("levelrecyclemenu", new RecycleMenu());
 }
 
-new Game()
+new Game();
