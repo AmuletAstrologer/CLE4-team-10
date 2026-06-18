@@ -3,6 +3,7 @@ import { Actor, Engine, Vector, DisplayMode, SolverStrategy, Transition, Color, 
 import { Resources, ResourceLoader } from './resources.js'
 import { Start } from './scenes/start.js'
 import { Level1 } from './scenes/levelone/levelone.js'
+import { RecycleMenu } from "./scenes/recyclemenu/recyclemenu.js";
 import { Level1Ending } from './scenes/levelone/leveloneEnding.js'
 
 export class Game extends Engine {
@@ -31,6 +32,7 @@ export class Game extends Engine {
         this.goToScene("start");
     }
 
+    this.addScene("levelrecyclemenu", new RecycleMenu());
 }
 
-new Game()
+new Game();
