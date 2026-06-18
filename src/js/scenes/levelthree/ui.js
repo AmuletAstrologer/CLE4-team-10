@@ -1,10 +1,10 @@
 import { Actor, Color, FontUnit, Label, Vector } from "excalibur"
-import { Resources, ResourceLoader } from "../../resources";
+import { Resources } from "../../resources";
 
 export class UI extends Actor {
     #label1;
     #objective
-    constructor() {
+    constructor(shot) {
         super({
         })
     }
@@ -21,7 +21,7 @@ export class UI extends Actor {
         })
         this.addChild(this.#label1)
 
-        this.#objective = new Label({
+         this.#objective = new Label({
             text: "0/10",
             pos: new Vector(600, 30),
             font: Resources.PixelFont.toFont({
@@ -31,22 +31,12 @@ export class UI extends Actor {
             })
         })
         this.addChild(this.#objective)
-
-        const objectiveIcon = new Actor({
-            pos: new Vector(670, 0),
-            anchor: Vector.Zero
-        });
-        const objectiveSprite = Resources.SpaceAfval.toSprite();
-        objectiveSprite.destSize = { width: 100, height: 100 }
-        objectiveIcon.graphics.use(objectiveSprite);
-        
-        this.addChild(objectiveIcon);
     }
 
     updateScore(score) {
         this.#label1.text = `Score: ${score}`
     }
-    updateObjective(objective) {
+    updateObjective(objective){
         this.#objective.text = `${objective}/10`
     }
 }

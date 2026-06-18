@@ -13,7 +13,7 @@ import {
 import { Resources } from "../../resources.js";
 import { PlusIcon } from "./plusIcon.js";
 
-type UpgradeTypes =
+export type UpgradeTypes =
   | "moreHookSpace"
   | "moreHookGetSpeed"
   | "moreHookThrowSpeed"
@@ -161,11 +161,11 @@ export class RecycleCard extends Actor {
       if (scrap !== null) {
         newScrap = Number(scrap);
 
-        if (this.getUpgradeCosts() < newScrap) {
+        if (this.getUpgradeCosts() <= newScrap) {
           newScrap = newScrap - this.getUpgradeCosts();
           this.pushToLocalStorage(
             this.#upgradeType,
-            this.getValueFromLocalStorage(this.#upgradeType) + 1,
+            RecycleCard.getValueFromLocalStorage(this.#upgradeType) + 1,
           );
 
           localStorage.setItem("scrap", newScrap.toString());
@@ -178,7 +178,7 @@ export class RecycleCard extends Actor {
   }
 
   onPreUpdate(engine: Engine, elapsed: number): void {
-    this.#upgradeLevelLabel.text = this.getValueFromLocalStorage(
+    this.#upgradeLevelLabel.text = RecycleCard.getValueFromLocalStorage(
       this.#upgradeType,
     ).toString();
 
@@ -200,7 +200,7 @@ export class RecycleCard extends Actor {
     this.#borderColor = "#C6DCFF60";
   }
 
-  getValueFromLocalStorage(upgradeType: UpgradeTypes): number {
+  public static getValueFromLocalStorage(upgradeType: UpgradeTypes): number {
     const localUpgrades = localStorage.getItem("upgrades");
     let returnValue = 0;
 
@@ -254,8 +254,8 @@ export class RecycleCard extends Actor {
 
   getUpgradeCosts(): number {
     return (
-      this.getValueFromLocalStorage(this.#upgradeType) *
-        this.getValueFromLocalStorage(this.#upgradeType) *
+      RecycleCard.getValueFromLocalStorage(this.#upgradeType) *
+        RecycleCard.getValueFromLocalStorage(this.#upgradeType) *
         2 +
       5
     );
