@@ -13,10 +13,7 @@ import {
 import { Resources } from "../resources.js";
 import { Trash } from "../objects/trash.js";
 import { Meteor } from "../objects/meteor.js";
-import {
-  UpgradeTypes,
-  RecycleCard,
-} from "../scenes/recyclemenu/recyclecard.js";
+import { ScrapManager } from "../lib/scrapmanager.js";
 
 export class Hook extends Actor {
   #moveTime = 0;
@@ -54,22 +51,17 @@ export class Hook extends Actor {
       this.between(this.pos.x, this.x - 5, this.x + 5) &&
       this.between(this.pos.y, this.y - 5, this.y + 5)
     ) {
-      if (this.#amountOfObjects > 0) {
-        if (this.children.length > 0) {
-          for (const child in this.children) {
-            const scrap = localStorage.getItem("scrap");
-            if (scrap !== null) {
-              localStorage.setItem("scrap", (Number(scrap) + 1).toString());
-            } else {
-              localStorage.setItem("scrap", "1");
-            }
-          }
+      if (this.children.length > 0) {
+        for (const child in this.children) {
+          ScrapManager.addScrap();
+          // @ts-expect-error
+          this.scene?.addScore();
+          // @ts-expect-error
+          this.scene?.addObjective();
         }
+      }
 
-        // @ts-expect-error
-        this.scene?.addScore();
-        // @ts-expect-error
-        this.scene?.addObjective();
+      if (this.#amountOfObjects > 0) {
         this.removeAllChildren();
       }
 
@@ -101,10 +93,12 @@ export class Hook extends Actor {
 
       this.vel.x =
         dx *
-        (500 + RecycleCard.getValueFromLocalStorage("moreHookThrowSpeed") * 50);
+        (500 +
+          ScrapManager.getValueFromLocalStorage("moreHookThrowSpeed") * 50);
       this.vel.y =
         dy *
-        (500 + RecycleCard.getValueFromLocalStorage("moreHookThrowSpeed") * 50);
+        (500 +
+          ScrapManager.getValueFromLocalStorage("moreHookThrowSpeed") * 50);
 
       this.#moveTime = 500;
       this.#isMoving = true;
@@ -127,7 +121,7 @@ export class Hook extends Actor {
     if (
       other.owner instanceof Trash &&
       this.#amountOfObjects <
-        1 + RecycleCard.getValueFromLocalStorage("moreHookSpace")
+        1 + ScrapManager.getValueFromLocalStorage("moreHookSpace")
     ) {
       other.owner.body.collisionType = CollisionType.PreventCollision;
       other.owner.vel = vec(0, 0);
@@ -146,7 +140,7 @@ export class Hook extends Actor {
     }
     if (other.owner instanceof Meteor) {
       this.#amountOfObjects =
-        1 + RecycleCard.getValueFromLocalStorage("moreHookSpace");
+        1 + ScrapManager.getValueFromLocalStorage("moreHookSpace");
       // this.#hasObject = true;
       // this.actions.moveTo(
       //   this.x,
@@ -159,13 +153,14 @@ export class Hook extends Actor {
 
     if (
       this.#amountOfObjects >=
-      1 + RecycleCard.getValueFromLocalStorage("moreHookSpace")
+      1 + ScrapManager.getValueFromLocalStorage("moreHookSpace")
     ) {
       this.actions.clearActions();
       this.actions.moveTo(
         this.x,
         this.y,
-        500 / 4 + RecycleCard.getValueFromLocalStorage("moreHookGetSpeed") * 25,
+        500 / 4 +
+          ScrapManager.getValueFromLocalStorage("moreHookGetSpeed") * 25,
       );
     }
   }
