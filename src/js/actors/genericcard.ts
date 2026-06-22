@@ -1,4 +1,12 @@
-import { Actor, Engine, vec, Canvas, PointerEvent, Vector } from "excalibur";
+import {
+  Actor,
+  Engine,
+  Shape,
+  vec,
+  Canvas,
+  PointerEvent,
+  Vector,
+} from "excalibur";
 
 export class GenericCard extends Actor {
   #width: number;
@@ -24,6 +32,8 @@ export class GenericCard extends Actor {
       width: config.width,
       height: config.height,
     });
+
+    this.collider.set(Shape.Box(config.width, config.height));
     this.#width = config.width;
     this.#height = config.height;
 

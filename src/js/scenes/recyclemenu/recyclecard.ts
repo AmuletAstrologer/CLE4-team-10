@@ -90,6 +90,10 @@ export class RecycleCard extends GenericCard {
     });
   }
 
+  buyItem() {
+    ScrapManager.doUpgrade(this.#upgradeType);
+  }
+
   onPreUpdate(engine: Engine, elapsed: number): void {
     this.#upgradeLevelLabel.text = ScrapManager.getUpgradeLevel(
       this.#upgradeType,

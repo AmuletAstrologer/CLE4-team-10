@@ -1,4 +1,4 @@
-import { Actor, Canvas, Color, Vector } from "excalibur";
+import { Actor, Canvas, Color, Shape, Vector } from "excalibur";
 
 export class PlusIcon extends Actor {
   #color: string;
@@ -17,6 +17,7 @@ export class PlusIcon extends Actor {
       width: config.size,
       height: config.size,
     });
+    this.collider.set(Shape.Box(config.size, config.size));
     this.#color = config.color;
     this.#hoverColor = config.hoverColor;
 

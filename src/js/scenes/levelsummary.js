@@ -85,7 +85,9 @@ export class LevelSummary extends Scene {
     });
     const gamepad = engine.input.gamepads.at(0);
     if (gamepad?.wasButtonPressed(Buttons.Face1)) {
-      this.hovered.events.emit("pointerup");
+      if (this.hovered instanceof Planet) {
+        this.hovered.events.emit("pointerup");
+      }
     }
   }
 }

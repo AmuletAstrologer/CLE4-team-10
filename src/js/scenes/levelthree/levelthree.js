@@ -1,4 +1,4 @@
-import { Scene, Label, Vector, Random } from "excalibur";
+import { Scene, Label, Vector, Random, Buttons } from "excalibur";
 import { Bolt } from "../../objects/bolts.js";
 import { Spawner } from "./spwaner.js";
 import { UI } from "./ui.js";
@@ -16,7 +16,7 @@ export class Level3 extends BaseScene {
 
   onInitialize(engine) {
     this.engine = engine;
-    this.createLevel();
+    // this.createLevel();
   }
 
   onActivate() {
@@ -74,5 +74,11 @@ export class Level3 extends BaseScene {
     this.score--;
 
     this.ui.updateScore(this.score);
+  }
+  onPreUpdate(engine) {
+    const gamepad = engine.input.gamepads.at(0);
+    if (gamepad?.wasButtonPressed(Buttons.Face2)) {
+      engine.goToScene("levels");
+    }
   }
 }
