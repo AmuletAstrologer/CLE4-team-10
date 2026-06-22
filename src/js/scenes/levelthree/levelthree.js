@@ -5,19 +5,21 @@ import { UI } from "./ui.js";
 import { Hook } from "../../actors/hook.ts";
 import { Resources } from "../../resources.js";
 import { Background } from "../../background/background.js";
+import { BaseScene, createGame } from "../../objects/createGame.ts";
+import { saveScores } from "../../scores.ts";
+import { checkAchievements } from "../../achievements.ts";
 
 //Metal Level
 
-export class Level3 extends Scene {
+export class Level3 extends BaseScene {
 
-    score = 0;
-    objective = 0;
+    levelNumber = 3
 
 
     onInitialize(engine) {
 
         this.engine = engine;
-        this.createLevel();
+        this.createLevel2();
     }
 
 
@@ -31,167 +33,180 @@ export class Level3 extends Scene {
             actor.kill();
         });
 
-    
-        this.createLevel();
+
+        this.createLevel2();
 
     }
-
-
-
-    createLevel() {
-
-        const background = new Background();
-        this.add(background);
-
-        const title = new Label({
-            text: "Level Three",
-            pos: new Vector(50, 20),
-            fontSize: 40
-        });
-
-
-        this.add(title);
-
+    createLevel2() {
         this.ui = new UI();
-        this.add(this.ui);
         this.spawner = new Spawner();
-        this.add(this.spawner);
-        this.hook = new Hook();
-        this.add(this.hook);
-
-
-    }
-
-
-
-
-    addScore() {
-        this.score++;
-
-        this.ui.updateScore(
-            this.score
+        const { hook } = createGame(
+            this,
+            this.spawner,
+            this.ui,
+            "Level Three"
         );
 
+        this.hook = hook;
     }
 
 
 
 
-    addObjective() {
+// createLevel() {
 
-        this.objective++;
+//     const background = new Background();
+//     this.add(background);
 
-        this.ui.updateObjective(
-            this.objective
+//     const title = new Label({
+//         text: "Level Three",
+//         pos: new Vector(50, 20),
+//         fontSize: 40
+//     });
+
+
+//     this.add(title);
+
+//     this.ui = new UI();
+//     this.add(this.ui);
+//     this.spawner = new Spawner();
+//     this.add(this.spawner);
+//     this.hook = new Hook();
+//     this.add(this.hook);
+
+
+// }
+
+
+
+
+// addScore() {
+//     this.score++;
+
+//     this.ui.updateScore(
+//         this.score
+//     );
+
+// }
+
+
+
+
+// addObjective() {
+
+//     this.objective++;
+
+//     this.ui.updateObjective(
+//         this.objective
+//     );
+
+
+
+//     if (this.objective >= 10) {
+
+
+//         this.engine.goToScene(
+//             "level3Ending",
+//             {
+//                 sceneActivationData: {
+//                     score: this.score
+
+//                 }
+//             }
+//         );
+//     }
+
+
+//     if (this.objective === 1) {
+
+
+//         this.engine.goToScene(
+//             "defeatscreen",
+//             {
+
+//                 sceneActivationData: {
+//                     score: this.score,
+//                     restartScene: "level3"
+
+//                 }
+
+//             }
+
+//         );
+
+//     }
+
+// }
+
+
+
+
+
+onCollision(x, y) {
+
+    const rand = new Random(1244)
+    const speed = 200;
+
+    const sprites = [
+        Resources.AfvalSchroef1.toSprite(),
+        Resources.AfvalSchroef2.toSprite(),
+        Resources.AfvalSchroef3.toSprite(),
+        Resources.AfvalSchroef4.toSprite(),
+
+    ];
+
+
+
+    const directions = [
+
+        new Vector(1, 0),
+        new Vector(-1, 0),
+        new Vector(0, 1),
+        new Vector(0, -1)
+
+    ];
+
+
+
+    for (const dir of directions) {
+
+        const bolt = new Bolt();
+        const index =
+            rand.integer(
+                0,
+                sprites.length - 1
+            );
+
+
+        bolt.graphics.use(
+            sprites[index]
         );
 
 
-
-        if (this.objective >= 10) {
-
-
-            this.engine.goToScene(
-                "level3Ending",
-                {
-                    sceneActivationData: {
-                        score: this.score
-
-                    }
-                }
-            );
-        }
-
-
-        if (this.objective === 1) {
-
-
-            this.engine.goToScene(
-                "defeatscreen",
-                {
-
-                    sceneActivationData: {
-                        score: this.score,
-                        restartScene: "level3"
-
-                    }
-
-                }
-
-            );
-
-        }
+        bolt.vel =
+            dir.scale(speed);
+        bolt.pos =
+            new Vector(x, y);
+        this.add(bolt);
 
     }
 
+    this.removeScore();
 
-
-
-
-    onCollision(x, y) {
-
-        const rand = new Random(1244)
-        const speed = 200;
-
-        const sprites = [
-            Resources.AfvalSchroef1.toSprite(),
-            Resources.AfvalSchroef2.toSprite(),
-            Resources.AfvalSchroef3.toSprite(),
-            Resources.AfvalSchroef4.toSprite(),
-
-        ];
-
-
-
-        const directions = [
-
-            new Vector(1,0),
-            new Vector(-1,0),
-            new Vector(0,1),
-            new Vector(0,-1)
-
-        ];
-
-
-
-        for (const dir of directions) {
-
-            const bolt = new Bolt();
-            const index =
-                rand.integer(
-                    0,
-                    sprites.length - 1
-                );
-
-
-            bolt.graphics.use(
-                sprites[index]
-            );
-
-
-            bolt.vel =
-                dir.scale(speed);
-            bolt.pos =
-                new Vector(x,y);
-            this.add(bolt);
-
-        }
-
-        this.removeScore();
-
-    }
+}
 
 
 
 
 
-    removeScore() {
-        this.score--;
+removeScore() {
+    this.score--;
 
-        this.ui.updateScore(
-            this.score
-        );
+    this.ui.updateScore(
+        this.score
+    );
 
 
-    }
+}
 
 }

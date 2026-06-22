@@ -17,6 +17,7 @@ import {
   UpgradeTypes,
   RecycleCard,
 } from "../scenes/recyclemenu/recyclecard.js";
+import { BaseScene } from "../objects/createGame.js";
 
 export class Hook extends Actor {
   #moveTime = 0;
@@ -64,10 +65,10 @@ export class Hook extends Actor {
           }
         }
 
-        // @ts-expect-error
-        this.scene?.addScore();
-        // @ts-expect-error
-        this.scene?.addObjective();
+
+        (this.scene as BaseScene)?.addScore?.();
+
+        (this.scene as BaseScene)?.addObjective();
         this.removeAllChildren();
       }
 
