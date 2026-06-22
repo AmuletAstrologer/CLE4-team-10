@@ -1,71 +1,46 @@
 import {
-  Actor,
   Engine,
   vec,
-  Canvas,
   TextAlign,
   Color,
   FontUnit,
   Label,
-  PointerEvent,
+  Vector,
   BaseAlign,
 } from "excalibur";
 import { Resources } from "../../resources.js";
 import { PlusIcon } from "./plusIcon.js";
+import { UpgradeTypes, ScrapManager } from "../../lib/scrapmanager.js";
+import { GenericCard } from "../../actors/genericcard.js";
 
-export type UpgradeTypes =
-  | "moreHookSpace"
-  | "moreHookGetSpeed"
-  | "moreHookThrowSpeed"
-  | "";
-
-type UpgradeObject = [
-  {
-    name: UpgradeTypes;
-    value: number;
-  },
-];
-
-export class RecycleCard extends Actor {
-  #width: number;
-  #height: number;
-  #cornerRadius = 20;
-  #borderWidth = 4;
-
-  #backgroundColor = "#305bab99";
-  #borderColor = "#C6DCFF60";
-
+export class RecycleCard extends GenericCard {
   #upgradeType: UpgradeTypes;
 
   #upgradeLevelLabel = new Label({
-    text: "6",
     pos: vec(-275, -2),
+    color: Color.White,
     font: Resources.PixelFont.toFont({
       size: 50,
       unit: FontUnit.Px,
       textAlign: TextAlign.Center,
       baseAlign: BaseAlign.Middle,
-      color: Color.White,
     }),
   });
 
   #upgradeNameLabel = new Label({
-    text: "Add to card",
     pos: vec(0, -15),
+    color: Color.White,
     font: Resources.PixelFont.toFont({
       size: 30,
       unit: FontUnit.Px,
       textAlign: TextAlign.Center,
       baseAlign: BaseAlign.Middle,
-      color: Color.White,
     }),
   });
 
   #upgradeCostLabel = new Label({
-    text: "Cost: 1000",
     pos: vec(0, 15),
     color: Color.LightGray,
-
     font: Resources.PixelFont.toFont({
       size: 25,
       unit: FontUnit.Px,
@@ -75,189 +50,59 @@ export class RecycleCard extends Actor {
   });
 
   constructor(
-    x: number,
-    y: number,
+    pos: Vector,
     width: number,
     height: number,
     upgradeType: UpgradeTypes,
   ) {
-    super({
-      pos: vec(x, y),
-      width,
-      height,
-    });
-    this.#width = width;
-    this.#height = height;
-
+    super({ pos, width, height });
     this.#upgradeType = upgradeType;
   }
 
   onInitialize(engine: Engine): void {
-    const roundedGraphic = new Canvas({
-      width: this.#width,
-      height: this.#height,
-      draw: (ctx: CanvasRenderingContext2D) => {
-        const offset = this.#borderWidth / 2;
-        const drawWidth = this.#width - this.#borderWidth;
-        const drawHeight = this.#height - this.#borderWidth;
-
-        ctx.beginPath();
-        ctx.roundRect(
-          offset,
-          offset,
-          drawWidth,
-          drawHeight,
-          this.#cornerRadius,
-        );
-
-        ctx.fillStyle = this.#backgroundColor; // Main background fill
-        ctx.fill();
-
-        ctx.lineWidth = this.#borderWidth;
-        ctx.strokeStyle = this.#borderColor; // Border Color fill
-        ctx.stroke();
-      },
-    });
-
-    this.graphics.use(roundedGraphic);
-
     this.addChild(this.#upgradeLevelLabel);
     this.addChild(this.#upgradeNameLabel);
+    this.addChild(this.#upgradeCostLabel);
+
     switch (this.#upgradeType) {
       case "moreHookSpace":
-        this.#upgradeNameLabel.text = "more hook space";
+        this.#upgradeNameLabel.text = "Hook capacity";
         break;
       case "moreHookGetSpeed":
-        this.#upgradeNameLabel.text = "More hook get speed";
+        this.#upgradeNameLabel.text = "Hook get speed";
         break;
       case "moreHookThrowSpeed":
-        this.#upgradeNameLabel.text = "More hook throw speed";
+        this.#upgradeNameLabel.text = "Hook throw speed";
         break;
       default:
         this.#upgradeNameLabel.text = "";
     }
 
-    this.addChild(this.#upgradeCostLabel);
-
     const plus = new PlusIcon({
       position: vec(275, 0),
       size: 40,
-      color: Color.White,
+      color: "#FFFFFF",
     });
     this.addChild(plus);
 
-    plus.on("pointerenter", () => {
-      plus.color = Color.Black;
-    });
-
-    plus.on("pointerleave", () => {
-      plus.color = Color.White;
-    });
-
     plus.on("pointerdown", () => {
-      const scrap = localStorage.getItem("scrap");
-      let newScrap = 0;
-
-      if (scrap !== null) {
-        newScrap = Number(scrap);
-
-        if (this.getUpgradeCosts() <= newScrap) {
-          newScrap = newScrap - this.getUpgradeCosts();
-          this.pushToLocalStorage(
-            this.#upgradeType,
-            RecycleCard.getValueFromLocalStorage(this.#upgradeType) + 1,
-          );
-
-          localStorage.setItem("scrap", newScrap.toString());
-        }
-      }
+      ScrapManager.doUpgrade(this.#upgradeType);
     });
-
-    this.on("pointerenter", (event) => this.onPointerEnter(event));
-    this.on("pointerleave", (event) => this.onPointerLeave(event));
   }
 
   onPreUpdate(engine: Engine, elapsed: number): void {
-    this.#upgradeLevelLabel.text = RecycleCard.getValueFromLocalStorage(
+    this.#upgradeLevelLabel.text = ScrapManager.getUpgradeLevel(
       this.#upgradeType,
     ).toString();
 
-    this.#upgradeCostLabel.text = this.getUpgradeCosts().toString() + " Scrap";
+    this.#upgradeCostLabel.text =
+      ScrapManager.getUpgradeCost(this.#upgradeType).toString() + " Scrap";
 
     this.#upgradeCostLabel.color = Color.LightGray;
-    if (this.getUpgradeCosts() > Number(localStorage.getItem("scrap"))) {
+    if (
+      ScrapManager.getUpgradeCost(this.#upgradeType) > ScrapManager.getScrap()
+    ) {
       this.#upgradeCostLabel.color = Color.Red;
     }
-  }
-
-  onPointerEnter(event: PointerEvent) {
-    this.#backgroundColor = "#305babD9";
-    this.#borderColor = "#C6DCFFA9";
-  }
-
-  onPointerLeave(event: PointerEvent) {
-    this.#backgroundColor = "#305bab99";
-    this.#borderColor = "#C6DCFF60";
-  }
-
-  public static getValueFromLocalStorage(upgradeType: UpgradeTypes): number {
-    const localUpgrades = localStorage.getItem("upgrades");
-    let returnValue = 0;
-
-    if (localUpgrades !== null) {
-      const localUpgradesJson: UpgradeObject = JSON.parse(localUpgrades);
-
-      for (const localUpgrade of localUpgradesJson) {
-        if (localUpgrade.name === upgradeType) {
-          returnValue = localUpgrade.value;
-        }
-      }
-    }
-
-    return returnValue;
-  }
-
-  pushToLocalStorage(upgradeType: UpgradeTypes, value: number) {
-    const localUpgrades = localStorage.getItem("upgrades");
-    let newUpgrades: Partial<UpgradeObject> = [];
-
-    if (localUpgrades !== null) {
-      const localUpgradesJson: UpgradeObject = JSON.parse(localUpgrades);
-      let inLocalUpgrades = false;
-
-      for (const localUpgrade of localUpgradesJson) {
-        if (localUpgrade.name === upgradeType) {
-          localUpgrade.value = value;
-          inLocalUpgrades = true;
-        }
-        newUpgrades.push({
-          name: localUpgrade.name,
-          value: localUpgrade.value,
-        });
-      }
-
-      if (!inLocalUpgrades) {
-        newUpgrades.push({
-          name: upgradeType,
-          value: value,
-        });
-      }
-    } else {
-      newUpgrades.push({
-        name: upgradeType,
-        value: value,
-      });
-    }
-
-    localStorage.setItem("upgrades", JSON.stringify(newUpgrades));
-  }
-
-  getUpgradeCosts(): number {
-    return (
-      RecycleCard.getValueFromLocalStorage(this.#upgradeType) *
-        RecycleCard.getValueFromLocalStorage(this.#upgradeType) *
-        2 +
-      5
-    );
   }
 }
