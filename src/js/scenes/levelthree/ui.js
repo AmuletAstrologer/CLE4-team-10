@@ -47,7 +47,7 @@ export class UI extends Actor {
     this.addChild(this.#target);
 
     this.#timer = new Label({
-      text: "02:00",
+      text: "03:00",
       pos: new Vector(50, 30),
       font: Resources.PixelFont.toFont({
         unit: FontUnit.Px,

@@ -5,6 +5,7 @@ import { UI } from "./ui.js";
 import { Hook } from "../../actors/hook.ts";
 import { Resources } from "../../resources.js";
 import { Background } from "../../background/background.js";
+import { DefeatScreen } from "../../defeatscreen.js";
 import { BaseScene, createGame } from "../../objects/createGame.ts";
 import { saveScores } from "../../scores.ts";
 import { checkAchievements } from "../../achievements.ts";
@@ -15,7 +16,7 @@ export class Level3 extends BaseScene {
   levelNumber = 3;
 
   //Game Timer
-  gameTime = 120000; // 2 minutes
+  gameTime = 180000; // 3 minutes
   timeLeft = 120000;
 
   //Trash Timer
@@ -114,11 +115,22 @@ export class Level3 extends BaseScene {
     if (this.timeLeft <= 0) {
       this.timeLeft = 0;
 
-      this.engine.goToScene("level3Ending", {
-        sceneActivationData: {
-          score: this.score,
-        },
-      });
+      if (this.objective >= 10) {
+        this.engine.goToScene("levelEnding", {
+          sceneActivationData: {
+            score: this.score,
+          },
+        });
+      } else {
+        this.engine.goToScene("defeatscreen", {
+          sceneActivationData: {
+            score: this.score,
+            restartScene: "level3",
+          },
+        });
+      }
+
+      return;
     }
   }
 
@@ -210,22 +222,13 @@ export class Level3 extends BaseScene {
 
     //Add minus score for collecting wrong thrash
     if (this.objective >= 10) {
-      this.engine.goToScene("level3Ending", {
+      this.engine.goToScene("levelEnding", {
         sceneActivationData: {
           score: this.score,
         },
       });
     }
 
-    // Add proper condition for losing later
-    // if (this.objective === 1) {
-    //   this.engine.goToScene("defeatscreen", {
-    //     sceneActivationData: {
-    //       score: this.score,
-    //       restartScene: "level3",
-    //     },
-    //   });
-    // }
   }
 
   onCollision(x, y) {
