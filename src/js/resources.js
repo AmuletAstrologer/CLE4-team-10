@@ -30,6 +30,7 @@ const Resources = {
     orangePlanet: new ImageSource('images/orangeplanet.png'),
     hoverorangePlanet: new ImageSource('images/hoverorangeplanet.png'),
     recyclePlanet: new ImageSource('images/recycleplanet.png'),
+    hoverrecyclePlanet: new ImageSource('images/hoverrecycleplanet.png'),
     redPlanet: new ImageSource('images/redplanet.png'),
     hoverredPlanet: new ImageSource('images/hoverredplanet.png'),
     salmonPlanet: new ImageSource('images/salmonplanet.png'),
@@ -44,8 +45,5 @@ const ResourceLoader = new Loader();
 for (let res of Object.values(Resources)) {
   ResourceLoader.addResource(res);
 }
-
-//Background
-Background: new ImageSource("images/background.png");
 
 export { Resources, ResourceLoader };
