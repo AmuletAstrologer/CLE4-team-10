@@ -37,6 +37,7 @@ export function getAchievements(): Partial<Achievements> {
     }
     return JSON.parse(achievements)
 }
+
 export function checkAchievements(): void {
     const achievements = getAchievements()
     const scores = getScores()

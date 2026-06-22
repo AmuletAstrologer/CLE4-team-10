@@ -12,112 +12,67 @@ import { checkAchievements } from "../../achievements.ts";
 //Metal Level
 
 export class Level3 extends BaseScene {
+  levelNumber = 3;
 
-    levelNumber = 3
+  onInitialize(engine) {
+    this.engine = engine;
+    this.createLevel();
+  }
 
+  onActivate() {
+    this.score = 0;
+    this.objective = 0;
 
-    onInitialize(engine) {
+    // Remove old actors
+    this.actors.forEach((actor) => {
+      actor.kill();
+    });
 
-        this.engine = engine;
-        this.createLevel2();
-    }
+    this.createLevel();
+  }
+  createLevel() {
+    this.ui = new UI();
+    this.spawner = new Spawner();
+    const { hook } = createGame(this, this.spawner, this.ui, "Level Three");
 
+    this.hook = hook;
+  }
 
-    onActivate() {
-        this.score = 0;
-        this.objective = 0;
-
-
-        // Remove old actors
-        this.actors.forEach(actor => {
-            actor.kill();
-        });
-
-
-        this.createLevel2();
-
-    }
-    createLevel2() {
-        this.ui = new UI();
-        this.spawner = new Spawner();
-        const { hook } = createGame(
-            this,
-            this.spawner,
-            this.ui,
-            "Level Three"
-        );
-
-        this.hook = hook;
-    }
-
-
-
-
-onCollision(x, y) {
-
-    const rand = new Random(1244)
+  onCollision(x, y) {
+    const rand = new Random(1244);
     const speed = 200;
 
     const sprites = [
-        Resources.AfvalSchroef1.toSprite(),
-        Resources.AfvalSchroef2.toSprite(),
-        Resources.AfvalSchroef3.toSprite(),
-        Resources.AfvalSchroef4.toSprite(),
-
+      Resources.AfvalSchroef1.toSprite(),
+      Resources.AfvalSchroef2.toSprite(),
+      Resources.AfvalSchroef3.toSprite(),
+      Resources.AfvalSchroef4.toSprite(),
     ];
-
-
 
     const directions = [
-
-        new Vector(1, 0),
-        new Vector(-1, 0),
-        new Vector(0, 1),
-        new Vector(0, -1)
-
+      new Vector(1, 0),
+      new Vector(-1, 0),
+      new Vector(0, 1),
+      new Vector(0, -1),
     ];
 
-
-
     for (const dir of directions) {
+      const bolt = new Bolt();
+      const index = rand.integer(0, sprites.length - 1);
 
-        const bolt = new Bolt();
-        const index =
-            rand.integer(
-                0,
-                sprites.length - 1
-            );
+      bolt.graphics.use(sprites[index]);
 
-
-        bolt.graphics.use(
-            sprites[index]
-        );
-
-
-        bolt.vel =
-            dir.scale(speed);
-        bolt.pos =
-            new Vector(x, y);
-        this.add(bolt);
-
+      bolt.vel = dir.scale(speed);
+      bolt.pos = new Vector(x, y);
+      this.add(bolt);
     }
 
     this.removeScore();
+  }
 
-}
-
-
-
-
-
-removeScore() {
+  removeScore() {
     this.score--;
 
-    this.ui.updateScore(
-        this.score
-    );
-
-
-}
-
+    this.ui.updateScore(this.score);
+  }
 }
