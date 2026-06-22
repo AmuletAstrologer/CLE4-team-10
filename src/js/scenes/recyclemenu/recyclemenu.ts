@@ -15,6 +15,7 @@ import { Background } from "../../background/background.js";
 import { BackgroundBox } from "../../actors/backgroundbox.js";
 import { Resources } from "../../resources.js";
 import { RecycleCard } from "./recyclecard.js";
+import { ScrapManager } from "../../lib/scrapmanager.js";
 
 export class RecycleMenu extends Scene {
   #scrapLabel = new Label({
@@ -48,22 +49,21 @@ export class RecycleMenu extends Scene {
     });
     this.add(title);
 
-    const mainBox = new BackgroundBox(
+    const mainContainer = new BackgroundBox(
       engine.halfDrawWidth,
       engine.halfDrawHeight + 20,
       750,
       530,
     );
-    this.add(mainBox);
+    this.add(mainContainer);
 
-    const scrapBox = new BackgroundBox(130, 125, 225, 150);
-    this.add(scrapBox);
+    const scrapContainer = new BackgroundBox(130, 125, 225, 150);
+    this.add(scrapContainer);
 
     this.add(this.#scrapLabel);
 
     const moreHookSpace = new RecycleCard(
-      engine.halfDrawWidth,
-      engine.halfDrawHeight - 145,
+      vec(engine.halfDrawWidth, engine.halfDrawHeight - 145),
       650,
       100,
       "moreHookSpace",
@@ -71,8 +71,7 @@ export class RecycleMenu extends Scene {
     this.add(moreHookSpace);
 
     const moreHookGetSpeed = new RecycleCard(
-      engine.halfDrawWidth,
-      engine.halfDrawHeight - 35,
+      vec(engine.halfDrawWidth, engine.halfDrawHeight - 35),
       650,
       100,
       "moreHookGetSpeed",
@@ -80,8 +79,7 @@ export class RecycleMenu extends Scene {
     this.add(moreHookGetSpeed);
 
     const moreHookThrowSpeed = new RecycleCard(
-      engine.halfDrawWidth,
-      engine.halfDrawHeight + 75,
+      vec(engine.halfDrawWidth, engine.halfDrawHeight + 75),
       650,
       100,
       "moreHookThrowSpeed",
@@ -89,8 +87,7 @@ export class RecycleMenu extends Scene {
     this.add(moreHookThrowSpeed);
 
     const card3 = new RecycleCard(
-      engine.halfDrawWidth,
-      engine.halfDrawHeight + 185,
+      vec(engine.halfDrawWidth, engine.halfDrawHeight + 185),
       650,
       100,
       "",
@@ -109,6 +106,7 @@ export class RecycleMenu extends Scene {
         color: Color.White,
       }),
     });
+
     this.add(backLabel);
   }
 
@@ -119,18 +117,13 @@ export class RecycleMenu extends Scene {
       if (evt.key === Keys.X) {
         engine.goToScene("levels");
       }
-      // if (evt.key === Keys.PageUp) {
-      //   localStorage.setItem("scrap", "999");
-      // }
+      if (evt.key === Keys.PageUp) {
+        localStorage.setItem("scrap", "999");
+      }
     });
   }
 
   onPreDraw(ctx: ExcaliburGraphicsContext, elapsed: number): void {
-    const scrap = localStorage.getItem("scrap");
-    if (scrap !== null) {
-      this.#scrapLabel.text = scrap.toString();
-    } else {
-      this.#scrapLabel.text = "0";
-    }
+    this.#scrapLabel.text = ScrapManager.getScrap().toString();
   }
 }

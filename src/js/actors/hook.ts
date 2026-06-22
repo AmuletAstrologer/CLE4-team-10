@@ -13,16 +13,13 @@ import {
 import { Resources } from "../resources.js";
 import { Trash } from "../objects/trash.js";
 import { Meteor } from "../objects/meteor.js";
-import {
-  UpgradeTypes,
-  RecycleCard,
-} from "../scenes/recyclemenu/recyclecard.js";
+import { ScrapManager } from "../lib/scrapmanager.js";
 import { BaseScene } from "../objects/createGame.js";
 
 export class Hook extends Actor {
   #moveTime = 0;
   #isMoving = false;
-  #hasObject = false;
+  #amountOfObjects = 0;
   public x;
   public y;
 
@@ -55,20 +52,18 @@ export class Hook extends Actor {
       this.between(this.pos.x, this.x - 5, this.x + 5) &&
       this.between(this.pos.y, this.y - 5, this.y + 5)
     ) {
-      if (this.#hasObject) {
-        if (this.children.length > 0) {
-          const scrap = localStorage.getItem("scrap");
-          if (scrap !== null) {
-            localStorage.setItem("scrap", (Number(scrap) + 1).toString());
-          } else {
-            localStorage.setItem("scrap", "1");
+      if (this.children.length > 0) {
+        for (const child in this.children) {
+          ScrapManager.addScrap();
+
+          if (this.scene instanceof BaseScene) {
+            this.scene.addScore();
+            this.scene.addObjective();
           }
         }
+      }
 
-
-        (this.scene as BaseScene)?.addScore?.();
-
-        (this.scene as BaseScene)?.addObjective();
+      if (this.#amountOfObjects > 0) {
         this.removeAllChildren();
       }
 
@@ -96,20 +91,18 @@ export class Hook extends Actor {
 
     if (engine.input.keyboard.isHeld(Keys.Space) && !this.#isMoving) {
       const dx = Math.sin(this.rotation);
-      const dy = Math.cos(this.rotation);
+      const dy = -Math.cos(this.rotation);
 
       this.vel.x =
-        dx * 500 +
-        RecycleCard.getValueFromLocalStorage("moreHookThrowSpeed") * 100;
+        dx * (500 + ScrapManager.getUpgradeLevel("moreHookThrowSpeed") * 50);
       this.vel.y =
-        dy * -500 +
-        RecycleCard.getValueFromLocalStorage("moreHookThrowSpeed") * 100;
+        dy * (500 + ScrapManager.getUpgradeLevel("moreHookThrowSpeed") * 50);
 
       this.#moveTime = 500;
       this.#isMoving = true;
 
       this.removeAllChildren();
-      this.#hasObject = false;
+      this.#amountOfObjects = 0;
     }
   }
 
@@ -123,38 +116,48 @@ export class Hook extends Actor {
     side: Side,
     contact: CollisionContact,
   ): void {
-    if (other.owner instanceof Trash && !this.#hasObject) {
+    if (
+      other.owner instanceof Trash &&
+      this.#amountOfObjects < 1 + ScrapManager.getUpgradeLevel("moreHookSpace")
+    ) {
       other.owner.body.collisionType = CollisionType.PreventCollision;
       other.owner.vel = vec(0, 0);
       other.owner.pos = vec(-10, -25);
 
       this.addChild(other.owner);
+      this.#amountOfObjects++;
       // this.#hasObject = true;
 
       // this.actions.clearActions();
       // this.actions.moveTo(
       //   this.x,
       //   this.y,
-      //   500 / 4 + RecycleCard.getValueFromLocalStorage("moreHookGetSpeed") * 100,
+      //   500 / 4 + RecycleCard.getValueFromLocalStorage("moreHookGetSpeed") * 25,
       // );
     }
-    // if (other.owner instanceof Meteor) {
+    if (other.owner instanceof Meteor) {
+      this.#amountOfObjects = 1 + ScrapManager.getUpgradeLevel("moreHookSpace");
+      // this.#hasObject = true;
+      // this.actions.moveTo(
+      //   this.x,
+      //   this.y,
+      //   500 / 4 +
+      //     RecycleCard.getValueFromLocalStorage("moreHookGetSpeed") * 25,
+      // );
+    }
     // this.#hasObject = true;
-    // this.actions.moveTo(
-    //   this.x,
-    //   this.y,
-    //   500 / 4 +
-    //     RecycleCard.getValueFromLocalStorage("moreHookGetSpeed") * 100,
-    // );
-    // }
-    this.#hasObject = true;
 
-    this.actions.clearActions();
-    this.actions.moveTo(
-      this.x,
-      this.y,
-      500 / 4 + RecycleCard.getValueFromLocalStorage("moreHookGetSpeed") * 100,
-    );
+    if (
+      this.#amountOfObjects >=
+      1 + ScrapManager.getUpgradeLevel("moreHookSpace")
+    ) {
+      this.actions.clearActions();
+      this.actions.moveTo(
+        this.x,
+        this.y,
+        500 / 4 + ScrapManager.getUpgradeLevel("moreHookGetSpeed") * 25,
+      );
+    }
   }
 
   between(x: number, min: number, max: number) {
