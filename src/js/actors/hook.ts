@@ -14,10 +14,6 @@ import { Resources } from "../resources.js";
 import { Trash } from "../objects/trash.js";
 import { Meteor } from "../objects/meteor.js";
 import { ScrapManager } from "../lib/scrapmanager.js";
-import {
-  UpgradeTypes,
-  RecycleCard,
-} from "../scenes/recyclemenu/recyclecard.js";
 import { BaseScene } from "../objects/createGame.js";
 
 export class Hook extends Actor {
@@ -59,18 +55,15 @@ export class Hook extends Actor {
       if (this.children.length > 0) {
         for (const child in this.children) {
           ScrapManager.addScrap();
-          // @ts-expect-error
-          this.scene?.addScore();
-          // @ts-expect-error
-          this.scene?.addObjective();
+
+          if (this.scene instanceof BaseScene) {
+            this.scene.addScore();
+            this.scene.addObjective();
+          }
         }
       }
 
       if (this.#amountOfObjects > 0) {
-        if (this.scene instanceof BaseScene) {
-          this.scene.addScore();
-          this.scene.addObjective();
-        }
         this.removeAllChildren();
       }
 

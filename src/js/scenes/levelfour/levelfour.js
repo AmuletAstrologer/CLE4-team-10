@@ -5,12 +5,11 @@ import { UI } from "./ui.js";
 import { Hook } from "../../actors/hook.ts";
 import { Resources } from "../../resources.js";
 import { Background } from "../../background/background.js";
-
+import { BaseScene, createGame } from "../../objects/createGame.ts";
 // Metal Level
 
-export class Level4 extends Scene {
-  score = 0;
-  objective = 0;
+export class Level4 extends BaseScene {
+  levelNumber = 4;
 
   targetTimer = 0;
   targetChangeTime = 30000; //30 seconden
@@ -175,6 +174,7 @@ export class Level4 extends Scene {
     } else {
       console.log("Wrong trash:", trash.type, "Needed:", this.currentTarget);
 
+      this.ui.health.decrease();
       this.score--;
       this.objective--;
     }

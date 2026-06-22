@@ -1,14 +1,26 @@
 import "../css/style.css";
-import { Actor, Engine, Vector, DisplayMode, SolverStrategy, Keys, Transition, Color, FadeInOut} from "excalibur";
+import {
+  Actor,
+  Engine,
+  Vector,
+  DisplayMode,
+  SolverStrategy,
+  Keys,
+  Transition,
+  Color,
+  FadeInOut,
+} from "excalibur";
 import { Resources, ResourceLoader } from "./resources.js";
 import { Start } from "./scenes/start.js";
 import { Background } from "./background/background.js";
 import { DefeatScreen } from "./defeatscreen.js";
 import { RecycleMenu } from "./scenes/recyclemenu/recyclemenu.js";
-import { Level3 } from './scenes/levelthree/levelthree.js'
+import { Level1 } from "./scenes/levelone/levelone.js";
+import { Level3 } from "./scenes/levelthree/levelthree.js";
+import { Level4 } from "./scenes/levelfour/levelfour.js";
 import { LevelEnding } from "./scenes/levelEnding.js";
-import { Level3Ending } from './scenes/levelthree/levelthreeEnding.js'
-import { LevelSummary } from "./scenes/levelsummary.js"
+import { Level3Ending } from "./scenes/levelthree/levelthreeEnding.js";
+import { LevelSummary } from "./scenes/levelsummary.js";
 
 export class Game extends Engine {
   constructor() {
@@ -22,13 +34,14 @@ export class Game extends Engine {
     this.start(ResourceLoader).then(() => this.startGame());
   }
 
-    startGame() {
-        this.addScene("start", new Start());
-        this.addScene("levels", new LevelSummary());
-        this.addScene("level1", new Level1());
-        this.addScene("level3", new Level3());
-        this.addScene("defeatscreen", new DefeatScreen());
-        this.addScene("levelrecyclemenu", new RecycleMenu());
+  startGame() {
+    this.addScene("start", new Start());
+    this.addScene("levels", new LevelSummary());
+    this.addScene("level1", new Level1());
+    this.addScene("level3", new Level3());
+    this.addScene("level4", new Level4());
+    this.addScene("defeatscreen", new DefeatScreen());
+    this.addScene("levelrecyclemenu", new RecycleMenu());
 
     (this.addScene("levelEnding", {
       scene: new LevelEnding(),

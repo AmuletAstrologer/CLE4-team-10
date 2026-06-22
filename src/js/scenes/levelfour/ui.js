@@ -6,6 +6,7 @@ import {
   Vector,
   TextAlign,
   BaseAlign,
+  Keys,
   vec,
 } from "excalibur";
 import { Resources } from "../../resources";
@@ -15,7 +16,7 @@ export class UI extends Actor {
   #label1;
   #objective;
   #target;
-  #health;
+  health;
 
   constructor(shot) {
     super({});
@@ -58,9 +59,15 @@ export class UI extends Actor {
     });
     this.addChild(this.#target);
 
-    this.#health = new Healthbar({ pos: vec(100, 50) });
+    this.health = new Healthbar({ pos: vec(100, 50) });
     // this.#health.pos = new Vector(100, 30);
-    this.addChild(this.#health);
+    this.addChild(this.health);
+
+    // engine.input.keyboard.on("press", (evt) => {
+    //   if (evt.key === Keys.PageUp) {
+    //     this.health.decrease();
+    //   }
+    // });
   }
 
   updateScore(score) {

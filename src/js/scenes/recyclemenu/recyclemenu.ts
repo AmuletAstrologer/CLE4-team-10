@@ -106,6 +106,7 @@ export class RecycleMenu extends Scene {
         color: Color.White,
       }),
     });
+
     this.add(backLabel);
   }
 

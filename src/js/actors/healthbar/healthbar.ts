@@ -18,7 +18,23 @@ export class Healthbar extends Actor {
     });
 
     for (let i = 0; i < this.#health; i++) {
-      this.addChild(new Heart({ pos: vec(0 + i * 60, 0) }));
+      this.addChild(new Heart({ pos: vec(0 + i * 60, 0) }).addTag(`heart${i}`));
+    }
+  }
+
+  decrease(): void {
+    if (this.#health - 1 <= 0) {
+      this.scene?.engine.goToScene("defeatscreen");
+      return;
+    }
+
+    const target = this.children.find((c) =>
+      c.hasTag(`heart${this.#health - 1}`),
+    );
+
+    if (target) {
+      this.removeChild(target);
+      this.#health--;
     }
   }
 }
