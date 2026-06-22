@@ -12,16 +12,13 @@ import {
 } from "excalibur";
 import { Resources } from "../resources.js";
 import { Trash } from "../objects/trash.js";
-<<<<<<< Updated upstream
 import { Meteor } from "../objects/meteor.js";
 import {
   UpgradeTypes,
   RecycleCard,
 } from "../scenes/recyclemenu/recyclecard.js";
 import { BaseScene } from "../objects/createGame.js";
-=======
 import { AlteredTrash } from "../scenes/leveltwo/alteredtrash.js";
->>>>>>> Stashed changes
 
 export class Hook extends Actor {
   #moveTime = 0;

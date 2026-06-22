@@ -17,7 +17,7 @@ export class AlteredTrash extends Actor {
             this.scale = new Vector(0.12, 0.12);
             this.on('pointerdown', () => {
                 this.kill()
-                this.scene?.addScore()
+                this.scene?.addObjective()
             });
         }
 
@@ -25,7 +25,7 @@ export class AlteredTrash extends Actor {
             if(other.owner instanceof PlanetSpawner){
                 this.kill();
                 this.scene.removeSpawned();
-                this.scene.removeScore();
+                this.scene.removeObjective();
             }
         }
 

@@ -4,10 +4,10 @@ import { Resources } from "../../resources";
 import { PlanetSpawner } from "./planetspawner";
 import { Hook } from "../../actors/hook";
 import { Spawner } from "./spawner";
-import { UI } from "../levelthree/ui";
+import { UI } from "./ui";
 
 export class Level2 extends Scene {
-    score = 0;
+    // score = 0;
     objective = 0;
 
     onInitialize(engine) {
@@ -27,6 +27,11 @@ export class Level2 extends Scene {
         backbutton.anchor = new Vector(0.5, 0.5);
         backbutton.pos = new Vector(40, 40);
 
+        this.spawned = 0;
+
+        this.spawner = new Spawner();
+        this.add(this.spawner);
+
         this.add(backbutton);
 
 
@@ -41,12 +46,6 @@ export class Level2 extends Scene {
         backbutton.on('pointerup', () => {
             engine.goToScene("levels");
         })
-
-        
-        this.spawned = 0;
-
-        this.spawner = new Spawner();
-        this.add(this.spawner);
     }
 
     addSpawned() {
@@ -65,14 +64,14 @@ export class Level2 extends Scene {
         this.add(this.ui);
     }
 
-    addScore() {
-        this.score++;
+    // addScore() {
+    //     this.score++;
 
-        this.ui.updateScore(
-            this.score
-        );
+    //     this.ui.updateScore(
+    //         this.score
+    //     );
 
-    }
+    // }
 
 
 
@@ -101,33 +100,13 @@ export class Level2 extends Scene {
             );
         }
 
-
-        // if (this.objective === 1) {
-
-
-        //     this.engine.goToScene(
-        //         "defeatscreen",
-        //         {
-
-        //             sceneActivationData: {
-        //                 score: this.score,
-        //                 restartScene: "level3"
-
-        //             }
-
-        //         }
-
-        //     );
-
-        // }
-
     }
 
-    removeScore() {
-        this.score--;
+    removeObjective() {
+        this.objective--;
 
-        this.ui.updateScore(
-            this.score
+        this.ui.updateObjective(
+            this.objective
         );
 
 
