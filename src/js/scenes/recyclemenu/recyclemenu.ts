@@ -117,7 +117,7 @@ export class RecycleMenu extends Scene {
 
     engine.input.keyboard.on("press", (evt) => {
       if (evt.key === Keys.X) {
-        engine.goToScene("start");
+        engine.goToScene("levels");
       }
       // if (evt.key === Keys.PageUp) {
       //   localStorage.setItem("scrap", "999");

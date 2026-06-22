@@ -5,10 +5,15 @@ import { UI } from "./ui.js";
 import { Hook } from "../../actors/hook.ts";
 import { Resources } from "../../resources.js";
 import { Background } from "../../background/background.js";
+import { BaseScene, createGame } from "../../objects/createGame.ts";
+import { saveScores } from "../../scores.ts";
+import { checkAchievements } from "../../achievements.ts";
 
 //Metal Level
 
-export class Level3 extends Scene {
+export class Level3 extends BaseScene {
+  levelNumber = 3;
+
   score = 0;
   objective = 0;
 
@@ -26,6 +31,7 @@ export class Level3 extends Scene {
 
   onInitialize(engine) {
     this.engine = engine;
+    this.createLevel();
   }
 
   onActivate() {
@@ -41,165 +47,39 @@ export class Level3 extends Scene {
     });
 
     this.createLevel();
-
-    this.targetTimer = 0;
-    this.pickNewTarget();
-  }
-
-  onPreUpdate(engine, delta) {
-    // Intro animation
-    this.introTimer += delta;
-
-    if (this.introTimer < 1000) {
-      // Fade in
-      const alpha = this.introTimer / 1000;
-
-      if (this.title) {
-        this.title.opacity = alpha;
-      }
-
-      if (this.intro) {
-        this.intro.opacity = alpha;
-      }
-    } else if (this.introTimer < 3000) {
-      // Stay visible
-      if (this.title) {
-        this.title.opacity = 1;
-      }
-
-      if (this.intro) {
-        this.intro.opacity = 1;
-      }
-    } else if (this.introTimer < 4000) {
-      // Fade out
-      const alpha = 1 - (this.introTimer - 3000) / 1000;
-
-      if (this.title) {
-        this.title.opacity = alpha;
-      }
-
-      if (this.intro) {
-        this.intro.opacity = alpha;
-      }
-    } else {
-      // Remove intro labels
-      if (this.title) {
-        this.title.kill();
-        this.title = null;
-      }
-
-      if (this.intro) {
-        this.intro.kill();
-        this.intro = null;
-      }
-    }
-
-    // Target switching
-    this.targetTimer += delta;
-
-    if (this.targetTimer >= this.targetChangeTime) {
-      this.targetTimer = 0;
-
-      this.pickNewTarget();
-    }
-
-    this.timeLeft -= delta;
-
-    if (this.ui) {
-      this.ui.updateTimer(this.timeLeft);
-    }
-
-    if (this.timeLeft <= 0) {
-      this.timeLeft = 0;
-
-      this.engine.goToScene("level3Ending", {
-        sceneActivationData: {
-          score: this.score,
-        },
-      });
-    }
   }
 
   createLevel() {
     const background = new Background();
     this.add(background);
 
-    // Level intro
-    this.title = new Label({
+    const title = new Label({
       text: "Level Three",
-      pos: new Vector(640, 280),
-      font: new Font({
-        size: 60,
-        unit: FontUnit.Px,
-        color: Color.White,
-      }),
+      pos: new Vector(50, 20),
+      fontSize: 40,
     });
 
-    this.title.anchor = new Vector(0.5, 0.5);
-    this.title.opacity = 0;
-
-    this.intro = new Label({
-      text: "Metal Level",
-      pos: new Vector(640, 360),
-      font: new Font({
-        size: 40,
-        unit: FontUnit.Px,
-        color: Color.White,
-      }),
-    });
-
-    this.intro.anchor = new Vector(0.5, 0.5);
-    this.intro.opacity = 0;
+    this.add(title);
 
     this.ui = new UI();
-    this.ui.z = 100;
     this.add(this.ui);
-
     this.spawner = new Spawner();
     this.add(this.spawner);
 
-    this.hook = new Hook();
-    this.add(this.hook);
+     const { hook } = createGame(
+            this,
+            this.spawner,
+            this.ui,
+            "Level Three"
+        );
 
-    this.add(this.title);
-    this.add(this.intro);
-  }
-
-  pickNewTarget() {
-    const index = Math.floor(Math.random() * this.metalTrash.length);
-
-    this.currentTarget = this.metalTrash[index];
-
-    //Immeadantly remove old targets' tint color
-    if (this.ui) {
-      this.ui.updateTarget(this.currentTarget);
-    }
-
-    console.log("Target:", this.currentTarget);
+        this.hook = hook;
   }
 
   addScore() {
-    const trash = this.hook.children[0];
-
-    if (!trash) {
-      console.log("No trash caught");
-      return;
-    }
-
-    //Only plus points for correct trash
-    if (trash.type === this.currentTarget) {
-      console.log("Correct trash");
-
-      this.score++;
-    } else {
-      console.log("Wrong trash:", trash.type, "Needed:", this.currentTarget);
-
-      this.score--;
-      this.objective--;
-    }
+    this.score++;
 
     this.ui.updateScore(this.score);
-    this.ui.updateObjective(this.objective);
   }
 
   addObjective() {
@@ -207,7 +87,6 @@ export class Level3 extends Scene {
 
     this.ui.updateObjective(this.objective);
 
-    //Add minus score for collecting wrong thrash
     if (this.objective >= 10) {
       this.engine.goToScene("level3Ending", {
         sceneActivationData: {
@@ -216,15 +95,14 @@ export class Level3 extends Scene {
       });
     }
 
-    // Add proper condition for losing later
-    // if (this.objective === 1) {
-    //   this.engine.goToScene("defeatscreen", {
-    //     sceneActivationData: {
-    //       score: this.score,
-    //       restartScene: "level3",
-    //     },
-    //   });
-    // }
+    if (this.objective === 1) {
+      this.engine.goToScene("defeatscreen", {
+        sceneActivationData: {
+          score: this.score,
+          restartScene: "level3",
+        },
+      });
+    }
   }
 
   onCollision(x, y) {
@@ -248,12 +126,32 @@ export class Level3 extends Scene {
     for (const dir of directions) {
       const bolt = new Bolt();
       const index = rand.integer(0, sprites.length - 1);
+    for (const dir of directions) {
+
+        const bolt = new Bolt();
+        const index =
+            rand.integer(
+                0,
+                sprites.length - 1
+            );
 
       bolt.graphics.use(sprites[index]);
+
+        bolt.graphics.use(
+            sprites[index]
+        );
 
       bolt.vel = dir.scale(speed);
       bolt.pos = new Vector(x, y);
       this.add(bolt);
+    }
+
+        bolt.vel =
+            dir.scale(speed);
+        bolt.pos =
+            new Vector(x, y);
+        this.add(bolt);
+
     }
 
     this.removeScore();

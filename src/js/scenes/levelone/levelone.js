@@ -6,52 +6,31 @@ import { UI } from "./ui.js";
 import { Hook } from "../../actors/hook.ts";
 import { Resources, ResourceLoader } from "../../resources.js";
 import { Background } from "../../background/background.js"
+import { saveScores } from "../../scores.ts";
+import { checkAchievements } from "../../achievements.ts";
+import { BaseScene, createGame } from "../../objects/createGame.ts";
 
-export class Level1 extends Scene {
-    score = 0;
-    objective = 0;
-    onDeactivate(context = SceneActivationContext) {
-    this.clear();
-    
-  }
+export class Level1 extends BaseScene {
+    levelNumber = 1
+
 
     onInitialize(engine) {
-        const background = new Background();
-        this.add(background);
-
         this.engine = engine
-        const title = new Label({
-            text: "Level One",
-            pos: new Vector(50, 20),
-            fontSize: 40,
-        });
+
 
         this.ui = new UI();
-        this.add(this.ui);
-
         this.spawner = new Spawner();
-        this.add(this.spawner);
+        const { hook } = createGame(
+            this,
+            this.spawner,
+            this.ui,
+            "Level One"
+        );
 
-        this.hook = new Hook();
-        this.add(this.hook);
+        this.hook = hook;
+    }
 
-        this.add(title);
-    }
-    addScore() {
-        this.score++;
-        this.ui.updateScore(this.score);
-    }
-    addObjective() {
-        this.objective++;
-        this.ui.updateObjective(this.objective);
-        if (this.objective >= 10) {
-            this.engine.goToScene("level1Ending", {
-                sceneActivationData: {
-                    score: this.score
-                }
-            })
-        }
-    }
+
     onCollision(x, y) {
         const rand = new Random(1244);
         const speed = 200;
@@ -85,5 +64,6 @@ export class Level1 extends Scene {
         this.score--;
         this.ui.updateScore(this.score)
     }
+
 
 }
