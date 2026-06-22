@@ -1,6 +1,5 @@
-import { Actor, Color, FontUnit, Label, Vector } from "excalibur";
+import { Actor, Color, FontUnit, Label, Vector, Buttons } from "excalibur";
 import { Resources } from "./resources";
-
 export class LevelButton extends Actor {
     constructor() {
         super({ width: Resources.Greenbutton.width, height: Resources.Greenbutton.height });
@@ -39,5 +38,12 @@ export class LevelButton extends Actor {
         buttonlabel.anchor = new Vector(0.5, 0.5);
 
         this.addChild(buttonlabel);
+    }
+    onPreUpdate(engine){
+        const gamepad = engine.input.gamepads.at(0);
+        if(gamepad?.wasButtonPressed(Buttons.Face1)){
+            engine.goToScene("levels")
+        }
+        
     }
 }

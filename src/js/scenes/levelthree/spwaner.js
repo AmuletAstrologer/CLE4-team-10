@@ -5,11 +5,16 @@ import { Trash } from "../../objects/trash"
 export class Spawner extends Actor {
     onInitialize(engine) {
         const rand = new Random(1244)
-        const sprites = [
-            Resources.AfvalAirtank(),
-            Resources.AfvalCilinder(),
-            Resources.AfvalPlaat(),
-            Resources.AfvalSatelliet()
+         const sprites = [
+            Resources.AfvalAirtank.toSprite(),
+            Resources.AfvalCilinder.toSprite(),
+            Resources.AfvalFragment.toSprite(),
+            Resources.AfvalHaak.toSprite(),
+            Resources.AfvalHelm.toSprite(),
+            Resources.AfvalModule.toSprite(),
+            Resources.AfvalPaneel.toSprite(),
+            Resources.AfvalPlaat.toSprite(),
+            Resources.AfvalSatelliet.toSprite()
         ]
 
         const metalTrash = [
