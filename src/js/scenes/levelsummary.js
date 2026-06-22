@@ -12,13 +12,6 @@ export class LevelSummary extends Scene {
 
         const planets = [
             {
-                sprite: Resources.redPlanet,
-                hoversprite: Resources.hoverredPlanet,
-                // level: "two",
-                scale: new Vector(0.5, 0.5),
-                pos: new Vector(250, 450)
-            },
-            {
                 sprite: Resources.recyclePlanet,
                 hoversprite: Resources.hoverrecyclePlanet,
                 level: "recyclemenu",
@@ -31,6 +24,13 @@ export class LevelSummary extends Scene {
                 level: "level1",
                 scale: new Vector(0.5, 0.5),
                 pos: new Vector(365, 625),
+            },
+            {
+                sprite: Resources.redPlanet,
+                hoversprite: Resources.hoverredPlanet,
+                level: "level2",
+                scale: new Vector(0.5, 0.5),
+                pos: new Vector(250, 450)
             },
             {
                 sprite: Resources.yellowringPlanet,
@@ -64,7 +64,7 @@ export class LevelSummary extends Scene {
 
         planets.forEach(p => {
             const planet = new Planet(p);
-            planet.pos = p.pos;
+            // planet.pos = p.pos;
             this.add(planet);
         });
     }

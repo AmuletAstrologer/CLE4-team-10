@@ -1,12 +1,13 @@
 import { Actor, Color } from "excalibur";
 
 export class Planet extends Actor {
-    constructor({sprite, level, scale, hoversprite}) {
+    constructor({sprite, level, scale, hoversprite, pos}) {
         super({ width: sprite.width, height: sprite.height});
         this.sprite = sprite;
         this.level = level;
         this.scale = scale;
         this.hoversprite = hoversprite;
+        this.pos = pos
     }
 
     onInitialize(engine) {

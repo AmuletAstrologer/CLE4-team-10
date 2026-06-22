@@ -10,6 +10,7 @@ import { Level3 } from './scenes/levelthree/levelthree.js'
 import { LevelEnding } from "./scenes/levelEnding.js";
 import { Level3Ending } from './scenes/levelthree/levelthreeEnding.js'
 import { LevelSummary } from "./scenes/levelsummary.js"
+import { Level2 } from './scenes/leveltwo/leveltwo.js'
 
 export class Game extends Engine {
   constructor() {
@@ -26,6 +27,7 @@ export class Game extends Engine {
         this.addScene("start", new Start());
         this.addScene("levels", new LevelSummary());
         this.addScene("level1", new Level1());
+        this.addScene("level2", new Level2());
         this.addScene("level3", new Level3());
         this.addScene("defeatscreen", new DefeatScreen());
         this.addScene("levelrecyclemenu", new RecycleMenu());
