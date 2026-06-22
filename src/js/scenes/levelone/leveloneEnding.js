@@ -10,7 +10,7 @@ export class Level1Ending extends Scene {
         this.title = new Label({
             text: `You completed level 1! Your score is ${this.score}`,
             pos: new Vector(300, 360),
-            font: Resources.Pixelfont.toFont({
+            font: Resources.PixelFont.toFont({
                 unit: FontUnit.Px,
                 size: 40,
                 color: Color.White

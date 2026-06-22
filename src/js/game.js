@@ -41,7 +41,7 @@ export class Game extends Engine {
             }
         }),
             this.addScene("level3Ending", {
-                scene: new Level1Ending(),
+                scene: new Level3Ending(),
                 transitions: {
                     in: new FadeInOut({ duration: 1500, direction: 'in', color: Color.Black }),
                     out: new FadeInOut({ duration: 1500, direction: 'out', color: Color.Black })
