@@ -78,7 +78,6 @@ export class UI extends Actor {
     const remainingSeconds = seconds % 60;
 
     this.#timer.text = `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
-    console.log(this.#timer);
   }
   
 }
