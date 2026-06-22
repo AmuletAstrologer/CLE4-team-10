@@ -59,15 +59,8 @@ export class UI extends Actor {
     });
     this.addChild(this.#target);
 
-    this.health = new Healthbar({ pos: vec(100, 50) });
-    // this.#health.pos = new Vector(100, 30);
+    this.health = new Healthbar({ pos: vec(100, engine.drawHeight - 100) });
     this.addChild(this.health);
-
-    // engine.input.keyboard.on("press", (evt) => {
-    //   if (evt.key === Keys.PageUp) {
-    //     this.health.decrease();
-    //   }
-    // });
   }
 
   updateScore(score) {
