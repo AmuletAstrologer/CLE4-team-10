@@ -5,6 +5,7 @@ export class UI extends Actor {
   #label1;
   #objective;
   #target;
+  #timer;
 
   constructor(shot) {
     super({});
@@ -44,6 +45,18 @@ export class UI extends Actor {
       }),
     });
     this.addChild(this.#target);
+
+    this.#timer = new Label({
+      text: "02:00",
+      pos: new Vector(50, 30),
+      font: Resources.PixelFont.toFont({
+        unit: FontUnit.Px,
+        size: 32,
+        color: Color.White,
+      }),
+    });
+
+    this.addChild(this.#timer);
   }
 
   updateScore(score) {
@@ -56,4 +69,15 @@ export class UI extends Actor {
     if (!this.#target) return;
     this.#target.text = `Target: ${target}`;
   }
+
+  updateTimer(timeLeft) {
+    if (!this.#timer) return;
+
+    const seconds = Math.ceil(timeLeft / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+
+    this.#timer.text = `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
+  }
+  
 }

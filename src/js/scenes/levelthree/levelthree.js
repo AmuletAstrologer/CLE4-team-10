@@ -11,10 +11,14 @@ import { checkAchievements } from "../../achievements.ts";
 
 //Metal Level
 
-export class Level3 extends Scene {
-  score = 0;
-  objective = 0;
+export class Level3 extends BaseScene {
+  levelNumber = 3;
 
+  //Game Timer
+  gameTime = 120000; // 2 minutes
+  timeLeft = 120000;
+
+  //Trash Timer
   targetTimer = 0;
   targetChangeTime = 30000; //30 seconden
 
@@ -30,6 +34,8 @@ export class Level3 extends Scene {
     this.score = 0;
     this.objective = 0;
     this.introTimer = 0;
+
+    this.timeLeft = this.gameTime;
 
     // Remove old actors
     this.actors.forEach((actor) => {
@@ -98,7 +104,22 @@ export class Level3 extends Scene {
 
       this.pickNewTarget();
     }
-    console.log("Title exists:", this.title, "Killed:", this.title?.isKilled());
+
+    this.timeLeft -= delta;
+
+    if (this.ui) {
+      this.ui.updateTimer(this.timeLeft);
+    }
+
+    if (this.timeLeft <= 0) {
+      this.timeLeft = 0;
+
+      this.engine.goToScene("level3Ending", {
+        sceneActivationData: {
+          score: this.score,
+        },
+      });
+    }
   }
 
   createLevel() {
@@ -133,7 +154,7 @@ export class Level3 extends Scene {
     this.intro.opacity = 0;
 
     this.ui = new UI();
-    this.add(this.ui);
+    this.ui.z = this.add(this.ui);
 
     this.spawner = new Spawner();
     this.add(this.spawner);
@@ -143,9 +164,6 @@ export class Level3 extends Scene {
 
     this.add(this.title);
     this.add(this.intro);
-
-    console.log("Title added:", this.title);
-    console.log("Intro added:", this.intro);
   }
 
   pickNewTarget() {
