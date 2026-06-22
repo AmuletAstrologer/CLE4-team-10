@@ -32,7 +32,7 @@ export class ScrapManager {
     }
   }
 
-  public static getValueFromLocalStorage(upgradeType: UpgradeTypes): number {
+  public static getUpgradeLevel(upgradeType: UpgradeTypes): number {
     const localUpgrades = localStorage.getItem("upgrades");
     let returnValue = 0;
 
@@ -49,10 +49,7 @@ export class ScrapManager {
     return returnValue;
   }
 
-  public static pushUpgradeToLocalStorage(
-    upgradeType: UpgradeTypes,
-    value: number,
-  ) {
+  public static setUpgradeLevel(upgradeType: UpgradeTypes, value: number) {
     const localUpgrades = localStorage.getItem("upgrades");
     let newUpgrades: Partial<UpgradeObject> = [];
 
@@ -87,9 +84,8 @@ export class ScrapManager {
     localStorage.setItem("upgrades", JSON.stringify(newUpgrades));
   }
 
-  public static getUpgradeCosts(upgradeType: UpgradeTypes): number {
-    const upgradeLevelCost =
-      ScrapManager.getValueFromLocalStorage(upgradeType) + 1;
+  public static getUpgradeCost(upgradeType: UpgradeTypes): number {
+    const upgradeLevelCost = ScrapManager.getUpgradeLevel(upgradeType) + 1;
 
     switch (upgradeType) {
       case "moreHookSpace":
