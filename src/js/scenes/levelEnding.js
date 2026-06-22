@@ -1,17 +1,18 @@
 import { Scene, Label, Actor, Vector, Random, FontSource, FontUnit, Color, Text, TextAlign, vec } from "excalibur";
-import { Resources, ResourceLoader } from "../../resources.js";
-import { Background } from "../../background/background.js"
+import { Resources, ResourceLoader } from "../resources.js";
+import { Background } from "../background/background.js"
 
-export class Level1Ending extends Scene {
+export class LevelEnding extends Scene {
+
 
     onInitialize(engine) {
         const background = new Background();
         this.add(background);
+        console.log(this.levelNumber)
 
         this.title = new Label({
-            text: `You completed level 1! Your score is ${this.score}`,
             pos: new Vector(engine.halfDrawWidth, 360),
-            font: Resources.Pixelfont.toFont({
+            font: Resources.PixelFont.toFont({
                 unit: FontUnit.Px,
                 size: 40,
                 color: Color.White,
@@ -21,7 +22,7 @@ export class Level1Ending extends Scene {
 
         this.continue = new Text({
             text: `Press spacebar to continue`,
-            font: Resources.Pixelfont.toFont({
+            font: Resources.PixelFont.toFont({
                 unit: FontUnit.Px,
                 size: 32,
                 color: Color.White,
@@ -49,6 +50,7 @@ export class Level1Ending extends Scene {
     onActivate(ctx) {
         const data = ctx.data;
         this.score = data?.score ?? 0;
-        this.title.text = `You completed level 1! Your score is ${this.score}`
+        this.levelNumber = data?.levelNumber ?? 0;
+        this.title.text = `You completed level ${this.levelNumber}! Your score is ${this.score}`
     }
 }

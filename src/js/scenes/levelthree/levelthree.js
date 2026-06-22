@@ -5,6 +5,9 @@ import { UI } from "./ui.js";
 import { Hook } from "../../actors/hook.ts";
 import { Resources } from "../../resources.js";
 import { Background } from "../../background/background.js";
+import { BaseScene, createGame } from "../../objects/createGame.ts";
+import { saveScores } from "../../scores.ts";
+import { checkAchievements } from "../../achievements.ts";
 
 //Metal Level
 

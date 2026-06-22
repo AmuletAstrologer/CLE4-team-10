@@ -17,7 +17,7 @@ import { DefeatScreen } from "./defeatscreen.js";
 import { Level1 } from "./scenes/levelone/levelone.js";
 import { RecycleMenu } from "./scenes/recyclemenu/recyclemenu.js";
 import { Level3 } from "./scenes/levelthree/levelthree.js";
-import { Level1Ending } from "./scenes/levelone/leveloneEnding.js";
+import { LevelEnding } from "./scenes/levelEnding.js";
 import { Level3Ending } from "./scenes/levelthree/levelthreeEnding.js";
 import { LevelSummary } from "./scenes/levelsummary.js";
 import "../css/style.css";
@@ -42,8 +42,8 @@ export class Game extends Engine {
     this.addScene("levelrecyclemenu", new RecycleMenu());
     this.addScene("defeatscreen", new DefeatScreen());
 
-    (this.addScene("level1Ending", {
-      scene: new Level1Ending(),
+    (this.addScene("levelEnding", {
+      scene: new LevelEnding(),
       transitions: {
         in: new FadeInOut({
           duration: 1500,
@@ -58,7 +58,7 @@ export class Game extends Engine {
       },
     }),
       this.addScene("level3Ending", {
-        scene: new Level1Ending(),
+        scene: new LevelEnding(),
         transitions: {
           in: new FadeInOut({
             duration: 1500,
