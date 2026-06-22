@@ -96,14 +96,21 @@ export class ScrapManager {
   }
 
   public static getUpgradeCost(upgradeType: UpgradeTypes): number {
-    const upgradeLevelCost = ScrapManager.getUpgradeLevel(upgradeType) + 1;
+    const upgradeLevel = ScrapManager.getUpgradeLevel(upgradeType);
+    let upgradeMultiplier: number;
+    let upgradeStartValue: number;
 
     switch (upgradeType) {
       case "moreHookSpace":
-        return upgradeLevelCost * upgradeLevelCost * 2 + 25;
+        upgradeMultiplier = 25;
+        upgradeStartValue = 25;
+        break;
       default:
-        return upgradeLevelCost * upgradeLevelCost * 2 + 5;
+        upgradeMultiplier = 5;
+        upgradeStartValue = 5;
     }
+
+    return upgradeLevel * upgradeLevel * upgradeMultiplier + upgradeStartValue;
   }
 
   public static doUpgrade(upgradeType: UpgradeTypes): void {

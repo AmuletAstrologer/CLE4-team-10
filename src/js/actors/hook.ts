@@ -92,13 +92,9 @@ export class Hook extends Actor {
       const dy = -Math.cos(this.rotation);
 
       this.vel.x =
-        dx *
-        (500 +
-          ScrapManager.getValueFromLocalStorage("moreHookThrowSpeed") * 50);
+        dx * (500 + ScrapManager.getUpgradeLevel("moreHookThrowSpeed") * 50);
       this.vel.y =
-        dy *
-        (500 +
-          ScrapManager.getValueFromLocalStorage("moreHookThrowSpeed") * 50);
+        dy * (500 + ScrapManager.getUpgradeLevel("moreHookThrowSpeed") * 50);
 
       this.#moveTime = 500;
       this.#isMoving = true;
@@ -120,8 +116,7 @@ export class Hook extends Actor {
   ): void {
     if (
       other.owner instanceof Trash &&
-      this.#amountOfObjects <
-        1 + ScrapManager.getValueFromLocalStorage("moreHookSpace")
+      this.#amountOfObjects < 1 + ScrapManager.getUpgradeLevel("moreHookSpace")
     ) {
       other.owner.body.collisionType = CollisionType.PreventCollision;
       other.owner.vel = vec(0, 0);
@@ -139,8 +134,7 @@ export class Hook extends Actor {
       // );
     }
     if (other.owner instanceof Meteor) {
-      this.#amountOfObjects =
-        1 + ScrapManager.getValueFromLocalStorage("moreHookSpace");
+      this.#amountOfObjects = 1 + ScrapManager.getUpgradeLevel("moreHookSpace");
       // this.#hasObject = true;
       // this.actions.moveTo(
       //   this.x,
@@ -153,14 +147,13 @@ export class Hook extends Actor {
 
     if (
       this.#amountOfObjects >=
-      1 + ScrapManager.getValueFromLocalStorage("moreHookSpace")
+      1 + ScrapManager.getUpgradeLevel("moreHookSpace")
     ) {
       this.actions.clearActions();
       this.actions.moveTo(
         this.x,
         this.y,
-        500 / 4 +
-          ScrapManager.getValueFromLocalStorage("moreHookGetSpeed") * 25,
+        500 / 4 + ScrapManager.getUpgradeLevel("moreHookGetSpeed") * 25,
       );
     }
   }
