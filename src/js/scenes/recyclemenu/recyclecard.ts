@@ -155,21 +155,18 @@ export class RecycleCard extends Actor {
     });
 
     plus.on("pointerdown", () => {
-      const scrap = localStorage.getItem("scrap");
-      let newScrap = 0;
+      let scrap = ScrapManager.getScrap();
 
-      if (scrap !== null) {
-        newScrap = Number(scrap);
+      // TODO: Set this to the ScrapManager Class so this logic isn't here
+      if (ScrapManager.getUpgradeCost(this.#upgradeType) <= scrap) {
+        scrap -= ScrapManager.getUpgradeCost(this.#upgradeType);
 
-        if (this.getUpgradeCosts() < newScrap) {
-          newScrap = newScrap - this.getUpgradeCosts();
-          this.pushToLocalStorage(
-            this.#upgradeType,
-            this.getValueFromLocalStorage(this.#upgradeType) + 1,
-          );
+        ScrapManager.setUpgradeLevel(
+          this.#upgradeType,
+          ScrapManager.getUpgradeLevel(this.#upgradeType) + 1,
+        );
 
-          localStorage.setItem("scrap", newScrap.toString());
-        }
+        localStorage.setItem("scrap", scrap.toString());
       }
     });
 
@@ -178,14 +175,17 @@ export class RecycleCard extends Actor {
   }
 
   onPreUpdate(engine: Engine, elapsed: number): void {
-    this.#upgradeLevelLabel.text = this.getValueFromLocalStorage(
+    this.#upgradeLevelLabel.text = ScrapManager.getUpgradeLevel(
       this.#upgradeType,
     ).toString();
 
-    this.#upgradeCostLabel.text = this.getUpgradeCosts().toString() + " Scrap";
+    this.#upgradeCostLabel.text =
+      ScrapManager.getUpgradeCost(this.#upgradeType).toString() + " Scrap";
 
     this.#upgradeCostLabel.color = Color.LightGray;
-    if (this.getUpgradeCosts() > Number(localStorage.getItem("scrap"))) {
+    if (
+      ScrapManager.getUpgradeCost(this.#upgradeType) > ScrapManager.getScrap()
+    ) {
       this.#upgradeCostLabel.color = Color.Red;
     }
   }
