@@ -12,6 +12,12 @@ import {
 } from "excalibur";
 import { Resources } from "../resources.js";
 import { Trash } from "../objects/trash.js";
+import { Meteor } from "../objects/meteor.js";
+import {
+  UpgradeTypes,
+  RecycleCard,
+} from "../scenes/recyclemenu/recyclecard.js";
+import { BaseScene } from "../objects/createGame.js";
 
 export class Hook extends Actor {
   #moveTime = 0;
@@ -50,8 +56,19 @@ export class Hook extends Actor {
       this.between(this.pos.y, this.y - 5, this.y + 5)
     ) {
       if (this.#hasObject) {
-        this.scene?.addScore();
-        this.scene?.addObjective();
+        if (this.children.length > 0) {
+          const scrap = localStorage.getItem("scrap");
+          if (scrap !== null) {
+            localStorage.setItem("scrap", (Number(scrap) + 1).toString());
+          } else {
+            localStorage.setItem("scrap", "1");
+          }
+        }
+
+
+        (this.scene as BaseScene)?.addScore?.();
+
+        (this.scene as BaseScene)?.addObjective();
         this.removeAllChildren();
       }
 
@@ -81,8 +98,12 @@ export class Hook extends Actor {
       const dx = Math.sin(this.rotation);
       const dy = Math.cos(this.rotation);
 
-      this.vel.x = dx * 500;
-      this.vel.y = dy * -500;
+      this.vel.x =
+        dx * 500 +
+        RecycleCard.getValueFromLocalStorage("moreHookThrowSpeed") * 100;
+      this.vel.y =
+        dy * -500 +
+        RecycleCard.getValueFromLocalStorage("moreHookThrowSpeed") * 100;
 
       this.#moveTime = 500;
       this.#isMoving = true;
@@ -108,11 +129,32 @@ export class Hook extends Actor {
       other.owner.pos = vec(-10, -25);
 
       this.addChild(other.owner);
-      this.#hasObject = true;
+      // this.#hasObject = true;
 
-      this.actions.clearActions();
-      this.actions.moveTo(this.x, this.y, 500 / 4);
+      // this.actions.clearActions();
+      // this.actions.moveTo(
+      //   this.x,
+      //   this.y,
+      //   500 / 4 + RecycleCard.getValueFromLocalStorage("moreHookGetSpeed") * 100,
+      // );
     }
+    // if (other.owner instanceof Meteor) {
+    // this.#hasObject = true;
+    // this.actions.moveTo(
+    //   this.x,
+    //   this.y,
+    //   500 / 4 +
+    //     RecycleCard.getValueFromLocalStorage("moreHookGetSpeed") * 100,
+    // );
+    // }
+    this.#hasObject = true;
+
+    this.actions.clearActions();
+    this.actions.moveTo(
+      this.x,
+      this.y,
+      500 / 4 + RecycleCard.getValueFromLocalStorage("moreHookGetSpeed") * 100,
+    );
   }
 
   between(x: number, min: number, max: number) {
