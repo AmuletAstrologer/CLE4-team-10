@@ -22,6 +22,17 @@ export class ScrapManager {
     }
   }
 
+  public static removeScrap(amount: number): boolean {
+    let scrap = ScrapManager.getScrap();
+
+    if (amount <= scrap) {
+      scrap -= amount;
+      localStorage.setItem("scrap", scrap.toString());
+      return true;
+    }
+    return false;
+  }
+
   public static addScrap(): void {
     const scrap = localStorage.getItem("scrap");
 
@@ -93,5 +104,16 @@ export class ScrapManager {
       default:
         return upgradeLevelCost * upgradeLevelCost * 2 + 5;
     }
+  }
+
+  public static doUpgrade(upgradeType: UpgradeTypes): void {
+    if (!ScrapManager.removeScrap(ScrapManager.getUpgradeCost(upgradeType))) {
+      return;
+    }
+
+    ScrapManager.setUpgradeLevel(
+      upgradeType,
+      ScrapManager.getUpgradeLevel(upgradeType) + 1,
+    );
   }
 }

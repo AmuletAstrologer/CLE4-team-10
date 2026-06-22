@@ -86,19 +86,7 @@ export class RecycleCard extends GenericCard {
     this.addChild(plus);
 
     plus.on("pointerdown", () => {
-      let scrap = ScrapManager.getScrap();
-
-      // TODO: Set this to the ScrapManager Class so this logic isn't here
-      if (ScrapManager.getUpgradeCost(this.#upgradeType) <= scrap) {
-        scrap -= ScrapManager.getUpgradeCost(this.#upgradeType);
-
-        ScrapManager.setUpgradeLevel(
-          this.#upgradeType,
-          ScrapManager.getUpgradeLevel(this.#upgradeType) + 1,
-        );
-
-        localStorage.setItem("scrap", scrap.toString());
-      }
+      ScrapManager.doUpgrade(this.#upgradeType);
     });
   }
 
