@@ -47,7 +47,4 @@ for (let res of Object.values(Resources)) {
   ResourceLoader.addResource(res);
 }
 
-//Background
-Background: new ImageSource("images/background.png");
-
 export { Resources, ResourceLoader };

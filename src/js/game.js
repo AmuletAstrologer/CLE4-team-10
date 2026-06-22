@@ -20,6 +20,8 @@ import { Level3 } from "./scenes/levelthree/levelthree.js";
 import { Level1Ending } from "./scenes/levelone/leveloneEnding.js";
 import { Level3Ending } from "./scenes/levelthree/levelthreeEnding.js";
 import { LevelSummary } from "./scenes/levelsummary.js";
+import "../css/style.css";
+// import { Actor, Engine, Vector, DisplayMode, SolverStrategy, Keys, Transition, Color, FadeInOut } from "excalibur"
 
 export class Game extends Engine {
   constructor() {

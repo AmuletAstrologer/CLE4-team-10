@@ -350,8 +350,8 @@ export class DefeatScreen extends Scene {
 
 
 
-
-        // Restart fade in
+        //Make comments clearer
+        // Restart fade in blinking
 
         if (
             this.crawlFinished &&
@@ -376,7 +376,7 @@ export class DefeatScreen extends Scene {
 
         if (this.restart.opacity >= 1) {
 
-
+           //Add const instead of magic numbers
             this.restart.opacity =
                 0.75 +
                 Math.sin(this.time / 250)
