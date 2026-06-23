@@ -1,6 +1,16 @@
-import { Actor, Color, FontUnit, Label, Vector,  BaseAlign, TextAlign } from "excalibur";
+import {
+  Actor,
+  Color,
+  FontUnit,
+  Label,
+  Vector,
+  BaseAlign,
+  TextAlign,
+  vec,
+} from "excalibur";
 import { Resources } from "../../resources";
 import { BackgroundBox } from "../../actors/backgroundbox";
+import { Healthbar } from "../../actors/healthbar/healthbar";
 
 export class UI extends Actor {
   #objective;
@@ -40,7 +50,7 @@ export class UI extends Actor {
 
     this.#timer = new Label({
       text: "03:00",
-      pos: new Vector(1200 , 30),
+      pos: new Vector(1200, 30),
       font: Resources.PixelFont.toFont({
         unit: FontUnit.Px,
         size: 32,
@@ -51,8 +61,10 @@ export class UI extends Actor {
     });
 
     this.addChild(this.#timer);
-  }
 
+    this.health = new Healthbar({ pos: vec(100, engine.drawHeight - 100) });
+    this.addChild(this.health);
+  }
 
   updateObjective(objective) {
     this.#objective.text = `${objective}/10`;

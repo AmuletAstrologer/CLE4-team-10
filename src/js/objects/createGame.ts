@@ -1,11 +1,11 @@
-import { Scene, Label, Actor, Vector, Random, Font } from "excalibur";
+import { Scene, Label, Actor, Vector } from "excalibur";
 import { Hook } from "../actors/hook";
 import { Background } from "../background/background";
 import { Spawner } from "../scenes/levelone/spawner";
 import { UI } from "../scenes/levelone/ui";
 import { Resources, ResourceLoader } from "../resources";
-import { LevelScores, saveScores } from "../scores";
-import { checkAchievements } from "../achievements";
+import { LevelScores, saveScores, getScores } from "../scores";
+import { AchievementManager } from "../lib/achievementmanager";
 
 export abstract class BaseScene extends Scene {
   score = 0;
@@ -25,16 +25,27 @@ export abstract class BaseScene extends Scene {
     this.objective++;
     this.ui.updateObjective(this.objective);
     console.log(this.levelNumber);
-    if (this.objective >= 1) {
-      this.engine.goToScene("levelEnding", {
-        sceneActivationData: {
-          levelNumber: this.levelNumber,
-          score: this.score,
-        },
-      });
-    }
+    if (this.objective >= 1) this.levelEnding();
+  }
+
+  levelEnding() {
+    this.engine.goToScene("levelEnding", {
+      sceneActivationData: {
+        levelNumber: this.levelNumber,
+        score: this.score,
+      },
+    });
+  }
+
+  defeat() {
+    this.engine.goToScene("defeatscreen", {
+      sceneActivationData: {
+        restartScene: `level${this.levelNumber}`,
+      },
+    });
   }
 }
+
 export abstract class BaseUi extends Actor {}
 
 export function createGame(

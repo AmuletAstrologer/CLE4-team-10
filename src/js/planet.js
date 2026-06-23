@@ -1,7 +1,7 @@
 import { Actor, Color, Buttons, Shape, CollisionType } from "excalibur";
 
 export class Planet extends Actor {
-  constructor({ sprite, level, scale, hoversprite }) {
+  constructor({ sprite, level, scale, hoversprite, pos }) {
     super({
       width: sprite.width,
       height: sprite.height,
@@ -12,12 +12,13 @@ export class Planet extends Actor {
     this.level = level;
     this.scale = scale;
     this.hoversprite = hoversprite;
+    this.pos = pos;
   }
 
   onInitialize(engine) {
     this.sprite = this.sprite;
 
-    this.graphics.use(this.sprite.toSprite());
+    this.graphics.use(this.sprite);
 
     this.scale = this.scale;
     this.on("pointerup", () => {
@@ -26,16 +27,16 @@ export class Planet extends Actor {
       console.log(this.level);
     });
     this.on("pointerenter", () => {
-      this.graphics.use(this.hoversprite.toSprite());
+      this.graphics.use(this.hoversprite);
     });
     this.on("pointerleave", () => {
-      this.graphics.use(this.sprite.toSprite());
+      this.graphics.use(this.sprite);
     });
     this.on("collisionstart", (evt) => {
-      this.graphics.use(this.hoversprite.toSprite());
+      this.graphics.use(this.hoversprite);
     });
     this.on("collisionend", (evt) => {
-      this.graphics.use(this.sprite.toSprite());
+      this.graphics.use(this.sprite);
     });
   }
 }

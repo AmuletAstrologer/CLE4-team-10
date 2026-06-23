@@ -15,51 +15,58 @@ export class LevelSummary extends Scene {
 
     const planets = [
       {
-        sprite: Resources.redPlanet,
-        hoversprite: Resources.hoverredPlanet,
-        // level: "two",
-        scale: new Vector(0.5, 0.5),
-        pos: new Vector(250, 450),
-      },
-      {
-        sprite: Resources.recyclePlanet,
-        hoversprite: Resources.hoverredPlanet,
-        level: "levelrecyclemenu",
+        sprite: Resources.recyclePlanet.toSprite(),
+        hoversprite: Resources.hoverrecyclePlanet.toSprite(),
+        level: "recyclemenu",
         scale: new Vector(0.7, 0.7),
         pos: new Vector(150, 110),
       },
       {
-        sprite: Resources.salmonPlanet,
-        hoversprite: Resources.hoversalmonPlanet,
-        level: "level1",
+        sprite: Resources.achievementPlanet.toSprite(),
+        hoversprite: Resources.hoverachievementPlanet.toSprite(),
+        level: "achievements",
         scale: new Vector(0.5, 0.5),
-        pos: new Vector(380, 610),
+        pos: new Vector(1170, 600),
       },
       {
-        sprite: Resources.yellowringPlanet,
-        hoversprite: Resources.hoveryellowringPlanet,
+        sprite: Resources.salmonPlanet.toSprite(),
+        hoversprite: Resources.hoversalmonPlanet.toSprite(),
+        level: "level1",
+        scale: new Vector(0.5, 0.5),
+        pos: new Vector(365, 625),
+      },
+      {
+        sprite: Resources.redPlanet.toSprite(),
+        hoversprite: Resources.hoverredPlanet.toSprite(),
+        level: "level2",
+        scale: new Vector(0.5, 0.5),
+        pos: new Vector(250, 450),
+      },
+      {
+        sprite: Resources.yellowringPlanet.toSprite(),
+        hoversprite: Resources.hoveryellowringPlanet.toSprite(),
         level: "level3",
         scale: new Vector(0.5, 0.5),
         pos: new Vector(700, 590),
       },
       {
-        sprite: Resources.lightbluePlanet,
-        hoversprite: Resources.hoverlightbluePlanet,
-        //level: "four",
+        sprite: Resources.lightbluePlanet.toSprite(),
+        hoversprite: Resources.hoverlightbluePlanet.toSprite(),
+        level: "level4",
         scale: new Vector(0.6, 0.6),
         pos: new Vector(485, 345),
       },
       {
-        sprite: Resources.orangePlanet,
-        hoversprite: Resources.hoverorangePlanet,
-        //level: "five",
+        sprite: Resources.orangePlanet.toSprite(),
+        hoversprite: Resources.hoverorangePlanet.toSprite(),
+        level: "five",
         scale: new Vector(0.4, 0.4),
         pos: new Vector(1015, 405),
       },
       {
-        sprite: Resources.blueringPlanet,
-        hoversprite: Resources.hoverblueringPlanet,
-        //level: "six",
+        sprite: Resources.blueringPlanet.toSprite(),
+        hoversprite: Resources.hoverblueringPlanet.toSprite(),
+        level: "six",
         scale: new Vector(0.5, 0.5),
         pos: new Vector(840, 80),
       },
@@ -67,7 +74,7 @@ export class LevelSummary extends Scene {
 
     planets.forEach((p) => {
       const planet = new Planet(p);
-      planet.pos = p.pos;
+      // planet.pos = p.pos;
       this.add(planet);
     });
   }

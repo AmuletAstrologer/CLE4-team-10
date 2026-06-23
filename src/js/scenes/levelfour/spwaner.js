@@ -16,12 +16,24 @@ export class Spawner extends Actor {
         type: "Cilinder",
       },
       {
+        sprite: Resources.AfvalFragment.toSprite(),
+        type: "Fragment",
+      },
+      {
+        sprite: Resources.AfvalHelm.toSprite(),
+        type: "Helm",
+      },
+      {
+        sprite: Resources.AfvalModule.toSprite(),
+        type: "Module",
+      },
+      {
         sprite: Resources.AfvalPaneel.toSprite(),
         type: "Plaat",
       },
       {
         sprite: Resources.AfvalPlaat.toSprite(),
-        type: "Piece",
+        type: "Plaat",
       },
       {
         sprite: Resources.AfvalSatelliet.toSprite(),

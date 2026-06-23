@@ -1,29 +1,16 @@
-import {
-  Scene,
-  Label,
-  Vector,
-  Random,
-  Font,
-  FontUnit,
-  Color,
-  Buttons,
-} from "excalibur";
+import { Scene, Label, Vector, Random, Font, FontUnit, Color } from "excalibur";
 import { Bolt } from "../../objects/bolts.js";
 import { Spawner } from "./spwaner.js";
 import { UI } from "./ui.js";
 import { Hook } from "../../actors/hook.ts";
 import { Resources } from "../../resources.js";
 import { Background } from "../../background/background.js";
-import { DefeatScreen } from "../../defeatscreen.js";
-import { Trash } from "../../objects/trash.js";
 import { BaseScene, createGame } from "../../objects/createGame.ts";
+import { Trash } from "../../objects/trash.js";
 import { saveScores } from "../../scores.ts";
-import { AchievementManager } from "../../lib/achievementmanager.ts";
 
-//Metal Level
-
-export class Level3 extends BaseScene {
-  levelNumber = 3;
+export class Level4 extends BaseScene {
+  levelNumber = 4;
 
   //Game Timer
   gameTime = 180000; // 3 minutes
@@ -127,18 +114,9 @@ export class Level3 extends BaseScene {
       this.timeLeft = 0;
 
       if (this.objective >= 10) {
-        this.engine.goToScene("levelEnding", {
-          sceneActivationData: {
-            score: this.score,
-          },
-        });
+        this.levelEnding();
       } else {
-        this.engine.goToScene("defeatscreen", {
-          sceneActivationData: {
-            score: this.score,
-            restartScene: "level3",
-          },
-        });
+        this.defeat();
       }
 
       return;
@@ -221,6 +199,7 @@ export class Level3 extends BaseScene {
     } else {
       console.log("Wrong trash:", trash.type, "Needed:", this.currentTarget);
       this.objective--;
+      this.ui.health.decrease();
     }
 
     this.ui.updateObjective(this.objective);
@@ -232,11 +211,7 @@ export class Level3 extends BaseScene {
     this.ui.updateObjective(this.objective);
 
     if (this.objective >= 10) {
-      this.engine.goToScene("levelEnding", {
-        sceneActivationData: {
-          score: this.score,
-        },
-      });
+      this.levelEnding();
     }
   }
 
@@ -267,12 +242,6 @@ export class Level3 extends BaseScene {
       bolt.vel = dir.scale(speed);
       bolt.pos = new Vector(x, y);
       this.add(bolt);
-    }
-  }
-  onPreUpdate(engine) {
-    const gamepad = engine.input.gamepads.at(0);
-    if (gamepad?.wasButtonPressed(Buttons.Face2)) {
-      engine.goToScene("levels");
     }
   }
 }

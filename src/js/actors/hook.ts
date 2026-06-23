@@ -14,13 +14,10 @@ import {
 } from "excalibur";
 import { Resources } from "../resources.js";
 import { Trash } from "../objects/trash.js";
+import { AlteredTrash } from "../scenes/leveltwo/alteredtrash.js";
 import { Meteor } from "../objects/meteor.js";
-import {
-  UpgradeTypes,
-  RecycleCard,
-} from "../scenes/recyclemenu/recyclecard.js";
-import { BaseScene } from "../objects/createGame.js";
 import { ScrapManager } from "../lib/scrapmanager.js";
+import { BaseScene } from "../objects/createGame.js";
 
 export class Hook extends Actor {
   #moveTime = 0;
@@ -62,9 +59,10 @@ export class Hook extends Actor {
         for (const child in this.children) {
           ScrapManager.addScrap();
 
-          (this.scene as BaseScene)?.addScore?.();
-
-          (this.scene as BaseScene)?.addObjective();
+          if (this.scene instanceof BaseScene) {
+            this.scene.addScore();
+            this.scene.addObjective();
+          }
         }
       }
 
@@ -131,8 +129,11 @@ export class Hook extends Actor {
     contact: CollisionContact,
   ): void {
     if (
-      other.owner instanceof Trash &&
-      this.#amountOfObjects < 1 + ScrapManager.getUpgradeLevel("moreHookSpace")
+      other.owner instanceof Trash ||
+      (other.owner instanceof AlteredTrash &&
+        this.#amountOfObjects <
+          1 + ScrapManager.getUpgradeLevel("moreHookSpace") &&
+        !this.#amountOfObjects)
     ) {
       other.owner.body.collisionType = CollisionType.PreventCollision;
       other.owner.vel = vec(0, 0);

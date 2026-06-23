@@ -86,4 +86,33 @@ export class GenericCard extends Actor {
     this.#activeBackgroundColor = this.#backgroundColor + "99";
     this.#activeBorderColor = this.#borderColor + "60";
   }
+  private refresh() {
+    this.graphics.use(
+      new Canvas({
+        width: this.#width,
+        height: this.#height,
+        draw: (ctx) => {
+          const offset = this.#borderWidth / 2;
+          const drawWidth = this.#width - this.#borderWidth;
+          const drawHeight = this.#height - this.#borderWidth;
+
+          ctx.beginPath();
+          ctx.roundRect(
+            offset,
+            offset,
+            drawWidth,
+            drawHeight,
+            this.#cornerRadius,
+          );
+
+          ctx.fillStyle = this.#activeBackgroundColor;
+          ctx.fill();
+
+          ctx.strokeStyle = this.#activeBorderColor;
+          ctx.lineWidth = this.#borderWidth;
+          ctx.stroke();
+        },
+      }),
+    );
+  }
 }
