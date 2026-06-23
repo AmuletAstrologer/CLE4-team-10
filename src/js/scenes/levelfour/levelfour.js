@@ -6,23 +6,21 @@ import { Hook } from "../../actors/hook.ts";
 import { Resources } from "../../resources.js";
 import { Background } from "../../background/background.js";
 import { BaseScene, createGame } from "../../objects/createGame.ts";
+import { Trash } from "../../objects/trash.js";
+import { saveScores } from "../../scores.ts";
 
-//
 export class Level4 extends BaseScene {
-  // constructor() {
-  //   super();
-  // }
   levelNumber = 4;
 
   //Game Timer
-  gameTime = 120000; // 2 minutes
+  gameTime = 180000; // 3 minutes
   timeLeft = 120000;
 
   //Trash Timer
   targetTimer = 0;
   targetChangeTime = 30000; //30 seconden
 
-  metalTrash = ["Airtank", "Cilinder", "Plaat", "Satelliet"];
+  metalTrash = ["Airtank", "Cilinder", "Plaat", "Satelliet", "Piece"];
 
   currentTarget = "";
 
@@ -31,7 +29,7 @@ export class Level4 extends BaseScene {
   }
 
   onActivate() {
-    this.score = 0;
+    // this.score = 0;
     this.objective = 0;
     this.introTimer = 0;
 
@@ -49,6 +47,7 @@ export class Level4 extends BaseScene {
   }
 
   onPreUpdate(engine, delta) {
+    this.ui.z = 100;
     // Intro animation
     this.introTimer += delta;
 
@@ -114,7 +113,13 @@ export class Level4 extends BaseScene {
     if (this.timeLeft <= 0) {
       this.timeLeft = 0;
 
-      this.levelEnding();
+      if (this.objective >= 10) {
+        this.levelEnding();
+      } else {
+        this.defeat();
+      }
+
+      return;
     }
   }
 
@@ -124,11 +129,11 @@ export class Level4 extends BaseScene {
 
     // Level intro
     this.title = new Label({
-      text: "Level Four",
+      text: "Level Three",
       pos: new Vector(640, 280),
-      font: new Font({
-        size: 60,
+      font: Resources.PixelFont.toFont({
         unit: FontUnit.Px,
+        size: 60,
         color: Color.White,
       }),
     });
@@ -139,9 +144,9 @@ export class Level4 extends BaseScene {
     this.intro = new Label({
       text: "Metal Level",
       pos: new Vector(640, 360),
-      font: new Font({
-        size: 40,
+      font: Resources.PixelFont.toFont({
         unit: FontUnit.Px,
+        size: 40,
         color: Color.White,
       }),
     });
@@ -167,9 +172,14 @@ export class Level4 extends BaseScene {
 
     this.currentTarget = this.metalTrash[index];
 
-    //Immeadantly remove old targets' tint color
     if (this.ui) {
       this.ui.updateTarget(this.currentTarget);
+    }
+
+    for (const actor of this.actors) {
+      if (actor instanceof Trash) {
+        actor.setTargetTint(actor.type === this.currentTarget);
+      }
     }
 
     console.log("Target:", this.currentTarget);
@@ -186,18 +196,12 @@ export class Level4 extends BaseScene {
     //Only plus points for correct trash
     if (trash.type === this.currentTarget) {
       console.log("Correct trash");
-
-      this.score++;
     } else {
       console.log("Wrong trash:", trash.type, "Needed:", this.currentTarget);
-
-      this.score--;
       this.objective--;
-
       this.ui.health.decrease();
     }
 
-    this.ui.updateScore(this.score);
     this.ui.updateObjective(this.objective);
   }
 
@@ -206,20 +210,9 @@ export class Level4 extends BaseScene {
 
     this.ui.updateObjective(this.objective);
 
-    //Add minus score for collecting wrong thrash
-    if (this.objective >= 1) {
+    if (this.objective >= 10) {
       this.levelEnding();
     }
-
-    // Add proper condition for losing later
-    // if (this.objective === 1) {
-    //   this.engine.goToScene("defeatscreen", {
-    //     sceneActivationData: {
-    //       score: this.score,
-    //       restartScene: "level3",
-    //     },
-    //   });
-    // }
   }
 
   onCollision(x, y) {
@@ -250,13 +243,5 @@ export class Level4 extends BaseScene {
       bolt.pos = new Vector(x, y);
       this.add(bolt);
     }
-
-    this.removeScore();
-  }
-
-  removeScore() {
-    this.score--;
-
-    this.ui.updateScore(this.score);
   }
 }

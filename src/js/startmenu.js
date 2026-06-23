@@ -13,4 +13,5 @@ export class StartMenu extends Actor {
         this.scale = new Vector(0.5, 0.5);
         this.addChild(new LevelButton);
     }
+    
 }

@@ -3,7 +3,9 @@ import { Hook } from "../actors/hook";
 import { Background } from "../background/background";
 import { Spawner } from "../scenes/levelone/spawner";
 import { UI } from "../scenes/levelone/ui";
-import { Resources } from "../resources";
+import { Resources, ResourceLoader } from "../resources";
+import { LevelScores, saveScores, getScores } from "../scores";
+import { AchievementManager } from "../lib/achievementmanager";
 
 export abstract class BaseScene extends Scene {
   score = 0;
@@ -56,7 +58,7 @@ export function createGame(
   scene.add(background);
 
   const title = new Label({
-    text: `${levelTitle}`,
+    text: levelTitle,
     pos: new Vector(50, 20),
     font: Resources.PixelFont.toFont({
       size: 40,

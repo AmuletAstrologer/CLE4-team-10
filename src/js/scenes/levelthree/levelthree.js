@@ -1,4 +1,13 @@
-import { Scene, Label, Vector, Random, Font, FontUnit, Color } from "excalibur";
+import {
+  Scene,
+  Label,
+  Vector,
+  Random,
+  Font,
+  FontUnit,
+  Color,
+  Buttons,
+} from "excalibur";
 import { Bolt } from "../../objects/bolts.js";
 import { Spawner } from "./spwaner.js";
 import { UI } from "./ui.js";
@@ -9,7 +18,7 @@ import { DefeatScreen } from "../../defeatscreen.js";
 import { Trash } from "../../objects/trash.js";
 import { BaseScene, createGame } from "../../objects/createGame.ts";
 import { saveScores } from "../../scores.ts";
-import { checkAchievements } from "../../achievements.ts";
+import { AchievementManager } from "../../lib/achievementmanager.ts";
 
 //Metal Level
 
@@ -246,6 +255,12 @@ export class Level3 extends BaseScene {
       bolt.vel = dir.scale(speed);
       bolt.pos = new Vector(x, y);
       this.add(bolt);
+    }
+  }
+  onPreUpdate(engine) {
+    const gamepad = engine.input.gamepads.at(0);
+    if (gamepad?.wasButtonPressed(Buttons.Face2)) {
+      engine.goToScene("levels");
     }
   }
 }
