@@ -9,6 +9,8 @@ import {
   Collider,
   CollisionContact,
   Side,
+  Buttons,
+  Axes,
 } from "excalibur";
 import { Resources } from "../resources.js";
 import { Trash } from "../objects/trash.js";
@@ -72,6 +74,12 @@ export class Hook extends Actor {
       this.rotation = 0;
       this.#isMoving = false;
     }
+    const gamepad = engine.input.gamepads.at(0);
+    const x = gamepad?.getAxes(Axes.LeftStickX) ?? 0;
+    const y = gamepad?.getAxes(Axes.LeftStickY) ?? 0;
+    if (!this.#isMoving) {
+      this.rotation += x * 0.025;
+    }
 
     if (
       (engine.input.keyboard.isHeld(Keys.ArrowLeft) ||
@@ -89,7 +97,10 @@ export class Hook extends Actor {
       this.rotation += 0.025;
     }
 
-    if (engine.input.keyboard.isHeld(Keys.Space) && !this.#isMoving) {
+    if (
+      engine.input.keyboard.isHeld(Keys.Space) ||
+      (gamepad?.wasButtonPressed(Buttons.Face1) && !this.#isMoving)
+    ) {
       const dx = Math.sin(this.rotation);
       const dy = -Math.cos(this.rotation);
 
@@ -117,8 +128,11 @@ export class Hook extends Actor {
     contact: CollisionContact,
   ): void {
     if (
-      other.owner instanceof Trash &&
-      this.#amountOfObjects < 1 + ScrapManager.getUpgradeLevel("moreHookSpace")
+      other.owner instanceof Trash ||
+      (other.owner instanceof AlteredTrash &&
+        this.#amountOfObjects <
+          1 + ScrapManager.getUpgradeLevel("moreHookSpace") &&
+        !this.#amountOfObjects)
     ) {
       other.owner.body.collisionType = CollisionType.PreventCollision;
       other.owner.vel = vec(0, 0);

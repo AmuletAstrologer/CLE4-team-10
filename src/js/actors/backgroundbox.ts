@@ -1,4 +1,4 @@
-import { Actor, Engine, vec, Canvas } from "excalibur";
+import { Actor, Engine, vec, Canvas, CollisionType } from "excalibur";
 
 export class BackgroundBox extends Actor {
   #width: number;

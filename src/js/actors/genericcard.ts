@@ -1,4 +1,12 @@
-import { Actor, Engine, vec, Canvas, PointerEvent, Vector } from "excalibur";
+import {
+  Actor,
+  Engine,
+  Shape,
+  vec,
+  Canvas,
+  PointerEvent,
+  Vector,
+} from "excalibur";
 
 export class GenericCard extends Actor {
   #width: number;
@@ -24,6 +32,8 @@ export class GenericCard extends Actor {
       width: config.width,
       height: config.height,
     });
+
+    this.collider.set(Shape.Box(config.width, config.height));
     this.#width = config.width;
     this.#height = config.height;
 
@@ -75,5 +85,34 @@ export class GenericCard extends Actor {
   onPointerLeave(event: PointerEvent) {
     this.#activeBackgroundColor = this.#backgroundColor + "99";
     this.#activeBorderColor = this.#borderColor + "60";
+  }
+  private refresh() {
+    this.graphics.use(
+      new Canvas({
+        width: this.#width,
+        height: this.#height,
+        draw: (ctx) => {
+          const offset = this.#borderWidth / 2;
+          const drawWidth = this.#width - this.#borderWidth;
+          const drawHeight = this.#height - this.#borderWidth;
+
+          ctx.beginPath();
+          ctx.roundRect(
+            offset,
+            offset,
+            drawWidth,
+            drawHeight,
+            this.#cornerRadius,
+          );
+
+          ctx.fillStyle = this.#activeBackgroundColor;
+          ctx.fill();
+
+          ctx.strokeStyle = this.#activeBorderColor;
+          ctx.lineWidth = this.#borderWidth;
+          ctx.stroke();
+        },
+      }),
+    );
   }
 }

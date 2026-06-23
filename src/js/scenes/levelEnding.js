@@ -6,6 +6,7 @@ import {
   Random,
   FontSource,
   FontUnit,
+  Buttons,
   Color,
   Text,
   TextAlign,
@@ -18,7 +19,7 @@ export class LevelEnding extends Scene {
   onInitialize(engine) {
     const background = new Background();
     this.add(background);
-    // console.log(this.levelNumber)
+    console.log(this.levelNumber);
 
     this.title = new Label({
       pos: new Vector(engine.halfDrawWidth, 360),
@@ -57,11 +58,15 @@ export class LevelEnding extends Scene {
     this.add(continueActor);
   }
   onActivate(ctx) {
-    console.log("LevelEnding scene activated with data:", ctx.data);
-
     const data = ctx.data;
     this.score = data?.score ?? 0;
     this.levelNumber = data?.levelNumber ?? 0;
     this.title.text = `You completed level ${this.levelNumber}! Your score is ${this.score}`;
+  }
+  onPreUpdate(engine) {
+    const gamepad = engine.input.gamepads.at(0);
+    if (gamepad?.wasButtonPressed(Buttons.Face2)) {
+      engine.goToScene("levels");
+    }
   }
 }
