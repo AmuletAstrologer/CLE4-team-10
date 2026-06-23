@@ -19,6 +19,13 @@ export class LevelSummary extends Scene {
                 pos: new Vector(150, 110),
             },
             {
+                sprite: Resources.achievementPlanet.toSprite(),
+                hoversprite: Resources.hoverachievementPlanet.toSprite(),
+                level: "achievements",
+                scale: new Vector(0.7, 0.7),
+                pos: new Vector(150, 110),
+            },
+            {
                 sprite: Resources.salmonPlanet.toSprite(),
                 hoversprite: Resources.hoversalmonPlanet.toSprite(),
                 level: "level1",

@@ -41,6 +41,8 @@ const Resources = {
     Star: new ImageSource('images/star.png'),
     yellowringPlanet: new ImageSource('images/yellowringplanet.png'),
     hoveryellowringPlanet: new ImageSource('images/hoveryellowringplanet.png'),
+    achievementPlanet: new ImageSource('images/achievementplanet.png'),
+    hoverachievementPlanet: new ImageSource('images/hoverachievementplanet.png'),
     
 }
 
