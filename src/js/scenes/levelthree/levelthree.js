@@ -227,7 +227,7 @@ export class Level3 extends BaseScene {
 
     this.ui.updateObjective(this.objective);
 
-    if (this.objective >= 1) {
+    if (this.objective >= 10) {
       this.levelEnding();
     }
   }
