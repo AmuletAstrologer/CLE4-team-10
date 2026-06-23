@@ -5,6 +5,7 @@ import { PlanetSpawner } from "./planetspawner";
 import { Hook } from "../../actors/hook";
 import { Spawner } from "./spawner";
 import { UI } from "./ui";
+import { Backbutton } from "../../backbutton";
 
 export class Level2 extends Scene {
     // score = 0;
@@ -13,39 +14,15 @@ export class Level2 extends Scene {
     onInitialize(engine) {
         this.add(new Background);
 
-        const backbutton = new Label({
-            text: "⇜",
-            font: Resources.PixelFont.toFont({
-                unit: FontUnit.Px,
-                size: 60,
-                color: Color.White
-            }),
-        })
-
+       
         this.createLevel();
-        
-        backbutton.anchor = new Vector(0.5, 0.5);
-        backbutton.pos = new Vector(40, 40);
 
         this.spawned = 0;
 
         this.spawner = new Spawner();
         this.add(this.spawner);
 
-        this.add(backbutton);
-
-
-        backbutton.on('pointerenter', () => {
-            backbutton.font.color = Color.Orange;
-        });
-
-        backbutton.on('pointerleave', () => {
-            backbutton.font.color = Color.White;
-        });
-
-        backbutton.on('pointerup', () => {
-            engine.goToScene("levels");
-        })
+        this.add(new Backbutton);
     }
 
     addSpawned() {
