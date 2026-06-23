@@ -43,7 +43,6 @@ export class Level3 extends BaseScene {
   }
 
   onActivate() {
-    // this.score = 0;
     this.objective = 0;
     this.introTimer = 0;
 
@@ -228,7 +227,7 @@ export class Level3 extends BaseScene {
 
     this.ui.updateObjective(this.objective);
 
-    if (this.objective >= 10) {
+    if (this.objective >= 1) {
       this.levelEnding();
     }
   }
