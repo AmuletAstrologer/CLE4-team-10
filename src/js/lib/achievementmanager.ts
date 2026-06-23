@@ -1,5 +1,5 @@
 import { getScores, LevelScores } from "../scores";
-import { UpgradeTypes } from "./scrapmanager";
+import { ScrapManager } from "./scrapmanager";
 
 export type AchievementNames =
   | "Perfect Hooking"
@@ -58,6 +58,8 @@ export class AchievementManager {
     const achievements = AchievementManager.getAchievements();
     const scores = getScores();
     this.checkAchievement1(scores, achievements);
+    this.checkAchievement2(achievements);
+    localStorage.setItem("achievements", JSON.stringify(achievements));
   }
 
   static checkAchievement1(
@@ -73,7 +75,23 @@ export class AchievementManager {
         perfectHooking.unlocked = true;
       }
     }
+  }
+  static checkAchievement2(achievements: Partial<Achievements>) {
+    const scrap = ScrapManager.getScrap();
+    if (scrap > 0) {
+      const scrapCollector = achievements.achievements?.find(
+        (achievement) => achievement.name === "Scrap Collector",
+      );
 
-    localStorage.setItem("achievements", JSON.stringify(achievements));
+      if (scrapCollector) {
+        scrapCollector.unlocked = true;
+      }
+    }
+  }
+  public static isUnlocked(name: AchievementNames): boolean {
+    return (
+      this.getAchievements().achievements?.find((a) => a.name === name)
+        ?.unlocked ?? false
+    );
   }
 }

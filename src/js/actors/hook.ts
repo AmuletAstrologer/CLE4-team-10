@@ -136,7 +136,7 @@ export class Hook extends Actor {
       (other.owner instanceof AlteredTrash &&
         this.#amountOfObjects <
           1 + ScrapManager.getUpgradeLevel("moreHookSpace") &&
-        !this.#hasObject)
+        !this.#amountOfObjects)
     ) {
       other.owner.body.collisionType = CollisionType.PreventCollision;
       other.owner.vel = vec(0, 0);

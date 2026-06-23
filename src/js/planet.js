@@ -27,10 +27,10 @@ export class Planet extends Actor {
       console.log(this.level);
     });
     this.on("pointerenter", () => {
-      this.graphics.use(this.hoversprite.toSprite());
+      this.graphics.use(this.hoversprite);
     });
     this.on("pointerleave", () => {
-      this.graphics.use(this.sprite.toSprite());
+      this.graphics.use(this.sprite);
     });
     this.on("collisionstart", (evt) => {
       this.graphics.use(this.hoversprite);

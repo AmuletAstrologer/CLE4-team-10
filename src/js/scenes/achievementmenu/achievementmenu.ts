@@ -25,6 +25,14 @@ export class AchievementMenu extends Scene {
   cursor!: Cursor;
 
   onInitialize(engine: Engine) {
+    AchievementManager.checkAchievements();
+    this.actors.forEach((a) => a.kill());
+    this.buildScene(engine);
+  }
+
+  buildScene(engine: Engine) {
+    const uncompletedBackgroundColor = "#ed405a";
+    const completedBackgroundColor = "#40ed5d";
     const cursor = new Cursor();
     this.add(cursor);
     this.cursor = cursor;
@@ -57,37 +65,49 @@ export class AchievementMenu extends Scene {
     const achievementContainer = new BackgroundBox(130, 125, 225, 150);
     this.add(achievementContainer);
 
-    const moreHookSpace = new AchievementCard(
+    const perfectHooking = new AchievementCard(
       vec(engine.halfDrawWidth, engine.halfDrawHeight - 145),
       650,
       100,
       "Perfect Hooking",
+      AchievementManager.isUnlocked("Perfect Hooking")
+        ? completedBackgroundColor
+        : uncompletedBackgroundColor,
     );
-    this.add(moreHookSpace);
+    this.add(perfectHooking);
 
-    const moreHookGetSpeed = new AchievementCard(
+    const scrapCollector = new AchievementCard(
       vec(engine.halfDrawWidth, engine.halfDrawHeight - 35),
       650,
       100,
       "Scrap Collector",
+      AchievementManager.isUnlocked("Scrap Collector")
+        ? completedBackgroundColor
+        : uncompletedBackgroundColor,
     );
-    this.add(moreHookGetSpeed);
+    this.add(scrapCollector);
 
-    const moreHookThrowSpeed = new AchievementCard(
+    const highScore = new AchievementCard(
       vec(engine.halfDrawWidth, engine.halfDrawHeight + 75),
       650,
       100,
       "High Score",
+      AchievementManager.isUnlocked("High Score")
+        ? completedBackgroundColor
+        : uncompletedBackgroundColor,
     );
-    this.add(moreHookThrowSpeed);
+    this.add(highScore);
 
-    const card3 = new AchievementCard(
+    const recycleMaster = new AchievementCard(
       vec(engine.halfDrawWidth, engine.halfDrawHeight + 185),
       650,
       100,
       "Recycle Master",
+      AchievementManager.isUnlocked("Recycle Master")
+        ? completedBackgroundColor
+        : uncompletedBackgroundColor,
     );
-    this.add(card3);
+    this.add(recycleMaster);
 
     const backLabel = new Label({
       text: "Press X to go back",
@@ -105,7 +125,10 @@ export class AchievementMenu extends Scene {
   }
 
   onActivate(context: SceneActivationContext) {
+    AchievementManager.checkAchievements();
     const engine = context.engine;
+    this.actors.forEach((a) => a.kill());
+    this.buildScene(engine);
 
     engine.input.keyboard.on("press", (evt) => {
       if (evt.key === Keys.X) {
@@ -117,9 +140,6 @@ export class AchievementMenu extends Scene {
     });
   }
 
-  onPreDraw(ctx: ExcaliburGraphicsContext, elapsed: number): void {
-    this.#scrapLabel.text = ScrapManager.getScrap().toString();
-  }
   onPreUpdate(engine: Engine, elapsed: number): void {
     const gamepad = engine.input.gamepads.at(0);
     if (gamepad?.wasButtonPressed(Buttons.Face2)) {
@@ -128,7 +148,7 @@ export class AchievementMenu extends Scene {
     this.hovered = null;
     this.hovered =
       this.actors.find((actor) => {
-        if (!(actor instanceof RecycleCard)) {
+        if (!(actor instanceof AchievementCard)) {
           return false;
         }
 
@@ -140,8 +160,8 @@ export class AchievementMenu extends Scene {
         );
       }) ?? null;
     if (gamepad?.wasButtonPressed(Buttons.Face1)) {
-      if (this.hovered instanceof RecycleCard) {
-        console.log(this.hovered.buyItem());
+      if (this.hovered instanceof AchievementCard) {
+        console.log(this.hovered);
       }
     }
   }

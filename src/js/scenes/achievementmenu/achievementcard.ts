@@ -40,7 +40,7 @@ export class AchievementCard extends GenericCard {
     }),
   });
 
-  #achievementCostLabel = new Label({
+  #achievementDescriptionLabel = new Label({
     pos: vec(0, 15),
     color: Color.LightGray,
     font: Resources.PixelFont.toFont({
@@ -56,28 +56,25 @@ export class AchievementCard extends GenericCard {
     width: number,
     height: number,
     achievementName: AchievementNames,
+    backgroundColor: string,
   ) {
-    super({ pos, width, height });
+    super({ pos, width, height, backgroundColor });
     this.#achievementName = achievementName;
   }
 
   onInitialize(engine: Engine): void {
     this.addChild(this.#achievementLevelLabel);
     this.addChild(this.#achievementNameLabel);
-    this.addChild(this.#achievementCostLabel);
+    this.addChild(this.#achievementDescriptionLabel);
 
-    switch (this.#achievementName) {
-      case "Perfect Hooking":
-        this.#achievementNameLabel.text = "Perfect Hooking";
-        break;
-      case "Scrap Collector":
-        this.#achievementNameLabel.text = "Scrap Collector";
-        break;
-      case "High Score":
-        this.#achievementNameLabel.text = "High score!";
-        break;
-      default:
-        this.#achievementNameLabel.text = "";
+    this.#achievementNameLabel.text = this.#achievementName;
+    const achievement = AchievementManager.getAchievements();
+
+    if (achievement.achievements !== undefined) {
+      this.#achievementDescriptionLabel.text =
+        achievement.achievements.find(
+          (achievement) => achievement.name === this.#achievementName,
+        )?.description ?? "";
     }
   }
 }
