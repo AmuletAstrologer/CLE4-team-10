@@ -73,7 +73,7 @@ export class Game extends Engine {
           }),
         },
       }));
-    this.goToScene("level4");
+    this.goToScene("start");
   }
 }
 
