@@ -19,6 +19,7 @@ import { Trash } from "../../objects/trash.js";
 import { BaseScene, createGame } from "../../objects/createGame.ts";
 import { saveScores } from "../../scores.ts";
 import { AchievementManager } from "../../lib/achievementmanager.ts";
+import { LevelEnding } from "../levelEnding.js";
 
 //Metal Level
 
@@ -134,6 +135,11 @@ export class Level3 extends BaseScene {
 
       return;
     }
+
+    const gamepad = engine.input.gamepads.at(0);
+    if (gamepad?.wasButtonPressed(Buttons.Face2)) {
+      engine.goToScene("levels");
+    }
   }
 
   createLevel() {
@@ -181,7 +187,6 @@ export class Level3 extends BaseScene {
   }
 
   pickNewTarget() {
-
     const index = Math.floor(Math.random() * this.metalTrash.length);
 
     this.currentTarget = this.metalTrash[index];
@@ -224,7 +229,7 @@ export class Level3 extends BaseScene {
     this.ui.updateObjective(this.objective);
 
     if (this.objective >= 10) {
-       this.levelEnding();
+      this.levelEnding();
     }
   }
 
@@ -255,12 +260,6 @@ export class Level3 extends BaseScene {
       bolt.vel = dir.scale(speed);
       bolt.pos = new Vector(x, y);
       this.add(bolt);
-    }
-  }
-  onPreUpdate(engine) {
-    const gamepad = engine.input.gamepads.at(0);
-    if (gamepad?.wasButtonPressed(Buttons.Face2)) {
-      engine.goToScene("levels");
     }
   }
 }
