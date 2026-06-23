@@ -6,11 +6,19 @@ import { Hook } from "../../actors/hook.ts";
 import { Resources } from "../../resources.js";
 import { Background } from "../../background/background.js";
 import { BaseScene, createGame } from "../../objects/createGame.ts";
-// Metal Level
 
+//
 export class Level4 extends BaseScene {
+  // constructor() {
+  //   super();
+  // }
   levelNumber = 4;
 
+  //Game Timer
+  gameTime = 120000; // 2 minutes
+  timeLeft = 120000;
+
+  //Trash Timer
   targetTimer = 0;
   targetChangeTime = 30000; //30 seconden
 
@@ -26,6 +34,8 @@ export class Level4 extends BaseScene {
     this.score = 0;
     this.objective = 0;
     this.introTimer = 0;
+
+    this.timeLeft = this.gameTime;
 
     // Remove old actors
     this.actors.forEach((actor) => {
@@ -94,7 +104,18 @@ export class Level4 extends BaseScene {
 
       this.pickNewTarget();
     }
-    // console.log("Title exists:", this.title, "Killed:", this.title?.isKilled());
+
+    this.timeLeft -= delta;
+
+    if (this.ui) {
+      this.ui.updateTimer(this.timeLeft);
+    }
+
+    if (this.timeLeft <= 0) {
+      this.timeLeft = 0;
+
+      this.levelEnding();
+    }
   }
 
   createLevel() {
@@ -129,8 +150,7 @@ export class Level4 extends BaseScene {
     this.intro.opacity = 0;
 
     this.ui = new UI();
-    this.ui.z = 100; // Ensure UI is on top of other actors
-    this.add(this.ui);
+    this.ui.z = this.add(this.ui);
 
     this.spawner = new Spawner();
     this.add(this.spawner);
@@ -140,9 +160,6 @@ export class Level4 extends BaseScene {
 
     this.add(this.title);
     this.add(this.intro);
-
-    // console.log("Title added:", this.title);
-    // console.log("Intro added:", this.intro);
   }
 
   pickNewTarget() {
@@ -155,7 +172,7 @@ export class Level4 extends BaseScene {
       this.ui.updateTarget(this.currentTarget);
     }
 
-    // console.log("Target:", this.currentTarget);
+    console.log("Target:", this.currentTarget);
   }
 
   addScore() {
@@ -174,9 +191,10 @@ export class Level4 extends BaseScene {
     } else {
       console.log("Wrong trash:", trash.type, "Needed:", this.currentTarget);
 
-      this.ui.health.decrease();
       this.score--;
       this.objective--;
+
+      this.ui.health.decrease();
     }
 
     this.ui.updateScore(this.score);
@@ -189,12 +207,8 @@ export class Level4 extends BaseScene {
     this.ui.updateObjective(this.objective);
 
     //Add minus score for collecting wrong thrash
-    if (this.objective >= 10) {
-      this.engine.goToScene("level3Ending", {
-        sceneActivationData: {
-          score: this.score,
-        },
-      });
+    if (this.objective >= 1) {
+      this.levelEnding();
     }
 
     // Add proper condition for losing later
