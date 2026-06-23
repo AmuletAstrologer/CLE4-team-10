@@ -8,7 +8,6 @@ import { Background } from "../../background/background.js";
 import { BaseScene, createGame } from "../../objects/createGame.ts";
 import { Trash } from "../../objects/trash.js";
 import { saveScores } from "../../scores.ts";
-import { checkAchievements } from "../../achievements.ts";
 
 export class Level4 extends BaseScene {
   levelNumber = 4;

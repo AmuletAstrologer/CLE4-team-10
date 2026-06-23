@@ -52,7 +52,7 @@ export class LevelSummary extends Scene {
       {
         sprite: Resources.lightbluePlanet.toSprite(),
         hoversprite: Resources.hoverlightbluePlanet.toSprite(),
-        level: "four",
+        level: "level4",
         scale: new Vector(0.6, 0.6),
         pos: new Vector(485, 345),
       },
