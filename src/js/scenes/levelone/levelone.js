@@ -7,7 +7,6 @@ import { Hook } from "../../actors/hook.ts";
 import { Resources, ResourceLoader } from "../../resources.js";
 import { Background } from "../../background/background.js";
 import { saveScores } from "../../scores.ts";
-import { checkAchievements } from "../../achievements.ts";
 import { BaseScene, createGame } from "../../objects/createGame.ts";
 
 export class Level1 extends BaseScene {

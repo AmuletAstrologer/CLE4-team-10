@@ -4,8 +4,8 @@ import { Background } from "../background/background";
 import { Spawner } from "../scenes/levelone/spawner";
 import { UI } from "../scenes/levelone/ui";
 import { Resources, ResourceLoader } from "../resources";
-import { LevelScores, saveScores } from "../scores";
-import { checkAchievements } from "../achievements";
+import { LevelScores, saveScores, getScores } from "../scores";
+import { AchievementManager } from "../lib/achievementmanager";
 
 export abstract class BaseScene extends Scene {
   score = 0;
@@ -26,6 +26,8 @@ export abstract class BaseScene extends Scene {
     this.ui.updateObjective(this.objective);
     console.log(this.levelNumber);
     if (this.objective >= 1) {
+      getScores();
+      AchievementManager.checkAchievements();
       this.engine.goToScene("levelEnding", {
         sceneActivationData: {
           levelNumber: this.levelNumber,
