@@ -143,6 +143,10 @@ export class Level3 extends BaseScene {
 
       return;
     }
+    const gamepad = engine.input.gamepads.at(0);
+    if (gamepad?.wasButtonPressed(Buttons.Face2)) {
+      engine.goToScene("levels");
+    }
   }
 
   createLevel() {
@@ -267,12 +271,6 @@ export class Level3 extends BaseScene {
       bolt.vel = dir.scale(speed);
       bolt.pos = new Vector(x, y);
       this.add(bolt);
-    }
-  }
-  onPreUpdate(engine) {
-    const gamepad = engine.input.gamepads.at(0);
-    if (gamepad?.wasButtonPressed(Buttons.Face2)) {
-      engine.goToScene("levels");
     }
   }
 }

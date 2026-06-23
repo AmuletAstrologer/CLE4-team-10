@@ -1,4 +1,4 @@
-import { Scene, Label, Actor, Buttons, Vector, Random } from "excalibur";
+import { Scene, Label, Actor, Buttons, Vector, Random, Keys } from "excalibur";
 import { Trash } from "../../objects/trash.js";
 import { Bolt } from "../../objects/bolts.js";
 import { Spawner } from "./spawner.js";
@@ -70,7 +70,10 @@ export class Level1 extends BaseScene {
   }
   onPreUpdate(engine) {
     const gamepad = engine.input.gamepads.at(0);
-    if (gamepad?.wasButtonPressed(Buttons.Face2)) {
+    if (
+      gamepad?.wasButtonPressed(Buttons.Face2) ||
+      engine.input.keyboard.wasPressed(Keys.X)
+    ) {
       engine.goToScene("levels");
     }
   }

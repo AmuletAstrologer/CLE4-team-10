@@ -1,8 +1,10 @@
-export type UpgradeTypes =
-  | "moreHookSpace"
-  | "moreHookGetSpeed"
-  | "moreHookThrowSpeed"
-  | "";
+export const upgradeTypes = [
+  "moreHookSpace",
+  "moreHookGetSpeed",
+  "moreHookThrowSpeed",
+  "",
+] as const;
+export type UpgradeTypes = (typeof upgradeTypes)[number];
 
 type UpgradeObject = [
   {
@@ -33,13 +35,13 @@ export class ScrapManager {
     return false;
   }
 
-  public static addScrap(amount = 1): void {
+  public static addScrap(): void {
     const scrap = localStorage.getItem("scrap");
 
     if (scrap !== null) {
-      localStorage.setItem("scrap", (Number(scrap) + amount).toString());
+      localStorage.setItem("scrap", (Number(scrap) + 1).toString());
     } else {
-      localStorage.setItem("scrap", `${amount}`);
+      localStorage.setItem("scrap", "1");
     }
   }
 
@@ -63,25 +65,29 @@ export class ScrapManager {
   public static setUpgradeLevel(upgradeType: UpgradeTypes, value: number) {
     const localUpgrades = localStorage.getItem("upgrades");
     let newUpgrades: Partial<UpgradeObject> = [];
-    let inLocalUpgrades = false;
 
     if (localUpgrades !== null) {
       const localUpgradesJson: UpgradeObject = JSON.parse(localUpgrades);
+      let inLocalUpgrades = false;
 
       for (const localUpgrade of localUpgradesJson) {
         if (localUpgrade.name === upgradeType) {
           localUpgrade.value = value;
           inLocalUpgrades = true;
         }
-
         newUpgrades.push({
           name: localUpgrade.name,
           value: localUpgrade.value,
         });
       }
-    }
 
-    if (localUpgrades === null || !inLocalUpgrades) {
+      if (!inLocalUpgrades) {
+        newUpgrades.push({
+          name: upgradeType,
+          value: value,
+        });
+      }
+    } else {
       newUpgrades.push({
         name: upgradeType,
         value: value,

@@ -11,6 +11,7 @@ import {
   Text,
   TextAlign,
   vec,
+  Keys,
 } from "excalibur";
 import { Resources, ResourceLoader } from "../resources.js";
 import { Background } from "../background/background.js";
@@ -65,7 +66,10 @@ export class LevelEnding extends Scene {
   }
   onPreUpdate(engine) {
     const gamepad = engine.input.gamepads.at(0);
-    if (gamepad?.wasButtonPressed(Buttons.Face2)) {
+    if (
+      gamepad?.wasButtonPressed(Buttons.Face2) ||
+      engine.input.keyboard.wasPressed(Keys.X)
+    ) {
       engine.goToScene("levels");
     }
   }
