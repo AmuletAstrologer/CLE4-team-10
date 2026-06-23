@@ -20,6 +20,7 @@ import {
   RecycleCard,
 } from "../scenes/recyclemenu/recyclecard.js";
 import { BaseScene } from "../objects/createGame.js";
+import { AlteredTrash } from "../scenes/leveltwo/alteredtrash.js";
 import { ScrapManager } from "../lib/scrapmanager.js";
 
 export class Hook extends Actor {
@@ -131,8 +132,11 @@ export class Hook extends Actor {
     contact: CollisionContact,
   ): void {
     if (
-      other.owner instanceof Trash &&
-      this.#amountOfObjects < 1 + ScrapManager.getUpgradeLevel("moreHookSpace")
+      other.owner instanceof Trash ||
+      (other.owner instanceof AlteredTrash &&
+        this.#amountOfObjects <
+          1 + ScrapManager.getUpgradeLevel("moreHookSpace") &&
+        !this.#hasObject)
     ) {
       other.owner.body.collisionType = CollisionType.PreventCollision;
       other.owner.vel = vec(0, 0);

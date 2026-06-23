@@ -18,9 +18,9 @@ const Resources = {
   AfvalSchroef2: new ImageSource("images/afvalschroef2.png"),
   AfvalSchroef3: new ImageSource("images/afvalschroef3.png"),
   AfvalSchroef4: new ImageSource("images/afvalschroef4.png"),
+  Hook: new ImageSource("images/hook.png"),
   SpaceAfval: new ImageSource("images/generiekAfval.png"),
   Meteor: new ImageSource("images/meteor.png"),
-  Hook: new ImageSource("images/hook.png"),
   PixelFont: new FontSource("fonts/upheavtt.ttf", "Upheaval"),
   StartsceneLabel: new ImageSource("images/startsceneLabel.png"),
   Greenbutton: new ImageSource("images/greenbutton.png"),
@@ -35,6 +35,7 @@ const Resources = {
   orangePlanet: new ImageSource("images/orangeplanet.png"),
   hoverorangePlanet: new ImageSource("images/hoverorangeplanet.png"),
   recyclePlanet: new ImageSource("images/recycleplanet.png"),
+  hoverrecyclePlanet: new ImageSource("images/hoverrecycleplanet.png"),
   redPlanet: new ImageSource("images/redplanet.png"),
   hoverredPlanet: new ImageSource("images/hoverredplanet.png"),
   salmonPlanet: new ImageSource("images/salmonplanet.png"),
@@ -42,14 +43,13 @@ const Resources = {
   Star: new ImageSource("images/star.png"),
   yellowringPlanet: new ImageSource("images/yellowringplanet.png"),
   hoveryellowringPlanet: new ImageSource("images/hoveryellowringplanet.png"),
+  achievementPlanet: new ImageSource("images/achievementplanet.png"),
+  hoverachievementPlanet: new ImageSource("images/hoverachievementplanet.png"),
 };
 
 const ResourceLoader = new Loader();
 for (let res of Object.values(Resources)) {
   ResourceLoader.addResource(res);
 }
-
-//Background
-Background: new ImageSource("images/background.png");
 
 export { Resources, ResourceLoader };
