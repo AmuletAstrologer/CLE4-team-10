@@ -118,18 +118,9 @@ export class Level3 extends BaseScene {
       this.timeLeft = 0;
 
       if (this.objective >= 10) {
-        this.engine.goToScene("levelEnding", {
-          sceneActivationData: {
-            score: this.score,
-          },
-        });
+        this.levelEnding();
       } else {
-        this.engine.goToScene("defeatscreen", {
-          sceneActivationData: {
-            score: this.score,
-            restartScene: "level3",
-          },
-        });
+        this.defeat();
       }
 
       return;
@@ -181,6 +172,7 @@ export class Level3 extends BaseScene {
   }
 
   pickNewTarget() {
+
     const index = Math.floor(Math.random() * this.metalTrash.length);
 
     this.currentTarget = this.metalTrash[index];
@@ -223,11 +215,7 @@ export class Level3 extends BaseScene {
     this.ui.updateObjective(this.objective);
 
     if (this.objective >= 10) {
-      this.engine.goToScene("levelEnding", {
-        sceneActivationData: {
-          score: this.score,
-        },
-      });
+       this.levelEnding();
     }
   }
 
