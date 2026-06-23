@@ -40,10 +40,10 @@ export class Game extends Engine {
     this.addScene("level1", new Level1());
     this.addScene("level3", new Level3());
     this.addScene("level4", new Level4());
-    this.addScene("defeatscreen", new DefeatScreen());
+    this.addScene("defeatscreen", { scene: new DefeatScreen() });
     this.addScene("levelrecyclemenu", new RecycleMenu());
 
-    (this.addScene("levelEnding", {
+    this.addScene("levelEnding", {
       scene: new LevelEnding(),
       transitions: {
         in: new FadeInOut({
@@ -57,23 +57,23 @@ export class Game extends Engine {
           color: Color.Black,
         }),
       },
-    }),
-      this.addScene("level3Ending", {
-        scene: new LevelEnding(),
-        transitions: {
-          in: new FadeInOut({
-            duration: 1500,
-            direction: "in",
-            color: Color.Black,
-          }),
-          out: new FadeInOut({
-            duration: 1500,
-            direction: "out",
-            color: Color.Black,
-          }),
-        },
-      }));
-    this.goToScene("level4");
+    });
+    // this.addScene("level3Ending", {
+    //   scene: new LevelEnding(),
+    //   transitions: {
+    //     in: new FadeInOut({
+    //       duration: 1500,
+    //       direction: "in",
+    //       color: Color.Black,
+    //     }),
+    //     out: new FadeInOut({
+    //       duration: 1500,
+    //       direction: "out",
+    //       color: Color.Black,
+    //     }),
+    //   },
+    // });
+    this.goToScene("start");
   }
 }
 

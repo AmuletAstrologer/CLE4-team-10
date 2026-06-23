@@ -8,6 +8,7 @@ import {
   ImageFiltering,
 } from "excalibur";
 import { Heart } from "./heart";
+import { BaseScene } from "../../objects/createGame";
 
 export class Healthbar extends Actor {
   #health = 3;
@@ -18,13 +19,13 @@ export class Healthbar extends Actor {
     });
 
     for (let i = 0; i < this.#health; i++) {
-      this.addChild(new Heart({ pos: vec(0 + i * 60, 0) }).addTag(`heart${i}`));
+      this.addChild(new Heart({ pos: vec(0 + i * 75, 0) }).addTag(`heart${i}`));
     }
   }
 
   decrease(): void {
     if (this.#health - 1 <= 0) {
-      this.scene?.engine.goToScene("defeatscreen");
+      if (this.scene instanceof BaseScene) this.scene.defeat();
       return;
     }
 

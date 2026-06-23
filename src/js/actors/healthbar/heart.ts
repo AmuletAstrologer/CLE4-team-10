@@ -10,7 +10,7 @@ import {
 
 export class Heart extends Actor {
   #baseSize = 32;
-  #pixelScale = 2;
+  #pixelScale = 1;
 
   constructor(config: { pos: Vector }) {
     super({
@@ -49,7 +49,7 @@ export class Heart extends Actor {
     });
 
     pixelHeartCanvas.filtering = ImageFiltering.Pixel;
-    // pixelHeartCanvas.scale = vec(0.5, 0.5);
+    pixelHeartCanvas.scale = vec(3, 3);
 
     this.graphics.use(pixelHeartCanvas);
   }
