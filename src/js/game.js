@@ -16,7 +16,6 @@ import { Background } from "./background/background.js";
 import { DefeatScreen } from "./defeatscreen.js";
 import { RecycleMenu } from "./scenes/recyclemenu/recyclemenu.js";
 import { LevelEnding } from "./scenes/levelEnding.js";
-import { Level3Ending } from "./scenes/levelthree/levelthreeEnding.js";
 import { LevelSummary } from "./scenes/levelsummary.js";
 import { Level2 } from "./scenes/leveltwo/leveltwo.js";
 import { Level1 } from "./scenes/levelone/levelone.js";
@@ -40,12 +39,12 @@ export class Game extends Engine {
     this.addScene("start", new Start());
     this.addScene("levels", new LevelSummary());
     this.addScene("level1", new Level1());
-    this.addScene("achievements", new AchievementMenu());
     this.addScene("level2", new Level2());
     this.addScene("level3", new Level3());
     this.addScene("level4", new Level4());
     this.addScene("defeatscreen", new DefeatScreen());
     this.addScene("recyclemenu", new RecycleMenu());
+    this.addScene("achievements", new AchievementMenu());
 
     this.addScene("levelEnding", {
       scene: new LevelEnding(),
@@ -62,21 +61,6 @@ export class Game extends Engine {
         }),
       },
     });
-    // this.addScene("level3Ending", {
-    //   scene: new LevelEnding(),
-    //   transitions: {
-    //     in: new FadeInOut({
-    //       duration: 1500,
-    //       direction: "in",
-    //       color: Color.Black,
-    //     }),
-    //     out: new FadeInOut({
-    //       duration: 1500,
-    //       direction: "out",
-    //       color: Color.Black,
-    //     }),
-    //   },
-    // });
     this.goToScene("start");
   }
 }

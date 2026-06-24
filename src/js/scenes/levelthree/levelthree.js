@@ -19,6 +19,7 @@ import { Trash } from "../../objects/trash.js";
 import { BaseScene, createGame } from "../../objects/createGame.ts";
 import { saveScores } from "../../scores.ts";
 import { AchievementManager } from "../../lib/achievementmanager.ts";
+import { LevelEnding } from "../levelEnding.js";
 
 //Metal Level
 
@@ -42,7 +43,6 @@ export class Level3 extends BaseScene {
   }
 
   onActivate() {
-    // this.score = 0;
     this.objective = 0;
     this.introTimer = 0;
 
@@ -127,18 +127,9 @@ export class Level3 extends BaseScene {
       this.timeLeft = 0;
 
       if (this.objective >= 10) {
-        this.engine.goToScene("levelEnding", {
-          sceneActivationData: {
-            score: this.score,
-          },
-        });
+        this.levelEnding();
       } else {
-        this.engine.goToScene("defeatscreen", {
-          sceneActivationData: {
-            score: this.score,
-            restartScene: "level3",
-          },
-        });
+        this.defeat();
       }
 
       return;
@@ -236,11 +227,7 @@ export class Level3 extends BaseScene {
     this.ui.updateObjective(this.objective);
 
     if (this.objective >= 10) {
-      this.engine.goToScene("levelEnding", {
-        sceneActivationData: {
-          score: this.score,
-        },
-      });
+      this.levelEnding();
     }
   }
 

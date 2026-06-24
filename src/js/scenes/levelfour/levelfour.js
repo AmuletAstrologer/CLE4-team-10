@@ -1,10 +1,19 @@
-import { Scene, Label, Vector, Random, Font, FontUnit, Color } from "excalibur";
+import {
+  Scene,
+  Label,
+  Vector,
+  Random,
+  Font,
+  FontUnit,
+  Color,
+  Buttons,
+} from "excalibur";
 import { Bolt } from "../../objects/bolts.js";
 import { Spawner } from "./spwaner.js";
 import { Hook } from "../../actors/hook.ts";
 import { Resources } from "../../resources.js";
 import { Background } from "../../background/background.js";
-import { BaseScene, createGame } from "../../objects/createGame.ts";
+import { BaseScene } from "../../objects/createGame.ts";
 import { Trash } from "../../objects/trash.js";
 import { saveScores } from "../../scores.ts";
 import { BaseLevelUI } from "../../actors/baselevelui.ts";
@@ -47,6 +56,11 @@ export class Level4 extends BaseScene {
   }
 
   onPreUpdate(engine, delta) {
+    const gamepad = engine.input.gamepads.at(0);
+    if (gamepad?.wasButtonPressed(Buttons.Face2)) {
+      engine.goToScene("levels");
+    }
+
     this.ui.z = 100;
     // Intro animation
     this.introTimer += delta;

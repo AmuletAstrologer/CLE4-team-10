@@ -20,7 +20,6 @@ export class LevelEnding extends Scene {
   onInitialize(engine) {
     const background = new Background();
     this.add(background);
-    console.log(this.levelNumber);
 
     this.title = new Label({
       pos: new Vector(engine.halfDrawWidth, 360),
@@ -33,7 +32,7 @@ export class LevelEnding extends Scene {
     });
 
     this.continue = new Text({
-      text: `Press spacebar to continue`,
+      text: `Press X to continue`,
       font: Resources.PixelFont.toFont({
         unit: FontUnit.Px,
         size: 32,
@@ -57,6 +56,12 @@ export class LevelEnding extends Scene {
 
     this.add(this.title);
     this.add(continueActor);
+    
+    engine.input.keyboard.on("press", (evt) => {
+      if (evt.key === Keys.X) {
+                  engine.goToScene("levels");
+      }
+    })
   }
   onActivate(ctx) {
     const data = ctx.data;
@@ -65,6 +70,7 @@ export class LevelEnding extends Scene {
     this.title.text = `You completed level ${this.levelNumber}! Your score is ${this.score}`;
   }
   onPreUpdate(engine) {
+
     const gamepad = engine.input.gamepads.at(0);
     if (
       gamepad?.wasButtonPressed(Buttons.Face2) ||
