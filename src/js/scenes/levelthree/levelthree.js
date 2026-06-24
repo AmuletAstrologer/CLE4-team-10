@@ -20,9 +20,9 @@ import { BaseScene, createGame } from "../../objects/createGame.ts";
 import { saveScores } from "../../scores.ts";
 import { AchievementManager } from "../../lib/achievementmanager.ts";
 import { LevelEnding } from "../levelEnding.js";
+import { LevelStart } from "../../actors/levelStart.ts";
 
 //Metal Level
-
 export class Level3 extends BaseScene {
   levelNumber = 3;
 
@@ -61,52 +61,6 @@ export class Level3 extends BaseScene {
 
   onPreUpdate(engine, delta) {
     this.ui.z = 100;
-    // Intro animation
-    this.introTimer += delta;
-
-    if (this.introTimer < 1000) {
-      // Fade in
-      const alpha = this.introTimer / 1000;
-
-      if (this.title) {
-        this.title.opacity = alpha;
-      }
-
-      if (this.intro) {
-        this.intro.opacity = alpha;
-      }
-    } else if (this.introTimer < 3000) {
-      // Stay visible
-      if (this.title) {
-        this.title.opacity = 1;
-      }
-
-      if (this.intro) {
-        this.intro.opacity = 1;
-      }
-    } else if (this.introTimer < 4000) {
-      // Fade out
-      const alpha = 1 - (this.introTimer - 3000) / 1000;
-
-      if (this.title) {
-        this.title.opacity = alpha;
-      }
-
-      if (this.intro) {
-        this.intro.opacity = alpha;
-      }
-    } else {
-      // Remove intro labels
-      if (this.title) {
-        this.title.kill();
-        this.title = null;
-      }
-
-      if (this.intro) {
-        this.intro.kill();
-        this.intro = null;
-      }
-    }
 
     // Target switching
     this.targetTimer += delta;
@@ -145,33 +99,6 @@ export class Level3 extends BaseScene {
     const background = new Background();
     this.add(background);
 
-    // Level intro
-    this.title = new Label({
-      text: "Level Three",
-      pos: new Vector(640, 280),
-      font: Resources.PixelFont.toFont({
-        unit: FontUnit.Px,
-        size: 60,
-        color: Color.White,
-      }),
-    });
-
-    this.title.anchor = new Vector(0.5, 0.5);
-    this.title.opacity = 0;
-
-    this.intro = new Label({
-      text: "Metal Level",
-      pos: new Vector(640, 360),
-      font: Resources.PixelFont.toFont({
-        unit: FontUnit.Px,
-        size: 40,
-        color: Color.White,
-      }),
-    });
-
-    this.intro.anchor = new Vector(0.5, 0.5);
-    this.intro.opacity = 0;
-
     this.ui = new BaseLevelUI({ level: 3 });
     this.ui.z = this.add(this.ui);
 
@@ -181,8 +108,11 @@ export class Level3 extends BaseScene {
     this.hook = new Hook();
     this.add(this.hook);
 
-    this.add(this.title);
-    this.add(this.intro);
+    this.levelStart = new LevelStart({
+      levelNumber: "Level 3",
+      levelName: "Metal Level",
+    });
+    this.add(this.levelStart);
   }
 
   pickNewTarget() {

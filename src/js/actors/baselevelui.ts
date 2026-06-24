@@ -4,10 +4,10 @@ import {
   FontUnit,
   Label,
   vec,
-  Vector,
   BaseAlign,
   TextAlign,
   Engine,
+  Buttons,
 } from "excalibur";
 import { Resources } from "../resources";
 import { Healthbar } from "./healthbar/healthbar";
@@ -91,5 +91,12 @@ export class BaseLevelUI extends ScreenElement {
     const remainingSeconds = seconds % 60;
 
     this.#timer.text = `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
+  }
+
+  onPreUpdate(engine: Engine, elapsed: number): void {
+    const gamepad = engine.input.gamepads.at(0);
+    if (gamepad?.wasButtonPressed(Buttons.Face2)) {
+      engine.goToScene("levels");
+    }
   }
 }
