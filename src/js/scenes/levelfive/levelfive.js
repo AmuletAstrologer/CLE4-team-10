@@ -7,10 +7,10 @@ import {
   FontUnit,
   Color,
   Buttons,
-  Engine,
+  Engine
 } from "excalibur";
 import { Bolt } from "../../objects/bolts.js";
-import { Spawner } from "./spwaner.js";
+import { Spawner } from "./spawner.js";
 import { UI } from "./ui.js";
 import { Hook } from "../../actors/hook.ts";
 import { Resources } from "../../resources.js";
@@ -24,18 +24,18 @@ import { LevelEnding } from "../levelEnding.js";
 
 //Metal Level
 
-export class Level3 extends BaseScene {
-  levelNumber = 3;
+export class Level5 extends BaseScene {
+  levelNumber = 5;
 
   //Game Timer
-  gameTime = 180000; // 3 minutes
+  gameTime = 120000; // 2 minutes
   timeLeft = 120000;
 
   //Trash Timer
   targetTimer = 0;
   targetChangeTime = 30000; //30 seconden
 
-  metalTrash = ["Airtank", "Cilinder", "Plaat", "Satelliet", "Piece"];
+  metalTrash = ["Airtank", "Cilinder", "Plaat", "Satelliet", "Piece", "Fragment", "Helm", "Module"];
 
   currentTarget = "";
 
@@ -138,7 +138,7 @@ export class Level3 extends BaseScene {
 
     const gamepad = engine.input.gamepads.at(0);
     if (gamepad?.wasButtonPressed(Buttons.Face2)) {
-      this.engine.goToScene("levels");
+      engine.goToScene("levels");
     }
   }
 
@@ -148,7 +148,7 @@ export class Level3 extends BaseScene {
 
     // Level intro
     this.title = new Label({
-      text: "Level Three",
+      text: "Level Five",
       pos: new Vector(640, 280),
       font: Resources.PixelFont.toFont({
         unit: FontUnit.Px,
@@ -161,7 +161,7 @@ export class Level3 extends BaseScene {
     this.title.opacity = 0;
 
     this.intro = new Label({
-      text: "Metal Level",
+      text: "Combination Level",
       pos: new Vector(640, 360),
       font: Resources.PixelFont.toFont({
         unit: FontUnit.Px,
@@ -173,7 +173,7 @@ export class Level3 extends BaseScene {
     this.intro.anchor = new Vector(0.5, 0.5);
     this.intro.opacity = 0;
 
-    const backbutton = new Label({
+      const backbutton = new Label({
       text: "⇜",
       font: Resources.PixelFont.toFont({
         unit: FontUnit.Px,
@@ -212,10 +212,13 @@ export class Level3 extends BaseScene {
     this.add(this.intro);
   }
 
+  //CHECK
   pickNewTarget() {
     const index = Math.floor(Math.random() * this.metalTrash.length);
 
     this.currentTarget = this.metalTrash[index];
+
+    //Add higher chance of current
 
     if (this.ui) {
       this.ui.updateTarget(this.currentTarget);
@@ -238,12 +241,14 @@ export class Level3 extends BaseScene {
       return;
     }
 
+    ///Check 
     //Only plus points for correct trash
     if (trash.type === this.currentTarget) {
       console.log("Correct trash");
     } else {
       console.log("Wrong trash:", trash.type, "Needed:", this.currentTarget);
       this.objective--;
+      this.ui.health.decrease();
     }
 
     this.ui.updateObjective(this.objective);
