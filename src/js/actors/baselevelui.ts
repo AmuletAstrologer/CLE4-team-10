@@ -75,7 +75,7 @@ export class BaseLevelUI extends ScreenElement {
     if (this.healthBar) this.healthBar.pos = vec(100, engine.drawHeight - 100);
   }
 
-  updateObjective(objective: string) {
+  updateObjective(objective: number | string) {
     this.#objective.text = `${objective}/10`;
   }
 
