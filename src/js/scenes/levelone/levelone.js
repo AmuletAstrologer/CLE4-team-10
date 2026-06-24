@@ -8,6 +8,7 @@ import { Resources, ResourceLoader } from "../../resources.js";
 import { Background } from "../../background/background.js";
 import { saveScores } from "../../scores.ts";
 import { BaseScene, createGame } from "../../objects/createGame.ts";
+import { LevelStart } from "../../actors/levelStart.ts";
 
 export class Level1 extends BaseScene {
   levelNumber = 1;
@@ -32,6 +33,12 @@ export class Level1 extends BaseScene {
   createLevel() {
     this.ui = new BaseLevelUI({ level: 1 });
     this.ui.updateTarget("Grab the trash!");
+
+    this.levelStart = new LevelStart({
+      levelNumber: "Level 1",
+      levelName: "Intro Level",
+    });
+    this.add(this.levelStart);
 
     this.spawner = new Spawner();
     const { hook } = createGame(this, this.spawner, this.ui, "Level One");

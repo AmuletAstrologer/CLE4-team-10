@@ -7,6 +7,7 @@ import { Spawner } from "./spawner";
 // import { UI } from "./ui";
 import { BaseLevelUI } from "../../actors/baselevelui.ts";
 import { Backbutton } from "../../backbutton";
+import { LevelStart } from "../../actors/levelStart.ts";
 
 export class Level2 extends Scene {
   // score = 0;
@@ -22,8 +23,6 @@ export class Level2 extends Scene {
     this.spawner = new Spawner();
     this.add(this.spawner);
 
-    // this.add(new Backbutton());
-
     this.ui.updateTarget("trash can't hit the planet!");
   }
 
@@ -38,6 +37,13 @@ export class Level2 extends Scene {
   createLevel() {
     this.add(new PlanetSpawner());
     this.add(new Hook());
+
+    this.levelStart = new LevelStart({
+      levelNumber: "Level 2",
+      levelName: "Metal Level",
+    });
+    this.add(this.levelStart);
+
     this.ui = new BaseLevelUI({ level: 2 });
     this.add(this.ui);
   }
