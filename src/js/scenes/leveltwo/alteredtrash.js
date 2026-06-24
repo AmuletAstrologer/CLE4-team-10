@@ -25,7 +25,9 @@ export class AlteredTrash extends Actor {
             if(other.owner instanceof PlanetSpawner){
                 this.kill();
                 this.scene.removeSpawned();
-                this.scene.removeObjective();
+                if (other.owner instanceof PlanetSpawner && !this.scene?.objective <= 0) {
+                   this.scene.removeObjective(); 
+                }
             }
         }
 

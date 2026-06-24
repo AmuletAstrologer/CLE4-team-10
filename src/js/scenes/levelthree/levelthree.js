@@ -11,7 +11,7 @@ import {
 } from "excalibur";
 import { Bolt } from "../../objects/bolts.js";
 import { Spawner } from "./spwaner.js";
-import { UI } from "./ui.js";
+import { BaseLevelUI } from "../../actors/baselevelui.ts";
 import { Hook } from "../../actors/hook.ts";
 import { Resources } from "../../resources.js";
 import { Background } from "../../background/background.js";
@@ -21,9 +21,9 @@ import { BaseScene, createGame } from "../../objects/createGame.ts";
 import { saveScores } from "../../scores.ts";
 import { AchievementManager } from "../../lib/achievementmanager.ts";
 import { LevelEnding } from "../levelEnding.js";
+import { LevelStart } from "../../actors/levelStart.ts";
 
 //Metal Level
-
 export class Level3 extends BaseScene {
   levelNumber = 3;
 
@@ -62,52 +62,6 @@ export class Level3 extends BaseScene {
 
   onPreUpdate(engine, delta) {
     this.ui.z = 100;
-    // Intro animation
-    this.introTimer += delta;
-
-    if (this.introTimer < 1000) {
-      // Fade in
-      const alpha = this.introTimer / 1000;
-
-      if (this.title) {
-        this.title.opacity = alpha;
-      }
-
-      if (this.intro) {
-        this.intro.opacity = alpha;
-      }
-    } else if (this.introTimer < 3000) {
-      // Stay visible
-      if (this.title) {
-        this.title.opacity = 1;
-      }
-
-      if (this.intro) {
-        this.intro.opacity = 1;
-      }
-    } else if (this.introTimer < 4000) {
-      // Fade out
-      const alpha = 1 - (this.introTimer - 3000) / 1000;
-
-      if (this.title) {
-        this.title.opacity = alpha;
-      }
-
-      if (this.intro) {
-        this.intro.opacity = alpha;
-      }
-    } else {
-      // Remove intro labels
-      if (this.title) {
-        this.title.kill();
-        this.title = null;
-      }
-
-      if (this.intro) {
-        this.intro.kill();
-        this.intro = null;
-      }
-    }
 
     // Target switching
     this.targetTimer += delta;
@@ -200,6 +154,7 @@ export class Level3 extends BaseScene {
     });
 
     this.ui = new UI();
+    this.ui = new BaseLevelUI({ level: 3 });
     this.ui.z = this.add(this.ui);
 
     this.spawner = new Spawner();
@@ -208,8 +163,11 @@ export class Level3 extends BaseScene {
     this.hook = new Hook();
     this.add(this.hook);
 
-    this.add(this.title);
-    this.add(this.intro);
+    this.levelStart = new LevelStart({
+      levelNumber: "Level 3",
+      levelName: "Metal Level",
+    });
+    this.add(this.levelStart);
   }
 
   pickNewTarget() {

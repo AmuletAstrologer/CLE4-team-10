@@ -9,8 +9,6 @@ import {
   CollisionType,
 } from "excalibur";
 import { Resources, ResourceLoader } from "../resources.js";
-import { UI } from "../scenes/levelone/ui.js";
-import { Trash } from "./trash.js";
 
 export class Meteor extends Actor {
   #speed = 200;
@@ -19,7 +17,7 @@ export class Meteor extends Actor {
       width: 1,
       height: 1,
       collider: Shape.Box(250, 250),
-      collisionType: CollisionType.Passive,
+      collisionType: CollisionType.Active,
     });
     const meteorSprite = Resources.Meteor.toSprite();
 
