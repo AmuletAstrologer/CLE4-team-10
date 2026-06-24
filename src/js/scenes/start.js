@@ -30,7 +30,7 @@ export class Start extends Scene {
 
     if (!music.isPlaying()) {
       music.loop = true;
-      music.play(0.5);
+      music.play(0.65);
     }
 
     engine.input.keyboard.on("press", (evt) => {
