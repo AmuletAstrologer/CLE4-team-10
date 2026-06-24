@@ -2,7 +2,7 @@ import { Scene, Label, Actor, Buttons, Vector, Random } from "excalibur";
 import { Trash } from "../../objects/trash.js";
 import { Bolt } from "../../objects/bolts.js";
 import { Spawner } from "./spawner.js";
-import { UI } from "./ui.js";
+import { BaseLevelUI } from "../../actors/baselevelui.ts";
 import { Hook } from "../../actors/hook.ts";
 import { Resources, ResourceLoader } from "../../resources.js";
 import { Background } from "../../background/background.js";
@@ -11,6 +11,7 @@ import { BaseScene, createGame } from "../../objects/createGame.ts";
 
 export class Level1 extends BaseScene {
   levelNumber = 1;
+  objective = 0;
 
   onInitialize(engine) {
     this.engine = engine;
@@ -29,7 +30,9 @@ export class Level1 extends BaseScene {
     this.createLevel();
   }
   createLevel() {
-    this.ui = new UI();
+    this.ui = new BaseLevelUI({ level: 1 });
+    this.ui.updateTarget("Grab the trash!");
+
     this.spawner = new Spawner();
     const { hook } = createGame(this, this.spawner, this.ui, "Level One");
     console.log(this.spawner);
@@ -62,12 +65,20 @@ export class Level1 extends BaseScene {
       bolt.pos = new Vector(x, y);
       this.add(bolt);
     }
-    this.removeScore();
+    this.addScore();
   }
-  removeScore() {
-    this.score--;
-    this.ui.updateScore(this.score);
+
+  addScore() {
+    const trash = this.hook.children[0];
+
+    if (!trash) {
+      console.log("No trash caught");
+      return;
+    }
+
+    this.ui.updateObjective(this.objective);
   }
+
   onPreUpdate(engine) {
     const gamepad = engine.input.gamepads.at(0);
     if (gamepad?.wasButtonPressed(Buttons.Face2)) {

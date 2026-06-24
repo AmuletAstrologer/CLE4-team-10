@@ -10,7 +10,7 @@ import {
 } from "excalibur";
 import { Bolt } from "../../objects/bolts.js";
 import { Spawner } from "./spwaner.js";
-import { UI } from "./ui.js";
+import { BaseLevelUI } from "../../actors/baselevelui.ts";
 import { Hook } from "../../actors/hook.ts";
 import { Resources } from "../../resources.js";
 import { Background } from "../../background/background.js";
@@ -176,7 +176,7 @@ export class Level3 extends BaseScene {
     this.intro.anchor = new Vector(0.5, 0.5);
     this.intro.opacity = 0;
 
-    this.ui = new UI();
+    this.ui = new BaseLevelUI({ level: 3 });
     this.ui.z = this.add(this.ui);
 
     this.spawner = new Spawner();
