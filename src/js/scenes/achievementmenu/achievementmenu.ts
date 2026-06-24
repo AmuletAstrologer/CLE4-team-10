@@ -62,9 +62,6 @@ export class AchievementMenu extends Scene {
     );
     this.add(mainContainer);
 
-    const achievementContainer = new BackgroundBox(130, 125, 225, 150);
-    this.add(achievementContainer);
-
     const perfectHooking = new AchievementCard(
       vec(engine.halfDrawWidth, engine.halfDrawHeight - 145),
       650,

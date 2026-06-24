@@ -4,7 +4,7 @@ import { Cursor } from "./objects/cursor";
 
 const Resources = {
   Background: new ImageSource("images/background.png"),
-  Cursor: new ImageSource("images/cursor.png"),
+  Cursor: new ImageSource("images/crosshair.png"),
   AfvalAirtank: new ImageSource("images/afvalairtank.png"),
   AfvalCilinder: new ImageSource("images/afvalcilinder.png"),
   AfvalFragment: new ImageSource("images/afvalfragment.png"),
@@ -45,6 +45,8 @@ const Resources = {
   hoveryellowringPlanet: new ImageSource("images/hoveryellowringplanet.png"),
   achievementPlanet: new ImageSource("images/achievementplanet.png"),
   hoverachievementPlanet: new ImageSource("images/hoverachievementplanet.png"),
+
+  tempMainMenuSong: new Sound("sounds/temp.wav"),
 };
 
 const ResourceLoader = new Loader();
