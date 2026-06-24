@@ -6,10 +6,10 @@ import { Planet } from "../planet";
 import { Startpoint } from "../startpoint";
 
 export class LevelSummary extends Scene {
-    onInitialize(engine) {
-        this.add(new Background);
+  onInitialize(engine) {
+    this.add(new Background());
 
-        this.add(new ArrowLayer);
+    this.add(new ArrowLayer());
 
         const planets = [
             {

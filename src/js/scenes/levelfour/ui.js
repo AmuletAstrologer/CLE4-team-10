@@ -1,11 +1,22 @@
-import { Actor, Color, FontUnit, Label, Vector } from "excalibur";
+import {
+  Actor,
+  Color,
+  FontUnit,
+  Label,
+  Vector,
+  TextAlign,
+  BaseAlign,
+  Keys,
+  vec,
+} from "excalibur";
 import { Resources } from "../../resources";
+import { Healthbar } from "../../actors/healthbar/healthbar.ts";
 
 export class UI extends Actor {
   #label1;
   #objective;
   #target;
-  #timer;
+  health;
 
   constructor(shot) {
     super({});
@@ -31,6 +42,8 @@ export class UI extends Actor {
         unit: FontUnit.Px,
         size: 40,
         color: Color.White,
+        textAlign: TextAlign.Center,
+        baseAlign: BaseAlign.Middle,
       }),
     });
     this.addChild(this.#objective);
@@ -46,17 +59,15 @@ export class UI extends Actor {
     });
     this.addChild(this.#target);
 
-    this.#timer = new Label({
-      text: "03:00",
-      pos: new Vector(50, 30),
-      font: Resources.PixelFont.toFont({
-        unit: FontUnit.Px,
-        size: 32,
-        color: Color.White,
-      }),
-    });
+    this.health = new Healthbar({ pos: vec(100, 50) });
+    // this.#health.pos = new Vector(100, 30);
+    this.addChild(this.health);
 
-    this.addChild(this.#timer);
+    // engine.input.keyboard.on("press", (evt) => {
+    //   if (evt.key === Keys.PageUp) {
+    //     this.health.decrease();
+    //   }
+    // });
   }
 
   updateScore(score) {
@@ -69,15 +80,4 @@ export class UI extends Actor {
     if (!this.#target) return;
     this.#target.text = `Target: ${target}`;
   }
-
-  updateTimer(timeLeft) {
-    if (!this.#timer) return;
-
-    const seconds = Math.ceil(timeLeft / 1000);
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-
-    this.#timer.text = `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
-  }
-  
 }

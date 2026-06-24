@@ -5,21 +5,12 @@ import { UI } from "./ui.js";
 import { Hook } from "../../actors/hook.ts";
 import { Resources } from "../../resources.js";
 import { Background } from "../../background/background.js";
-import { DefeatScreen } from "../../defeatscreen.js";
 import { BaseScene, createGame } from "../../objects/createGame.ts";
-import { saveScores } from "../../scores.ts";
-import { checkAchievements } from "../../achievements.ts";
+// Metal Level
 
-//Metal Level
+export class Level4 extends BaseScene {
+  levelNumber = 4;
 
-export class Level3 extends BaseScene {
-  levelNumber = 3;
-
-  //Game Timer
-  gameTime = 180000; // 3 minutes
-  timeLeft = 120000;
-
-  //Trash Timer
   targetTimer = 0;
   targetChangeTime = 30000; //30 seconden
 
@@ -35,8 +26,6 @@ export class Level3 extends BaseScene {
     this.score = 0;
     this.objective = 0;
     this.introTimer = 0;
-
-    this.timeLeft = this.gameTime;
 
     // Remove old actors
     this.actors.forEach((actor) => {
@@ -105,33 +94,7 @@ export class Level3 extends BaseScene {
 
       this.pickNewTarget();
     }
-
-    this.timeLeft -= delta;
-
-    if (this.ui) {
-      this.ui.updateTimer(this.timeLeft);
-    }
-
-    if (this.timeLeft <= 0) {
-      this.timeLeft = 0;
-
-      if (this.objective >= 10) {
-        this.engine.goToScene("levelEnding", {
-          sceneActivationData: {
-            score: this.score,
-          },
-        });
-      } else {
-        this.engine.goToScene("defeatscreen", {
-          sceneActivationData: {
-            score: this.score,
-            restartScene: "level3",
-          },
-        });
-      }
-
-      return;
-    }
+    // console.log("Title exists:", this.title, "Killed:", this.title?.isKilled());
   }
 
   createLevel() {
@@ -140,7 +103,7 @@ export class Level3 extends BaseScene {
 
     // Level intro
     this.title = new Label({
-      text: "Level Three",
+      text: "Level Four",
       pos: new Vector(640, 280),
       font: new Font({
         size: 60,
@@ -166,7 +129,8 @@ export class Level3 extends BaseScene {
     this.intro.opacity = 0;
 
     this.ui = new UI();
-    this.ui.z = this.add(this.ui);
+    this.ui.z = 100; // Ensure UI is on top of other actors
+    this.add(this.ui);
 
     this.spawner = new Spawner();
     this.add(this.spawner);
@@ -176,6 +140,9 @@ export class Level3 extends BaseScene {
 
     this.add(this.title);
     this.add(this.intro);
+
+    // console.log("Title added:", this.title);
+    // console.log("Intro added:", this.intro);
   }
 
   pickNewTarget() {
@@ -188,7 +155,7 @@ export class Level3 extends BaseScene {
       this.ui.updateTarget(this.currentTarget);
     }
 
-    console.log("Target:", this.currentTarget);
+    // console.log("Target:", this.currentTarget);
   }
 
   addScore() {
@@ -207,6 +174,7 @@ export class Level3 extends BaseScene {
     } else {
       console.log("Wrong trash:", trash.type, "Needed:", this.currentTarget);
 
+      this.ui.health.decrease();
       this.score--;
       this.objective--;
     }
@@ -222,13 +190,22 @@ export class Level3 extends BaseScene {
 
     //Add minus score for collecting wrong thrash
     if (this.objective >= 10) {
-      this.engine.goToScene("levelEnding", {
+      this.engine.goToScene("level3Ending", {
         sceneActivationData: {
           score: this.score,
         },
       });
     }
 
+    // Add proper condition for losing later
+    // if (this.objective === 1) {
+    //   this.engine.goToScene("defeatscreen", {
+    //     sceneActivationData: {
+    //       score: this.score,
+    //       restartScene: "level3",
+    //     },
+    //   });
+    // }
   }
 
   onCollision(x, y) {
