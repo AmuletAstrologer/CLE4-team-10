@@ -35,13 +35,13 @@ export class ScrapManager {
     return false;
   }
 
-  public static addScrap(): void {
+  public static addScrap(amount = 1): void {
     const scrap = localStorage.getItem("scrap");
 
     if (scrap !== null) {
-      localStorage.setItem("scrap", (Number(scrap) + 1).toString());
+      localStorage.setItem("scrap", (Number(scrap) + amount).toString());
     } else {
-      localStorage.setItem("scrap", "1");
+      localStorage.setItem("scrap", `${amount}`);
     }
   }
 
@@ -65,10 +65,10 @@ export class ScrapManager {
   public static setUpgradeLevel(upgradeType: UpgradeTypes, value: number) {
     const localUpgrades = localStorage.getItem("upgrades");
     let newUpgrades: Partial<UpgradeObject> = [];
+    let inLocalUpgrades = false;
 
     if (localUpgrades !== null) {
       const localUpgradesJson: UpgradeObject = JSON.parse(localUpgrades);
-      let inLocalUpgrades = false;
 
       for (const localUpgrade of localUpgradesJson) {
         if (localUpgrade.name === upgradeType) {
@@ -80,14 +80,9 @@ export class ScrapManager {
           value: localUpgrade.value,
         });
       }
+    }
 
-      if (!inLocalUpgrades) {
-        newUpgrades.push({
-          name: upgradeType,
-          value: value,
-        });
-      }
-    } else {
+    if (localUpgrades === null || !inLocalUpgrades) {
       newUpgrades.push({
         name: upgradeType,
         value: value,
