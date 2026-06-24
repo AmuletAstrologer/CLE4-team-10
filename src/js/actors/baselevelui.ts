@@ -13,6 +13,8 @@ import {
 import { Resources } from "../resources";
 import { Healthbar } from "./healthbar/healthbar";
 import { Backbutton } from "../backbutton";
+import { AchievementManager } from "../lib/achievementmanager";
+import { AchievementPopup } from "./achievementPopup";
 
 export class BaseLevelUI extends ScreenElement {
   healthBar: Healthbar | undefined;
@@ -102,5 +104,21 @@ export class BaseLevelUI extends ScreenElement {
     ) {
       engine.goToScene("levels");
     }
+    const achievements = AchievementManager.checkAchievements();
+    for (const a of achievements)
+      switch (a) {
+        case 1:
+          engine.currentScene.add(new AchievementPopup("Perfect Hooking"));
+          break;
+        case 2:
+          engine.currentScene.add(new AchievementPopup("Scrap Collector"));
+          break;
+        case 3:
+          engine.currentScene.add(new AchievementPopup("High Score"));
+          break;
+        case 4:
+          engine.currentScene.add(new AchievementPopup("Recycle Master"));
+          break;
+      }
   }
 }
