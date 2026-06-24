@@ -55,32 +55,37 @@ export class AchievementManager {
     return JSON.parse(achievements);
   }
 
-  public static checkAchievements(): void {
+  public static checkAchievements(): number[] {
+    const unlocked: number[] = [];
     const achievements = AchievementManager.getAchievements();
-    const scores = getScores();
-    this.checkAchievement1(scores, achievements);
-    this.checkAchievement2(achievements);
-    // this.checkAchievement3(score)
-    this.checkAchievement4(achievements);
+    // const scores = getScores();
+    if (this.checkAchievement1(achievements)) unlocked.push(1);
+    if (this.checkAchievement2(achievements)) unlocked.push(2);
+    // if (this.checkAchievement3(score)) unlocked.push(3);
+    if (this.checkAchievement4(achievements)) unlocked.push(4);
     localStorage.setItem("achievements", JSON.stringify(achievements));
+    return unlocked;
   }
 
   static checkAchievement1(
-    scores: LevelScores,
+    // scores: LevelScores,
     achievements: Partial<Achievements>,
-  ) {
-    if (scores.levelOne === 10) {
-      const perfectHooking = achievements.achievements?.find(
-        (achievement) => achievement.name === "Perfect Hooking",
-      );
+  ): boolean {
+    // if (scores.levelOne === 10) {
+    //   const perfectHooking = achievements.achievements?.find(
+    //     (achievement) => achievement.name === "Perfect Hooking",
+    //   );
 
-      if (perfectHooking) {
-        perfectHooking.unlocked = true;
-        // currentScene.add(new AchievementPopup("Perfect Hooking"));
-      }
-    }
+    //   if (perfectHooking) {
+    //     if (perfectHooking.unlocked !== true) {
+    //       perfectHooking.unlocked = true;
+    //       return true;
+    //     }
+    //   }
+    // }
+    return false;
   }
-  static checkAchievement2(achievements: Partial<Achievements>) {
+  static checkAchievement2(achievements: Partial<Achievements>): boolean {
     const scrap = ScrapManager.getScrap();
     if (scrap > 24) {
       const scrapCollector = achievements.achievements?.find(
@@ -88,22 +93,33 @@ export class AchievementManager {
       );
 
       if (scrapCollector) {
-        scrapCollector.unlocked = true;
+        if (!scrapCollector.unlocked) {
+          scrapCollector.unlocked = true;
+          return true;
+        }
       }
     }
+    return false;
   }
-  static checkAchievement3(achievements: Partial<Achievements>, score: number) {
+  static checkAchievement3(
+    achievements: Partial<Achievements>,
+    score: number,
+  ): boolean {
     if (score > 14) {
       const highscore = achievements.achievements?.find(
         (achievement) => achievement.name === "High Score",
       );
 
       if (highscore) {
-        highscore.unlocked = true;
+        if (!highscore.unlocked) {
+          highscore.unlocked = true;
+          return true;
+        }
       }
     }
+    return false;
   }
-  static checkAchievement4(achievements: Partial<Achievements>) {
+  static checkAchievement4(achievements: Partial<Achievements>): boolean {
     let values = 0;
     for (let index = 0; index < upgradeTypes.length; index++) {
       const element = upgradeTypes[index];
@@ -116,9 +132,13 @@ export class AchievementManager {
       );
 
       if (recycleMaster) {
-        recycleMaster.unlocked = true;
+        if (!recycleMaster.unlocked) {
+          recycleMaster.unlocked = true;
+          return true;
+        }
       }
     }
+    return false;
   }
   public static isUnlocked(name: AchievementNames): boolean {
     return (
