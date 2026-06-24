@@ -1,5 +1,6 @@
 import { Actor, Random, Vector } from "excalibur";
 import { Resources } from "../../resources";
+import { Hook } from "../../actors/hook";
 
 export class PlanetSpawner extends Actor {
     constructor() {

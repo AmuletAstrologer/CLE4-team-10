@@ -12,6 +12,7 @@ import {
 } from "excalibur";
 import { Resources } from "../resources.js";
 import { Trash } from "../objects/trash.js";
+import { PlanetSpawner } from "../scenes/leveltwo/planetspawner.js";
 import { Meteor } from "../objects/meteor.js";
 import {
   UpgradeTypes,
@@ -77,6 +78,7 @@ export class Hook extends Actor {
       this.vel = vec(0, 0);
       this.rotation = 0;
       this.#isMoving = false;
+      this.#hasObject = false;
     }
 
     if (
@@ -148,6 +150,11 @@ export class Hook extends Actor {
     //     RecycleCard.getValueFromLocalStorage("moreHookGetSpeed") * 100,
     // );
     // }
+
+    if (other.owner instanceof PlanetSpawner) {
+      return;
+    }
+
     this.#hasObject = true;
 
     this.actions.clearActions();
@@ -156,6 +163,10 @@ export class Hook extends Actor {
       this.y,
       500 / 4 + RecycleCard.getValueFromLocalStorage("moreHookGetSpeed") * 100,
     );
+  }
+
+  get hasObject() {
+    return this.#hasObject;
   }
 
   between(x: number, min: number, max: number) {

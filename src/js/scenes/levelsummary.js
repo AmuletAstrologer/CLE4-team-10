@@ -3,6 +3,7 @@ import { Background } from "../background/background";
 import { Resources } from "../resources";
 import { ArrowLayer } from "../background/arrowlayer";
 import { Planet } from "../planet";
+import { Startpoint } from "../startpoint";
 
 export class LevelSummary extends Scene {
     onInitialize(engine) {
@@ -74,5 +75,6 @@ export class LevelSummary extends Scene {
             // planet.pos = p.pos;
             this.add(planet);
         });
+        this.add(new Startpoint);
     }
 }
