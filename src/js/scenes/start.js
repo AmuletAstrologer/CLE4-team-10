@@ -1,4 +1,4 @@
-import { Color, FontUnit, Label, Scene, Vector } from "excalibur";
+import { Color, FontUnit, Label, Scene, Sound, Vector } from "excalibur";
 import { Resources } from "../resources.js";
 import { Background } from "../background/background.js";
 import { StartLabel } from "../startlabel.js";
@@ -26,6 +26,12 @@ export class Start extends Scene {
 
   onActivate(context) {
     const engine = context.engine;
+    const music = Resources.tempMainMenuSong;
+
+    if (!music.isPlaying()) {
+      music.loop = true;
+      music.play(0.65);
+    }
 
     engine.input.keyboard.on("press", (evt) => {
       if (evt.key === "Enter") {

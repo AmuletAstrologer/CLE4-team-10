@@ -45,6 +45,8 @@ const Resources = {
   hoveryellowringPlanet: new ImageSource("images/hoveryellowringplanet.png"),
   achievementPlanet: new ImageSource("images/achievementplanet.png"),
   hoverachievementPlanet: new ImageSource("images/hoverachievementplanet.png"),
+
+  tempMainMenuSong: new Sound("sounds/temp.wav"),
 };
 
 const ResourceLoader = new Loader();
