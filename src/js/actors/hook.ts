@@ -18,6 +18,7 @@ import { AlteredTrash } from "../scenes/leveltwo/alteredtrash.js";
 import { Meteor } from "../objects/meteor.js";
 import { ScrapManager } from "../lib/scrapmanager.js";
 import { BaseScene } from "../objects/createGame.js";
+import { Level4 } from "../scenes/levelfour/levelfour.js";
 
 export class Hook extends Actor {
   #moveTime = 0;
@@ -146,10 +147,8 @@ export class Hook extends Actor {
       this.#amountOfObjects = 1 + ScrapManager.getUpgradeLevel("moreHookSpace");
     }
 
-    if (
-      this.#amountOfObjects >=
-      1 + ScrapManager.getUpgradeLevel("moreHookSpace")
-    ) {
+    // TODO: Change Level4 to Level6 once ready
+    if (this.#amountOfObjects >= 1) {
       this.actions.clearActions();
       this.actions.moveTo(
         this.x,
