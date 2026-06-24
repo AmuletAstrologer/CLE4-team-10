@@ -129,11 +129,10 @@ export class Hook extends Actor {
     contact: CollisionContact,
   ): void {
     if (
-      other.owner instanceof Trash ||
-      (other.owner instanceof AlteredTrash &&
-        this.#amountOfObjects <
-          1 + ScrapManager.getUpgradeLevel("moreHookSpace") &&
-        !this.#amountOfObjects)
+      (other.owner instanceof Trash || other.owner instanceof AlteredTrash) &&
+      this.#amountOfObjects <
+        1 + ScrapManager.getUpgradeLevel("moreHookSpace") &&
+      !this.#amountOfObjects
     ) {
       other.owner.body.collisionType = CollisionType.PreventCollision;
       other.owner.vel = vec(0, 0);
@@ -141,26 +140,11 @@ export class Hook extends Actor {
 
       this.addChild(other.owner);
       this.#amountOfObjects++;
-      // this.#hasObject = true;
-
-      // this.actions.clearActions();
-      // this.actions.moveTo(
-      //   this.x,
-      //   this.y,
-      //   500 / 4 + RecycleCard.getValueFromLocalStorage("moreHookGetSpeed") * 25,
-      // );
     }
+
     if (other.owner instanceof Meteor) {
       this.#amountOfObjects = 1 + ScrapManager.getUpgradeLevel("moreHookSpace");
-      // this.#hasObject = true;
-      // this.actions.moveTo(
-      //   this.x,
-      //   this.y,
-      //   500 / 4 +
-      //     RecycleCard.getValueFromLocalStorage("moreHookGetSpeed") * 25,
-      // );
     }
-    // this.#hasObject = true;
 
     if (
       this.#amountOfObjects >=

@@ -80,7 +80,6 @@ export class LevelStart extends ScreenElement {
       return;
     }
 
-    this.#title.kill();
-    this.#intro.kill();
+    this.kill();
   }
 }
