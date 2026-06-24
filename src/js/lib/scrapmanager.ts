@@ -1,8 +1,10 @@
-export type UpgradeTypes =
-  | "moreHookSpace"
-  | "moreHookGetSpeed"
-  | "moreHookThrowSpeed"
-  | "";
+export const upgradeTypes = [
+  "moreHookSpace",
+  "moreHookGetSpeed",
+  "moreHookThrowSpeed",
+  "",
+] as const;
+export type UpgradeTypes = (typeof upgradeTypes)[number];
 
 type UpgradeObject = [
   {
@@ -73,7 +75,6 @@ export class ScrapManager {
           localUpgrade.value = value;
           inLocalUpgrades = true;
         }
-
         newUpgrades.push({
           name: localUpgrade.name,
           value: localUpgrade.value,

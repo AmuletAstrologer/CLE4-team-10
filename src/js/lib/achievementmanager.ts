@@ -1,5 +1,5 @@
 import { getScores, LevelScores } from "../scores";
-import { ScrapManager } from "./scrapmanager";
+import { ScrapManager, upgradeTypes } from "./scrapmanager";
 
 export type AchievementNames =
   | "Perfect Hooking"
@@ -30,12 +30,12 @@ export class AchievementManager {
         achievements: [
           {
             name: "Perfect Hooking",
-            description: "Get a perfect score on level 1",
+            description: "Finish the tutorial!",
             unlocked: false,
           },
           {
             name: "Scrap Collector",
-            description: "Collect your first scrap",
+            description: "Collect 25 scrap",
             unlocked: false,
           },
           {
@@ -45,7 +45,7 @@ export class AchievementManager {
           },
           {
             name: "Recycle Master",
-            description: "Get a total of 5 upgrades",
+            description: "Get a total of 15 upgrades",
             unlocked: false,
           },
         ],
@@ -59,6 +59,8 @@ export class AchievementManager {
     const scores = getScores();
     this.checkAchievement1(scores, achievements);
     this.checkAchievement2(achievements);
+    // this.checkAchievement3(score)
+    this.checkAchievement4(achievements);
     localStorage.setItem("achievements", JSON.stringify(achievements));
   }
 
@@ -78,13 +80,41 @@ export class AchievementManager {
   }
   static checkAchievement2(achievements: Partial<Achievements>) {
     const scrap = ScrapManager.getScrap();
-    if (scrap > 0) {
+    if (scrap > 24) {
       const scrapCollector = achievements.achievements?.find(
         (achievement) => achievement.name === "Scrap Collector",
       );
 
       if (scrapCollector) {
         scrapCollector.unlocked = true;
+      }
+    }
+  }
+  static checkAchievement3(achievements: Partial<Achievements>, score: number) {
+    if (score > 14) {
+      const highscore = achievements.achievements?.find(
+        (achievement) => achievement.name === "High Score",
+      );
+
+      if (highscore) {
+        highscore.unlocked = true;
+      }
+    }
+  }
+  static checkAchievement4(achievements: Partial<Achievements>) {
+    let values = 0;
+    for (let index = 0; index < upgradeTypes.length; index++) {
+      const element = upgradeTypes[index];
+      const value = ScrapManager.getUpgradeLevel(element);
+      values += value;
+    }
+    if (values > 14) {
+      const recycleMaster = achievements.achievements?.find(
+        (achievement) => achievement.name === "Recycle Master",
+      );
+
+      if (recycleMaster) {
+        recycleMaster.unlocked = true;
       }
     }
   }

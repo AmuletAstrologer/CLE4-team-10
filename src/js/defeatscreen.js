@@ -249,7 +249,10 @@ export class DefeatScreen extends Scene {
       engine.goToScene(this.levelToRestart);
     }
 
-    if (engine.input.keyboard.wasPressed(Keys.X)) {
+    if (
+      gamepad?.wasButtonPressed(Buttons.Face2) ||
+      engine.input.keyboard.wasPressed(Keys.X)
+    ) {
       engine.goToScene("start");
     }
   }
