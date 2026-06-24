@@ -14,7 +14,6 @@ import { Healthbar } from "./healthbar/healthbar";
 import { Backbutton } from "../backbutton";
 
 export class BaseLevelUI extends ScreenElement {
-  #target: Label | undefined;
   healthBar: Healthbar | undefined;
 
   #objective = new Label({
@@ -23,6 +22,18 @@ export class BaseLevelUI extends ScreenElement {
       unit: FontUnit.Px,
       size: 40,
       color: Color.White,
+      textAlign: TextAlign.Center,
+      baseAlign: BaseAlign.Middle,
+    }),
+  });
+
+  #target = new Label({
+    // @ts-expect-error
+    text: `Objective: ${this.scene?.currentTarget ?? "None"}`,
+    font: Resources.PixelFont.toFont({
+      unit: FontUnit.Px,
+      size: 32,
+      color: Color.Yellow,
       textAlign: TextAlign.Center,
       baseAlign: BaseAlign.Middle,
     }),
@@ -44,27 +55,13 @@ export class BaseLevelUI extends ScreenElement {
   constructor(config: { level: number }) {
     super({});
 
-    if (config.level >= 3) {
-      this.#target = new Label({
-        // @ts-expect-error
-        text: `Target: ${this.scene?.currentTarget ?? "None"}`,
-        font: Resources.PixelFont.toFont({
-          unit: FontUnit.Px,
-          size: 32,
-          color: Color.Yellow,
-          textAlign: TextAlign.Center,
-          baseAlign: BaseAlign.Middle,
-        }),
-      });
-      this.addChild(this.#target);
-    }
-
     if (config.level >= 4) {
       this.healthBar = new Healthbar({});
       this.addChild(this.healthBar);
     }
 
     this.addChild(this.#objective);
+    this.addChild(this.#target);
     this.addChild(this.#timer);
     this.addChild(this.#backbutton);
   }
@@ -80,9 +77,10 @@ export class BaseLevelUI extends ScreenElement {
   updateObjective(objective: string) {
     this.#objective.text = `${objective}/10`;
   }
+
   updateTarget(target: string) {
     if (!this.#target) return;
-    this.#target.text = `Target: ${target}`;
+    this.#target.text = `Objective: ${target}`;
   }
 
   updateTimer(timeLeft: number) {

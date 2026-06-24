@@ -31,6 +31,8 @@ export class Level1 extends BaseScene {
   }
   createLevel() {
     this.ui = new BaseLevelUI({ level: 1 });
+    this.ui.updateTarget("Grab the trash!");
+
     this.spawner = new Spawner();
     const { hook } = createGame(this, this.spawner, this.ui, "Level One");
     console.log(this.spawner);

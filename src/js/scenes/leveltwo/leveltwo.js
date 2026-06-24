@@ -4,7 +4,8 @@ import { Resources } from "../../resources";
 import { PlanetSpawner } from "./planetspawner";
 import { Hook } from "../../actors/hook";
 import { Spawner } from "./spawner";
-import { UI } from "./ui";
+// import { UI } from "./ui";
+import { BaseLevelUI } from "../../actors/baselevelui.ts";
 import { Backbutton } from "../../backbutton";
 
 export class Level2 extends Scene {
@@ -21,7 +22,9 @@ export class Level2 extends Scene {
     this.spawner = new Spawner();
     this.add(this.spawner);
 
-    this.add(new Backbutton());
+    // this.add(new Backbutton());
+
+    this.ui.updateTarget("trash can't hit the planet!");
   }
 
   addSpawned() {
@@ -35,18 +38,9 @@ export class Level2 extends Scene {
   createLevel() {
     this.add(new PlanetSpawner());
     this.add(new Hook());
-    this.ui = new UI();
+    this.ui = new BaseLevelUI({ level: 2 });
     this.add(this.ui);
   }
-
-  // addScore() {
-  //     this.score++;
-
-  //     this.ui.updateScore(
-  //         this.score
-  //     );
-
-  // }
 
   addObjective() {
     this.objective++;
