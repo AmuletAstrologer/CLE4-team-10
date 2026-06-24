@@ -9,7 +9,7 @@ import {
   CollisionType,
 } from "excalibur";
 import { Resources, ResourceLoader } from "../resources.js";
-import { UI } from "../scenes/levelone/ui.js";
+import { UI } from "../scenes/levelfive/ui.js";
 import { Trash } from "./trash.js";
 
 export class Meteor extends Actor {

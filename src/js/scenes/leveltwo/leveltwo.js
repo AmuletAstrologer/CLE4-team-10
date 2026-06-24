@@ -4,7 +4,7 @@ import { Resources } from "../../resources";
 import { PlanetSpawner } from "./planetspawner";
 import { Hook } from "../../actors/hook";
 import { Spawner } from "./spawner";
-// import { UI } from "./ui";
+import { UI } from "./ui";
 import { BaseLevelUI } from "../../actors/baselevelui.ts";
 import { Backbutton } from "../../backbutton";
 import { LevelStart } from "../../actors/levelStart.ts";
@@ -50,6 +50,8 @@ export class Level2 extends Scene {
     this.ui = new BaseLevelUI({ level: 2 });
     this.add(this.ui);
   }
+
+  
     onPreUpdate(engine, delta) {
         this.introTimer += delta;
 

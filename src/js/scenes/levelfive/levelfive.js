@@ -21,6 +21,8 @@ import { BaseScene, createGame } from "../../objects/createGame.ts";
 import { saveScores } from "../../scores.ts";
 import { AchievementManager } from "../../lib/achievementmanager.ts";
 import { LevelEnding } from "../levelEnding.js";
+import { PlanetSpawner } from "../leveltwo/planetspawner.js";
+import { AlteredTrash } from "../leveltwo/alteredtrash.js";
 
 //Metal Level
 
@@ -201,6 +203,8 @@ export class Level5 extends BaseScene {
 
     this.ui = new UI();
     this.ui.z = this.add(this.ui);
+
+    this.add(new PlanetSpawner());
 
     this.spawner = new Spawner();
     this.add(this.spawner);

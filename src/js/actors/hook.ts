@@ -24,6 +24,7 @@ export class Hook extends Actor {
   #moveTime = 0;
   #isMoving = false;
   #amountOfObjects = 0;
+  #hasObject = false;
   public x;
   public y;
 
@@ -57,7 +58,7 @@ export class Hook extends Actor {
       this.between(this.pos.y, this.y - 5, this.y + 5)
     ) {
       if (this.children.length > 0) {
-        for (const child in this.children) {
+        for (const child of this.children) {
           ScrapManager.addScrap();
 
           if (this.scene instanceof BaseScene) {
@@ -80,16 +81,10 @@ export class Hook extends Actor {
     }
     const gamepad = engine.input.gamepads.at(0);
     const x = gamepad?.getAxes(Axes.LeftStickX) ?? 0;
-    const y = gamepad?.getAxes(Axes.LeftStickY) ?? 0;
     if (!this.#isMoving) {
       this.rotation += x * 0.025;
     }
-    const gamepad = engine.input.gamepads.at(0);
-    const x = gamepad?.getAxes(Axes.LeftStickX) ?? 0;
-    const y = gamepad?.getAxes(Axes.LeftStickY) ?? 0;
-    if (!this.#isMoving) {
-      this.rotation += x * 0.025;
-    }
+
 
     if (
       (engine.input.keyboard.isHeld(Keys.ArrowLeft) ||
@@ -187,10 +182,6 @@ if (
         500 / 4 + ScrapManager.getUpgradeLevel("moreHookGetSpeed") * 25,
       );
     }
-  }
-
-  get hasObject() {
-    return this.#hasObject;
   }
 
   get hasObject() {
