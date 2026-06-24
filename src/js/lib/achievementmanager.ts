@@ -1,5 +1,6 @@
 import { getScores, LevelScores } from "../scores";
 import { ScrapManager, upgradeTypes } from "./scrapmanager";
+import { AchievementPopup } from "../actors/achievementPopup";
 
 export type AchievementNames =
   | "Perfect Hooking"
@@ -75,6 +76,7 @@ export class AchievementManager {
 
       if (perfectHooking) {
         perfectHooking.unlocked = true;
+        // currentScene.add(new AchievementPopup("Perfect Hooking"));
       }
     }
   }
