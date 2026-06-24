@@ -14,6 +14,7 @@ import {
 } from "excalibur";
 import { Resources } from "../resources.js";
 import { Trash } from "../objects/trash.js";
+import { PlanetSpawner } from "../scenes/leveltwo/planetspawner.js";
 import { AlteredTrash } from "../scenes/leveltwo/alteredtrash.js";
 import { Meteor } from "../objects/meteor.js";
 import { ScrapManager } from "../lib/scrapmanager.js";
@@ -74,6 +75,14 @@ export class Hook extends Actor {
       this.vel = vec(0, 0);
       this.rotation = 0;
       this.#isMoving = false;
+      this.#hasObject = false;
+      
+    }
+    const gamepad = engine.input.gamepads.at(0);
+    const x = gamepad?.getAxes(Axes.LeftStickX) ?? 0;
+    const y = gamepad?.getAxes(Axes.LeftStickY) ?? 0;
+    if (!this.#isMoving) {
+      this.rotation += x * 0.025;
     }
     const gamepad = engine.input.gamepads.at(0);
     const x = gamepad?.getAxes(Axes.LeftStickX) ?? 0;
@@ -150,19 +159,24 @@ export class Hook extends Actor {
       //   500 / 4 + RecycleCard.getValueFromLocalStorage("moreHookGetSpeed") * 25,
       // );
     }
-    if (other.owner instanceof Meteor) {
+       if (other.owner instanceof Meteor) {
       this.#amountOfObjects = 1 + ScrapManager.getUpgradeLevel("moreHookSpace");
-      // this.#hasObject = true;
-      // this.actions.moveTo(
-      //   this.x,
-      //   this.y,
-      //   500 / 4 +
-      //     RecycleCard.getValueFromLocalStorage("moreHookGetSpeed") * 25,
-      // );
-    }
     // this.#hasObject = true;
+    // this.actions.moveTo(
+    //   this.x,
+    //   this.y,
+    //   500 / 4 +
+    //     RecycleCard.getValueFromLocalStorage("moreHookGetSpeed") * 100,
+    // );
+     }
 
-    if (
+ if (other.owner instanceof PlanetSpawner) {
+      return;
+ }
+
+      this.#hasObject = true;
+
+if (
       this.#amountOfObjects >=
       1 + ScrapManager.getUpgradeLevel("moreHookSpace")
     ) {
@@ -173,6 +187,14 @@ export class Hook extends Actor {
         500 / 4 + ScrapManager.getUpgradeLevel("moreHookGetSpeed") * 25,
       );
     }
+  }
+
+  get hasObject() {
+    return this.#hasObject;
+  }
+
+  get hasObject() {
+    return this.#hasObject;
   }
 
   between(x: number, min: number, max: number) {

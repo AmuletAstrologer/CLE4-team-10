@@ -1,37 +1,45 @@
 import { Actor, Shape, Vector } from "excalibur";
 import { PlanetSpawner } from "./planetspawner";
+import { Hook } from "../../actors/hook";
 
 export class AlteredTrash extends Actor {
     #speed = 200;
-        constructor() {
-            super({
-                width: 1,
-                height: 1,
-                collider: Shape.Box(250, 250),
-                // collisionType: CollisionType.Active,
-            });
-        }
-    
-    
-        onInitialize(engine) {
-            this.scale = new Vector(0.12, 0.12);
-            this.on('pointerdown', () => {
-                this.kill()
-                this.scene?.addObjective()
-            });
-        }
+    constructor() {
+        super({
+            width: 1,
+            height: 1,
+            collider: Shape.Box(250, 250),
+            // collisionType: CollisionType.Active,
+        });
+    }
 
-        onCollisionStart(self, other){
-            if(other.owner instanceof PlanetSpawner){
-                this.kill();
-                this.scene.removeSpawned();
-                if (other.owner instanceof PlanetSpawner && !this.scene?.objective <= 0) {
-                   this.scene.removeObjective(); 
-                }
+
+    onInitialize(engine) {
+        this.scale = new Vector(0.12, 0.12);
+        this.on('pointerdown', () => {
+            this.kill()
+            this.scene?.addObjective()
+        });
+    }
+
+    onCollisionStart(self, other) {
+        if (other.owner instanceof PlanetSpawner) {
+            const hook = this.scene.actors.find(a => a instanceof Hook);
+
+            if (hook?.hasObject) {
+                return; // ❗ Haak heeft iets → trash mag NIET botsen met planeet
+            }
+
+            // Normale collision
+            this.kill();
+            this.scene.removeSpawned();
+            if (!this.scene?.objective <= 0) {
+                this.scene.removeObjective();
             }
         }
+    }
 
-        onPostUpdate(engine, delta) {
+    onPostUpdate(engine, delta) {
         const bounds = engine.screen;
 
         if (this.pos.x < 0 || this.pos.x > engine.drawWidth) {
