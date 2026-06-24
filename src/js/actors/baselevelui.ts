@@ -8,6 +8,7 @@ import {
   TextAlign,
   Engine,
   Buttons,
+  Keys,
 } from "excalibur";
 import { Resources } from "../resources";
 import { Healthbar } from "./healthbar/healthbar";
@@ -95,7 +96,10 @@ export class BaseLevelUI extends ScreenElement {
 
   onPreUpdate(engine: Engine, elapsed: number): void {
     const gamepad = engine.input.gamepads.at(0);
-    if (gamepad?.wasButtonPressed(Buttons.Face2)) {
+    if (
+      gamepad?.wasButtonPressed(Buttons.Face2) ||
+      engine.input.keyboard.wasPressed(Keys.X)
+    ) {
       engine.goToScene("levels");
     }
   }

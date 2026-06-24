@@ -89,10 +89,10 @@ export class Level3 extends BaseScene {
       return;
     }
 
-    const gamepad = engine.input.gamepads.at(0);
-    if (gamepad?.wasButtonPressed(Buttons.Face2)) {
-      engine.goToScene("levels");
-    }
+    // const gamepad = engine.input.gamepads.at(0);
+    // if (gamepad?.wasButtonPressed(Buttons.Face2)) {
+    //   engine.goToScene("levels");
+    // }
   }
 
   createLevel() {
