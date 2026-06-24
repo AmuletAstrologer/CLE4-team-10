@@ -4,7 +4,7 @@ import { Resources } from "../../resources";
 import { PlanetSpawner } from "./planetspawner";
 import { Hook } from "../../actors/hook";
 import { Spawner } from "./spawner";
-import { BaseLevelUI } from "../../actors/baselevelui.ts";
+import { UI } from "./ui";
 import { Backbutton } from "../../backbutton";
 
 export class Level2 extends Scene {
@@ -35,7 +35,7 @@ export class Level2 extends Scene {
   createLevel() {
     this.add(new PlanetSpawner());
     this.add(new Hook());
-    this.ui = new BaseLevelUI({ level: 2 });
+    this.ui = new UI();
     this.add(this.ui);
   }
 
