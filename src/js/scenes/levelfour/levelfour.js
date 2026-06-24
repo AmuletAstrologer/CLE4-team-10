@@ -10,12 +10,13 @@ import {
 } from "excalibur";
 import { Bolt } from "../../objects/bolts.js";
 import { Spawner } from "./spwaner.js";
-import { UI } from "./ui.js";
 import { Hook } from "../../actors/hook.ts";
 import { Resources } from "../../resources.js";
 import { Background } from "../../background/background.js";
 import { BaseScene } from "../../objects/createGame.ts";
 import { Trash } from "../../objects/trash.js";
+import { saveScores } from "../../scores.ts";
+import { BaseLevelUI } from "../../actors/baselevelui.ts";
 
 export class Level4 extends BaseScene {
   levelNumber = 4;
@@ -167,7 +168,7 @@ export class Level4 extends BaseScene {
     this.intro.anchor = new Vector(0.5, 0.5);
     this.intro.opacity = 0;
 
-    this.ui = new UI();
+    this.ui = new BaseLevelUI({ level: 4 });
     this.ui.z = this.add(this.ui);
 
     this.spawner = new Spawner();
@@ -212,7 +213,7 @@ export class Level4 extends BaseScene {
     } else {
       console.log("Wrong trash:", trash.type, "Needed:", this.currentTarget);
       this.objective--;
-      this.ui.health.decrease();
+      this.ui.healthBar.decrease();
     }
 
     this.ui.updateObjective(this.objective);

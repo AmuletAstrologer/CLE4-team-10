@@ -10,7 +10,7 @@ import {
 } from "excalibur";
 import { Bolt } from "../../objects/bolts.js";
 import { Spawner } from "./spwaner.js";
-import { UI } from "./ui.js";
+import { BaseLevelUI } from "../../actors/baselevelui.ts";
 import { Hook } from "../../actors/hook.ts";
 import { Resources } from "../../resources.js";
 import { Background } from "../../background/background.js";
@@ -19,6 +19,7 @@ import { Trash } from "../../objects/trash.js";
 import { BaseScene, createGame } from "../../objects/createGame.ts";
 import { saveScores } from "../../scores.ts";
 import { AchievementManager } from "../../lib/achievementmanager.ts";
+import { LevelEnding } from "../levelEnding.js";
 
 //Metal Level
 
@@ -42,7 +43,6 @@ export class Level3 extends BaseScene {
   }
 
   onActivate() {
-    // this.score = 0;
     this.objective = 0;
     this.introTimer = 0;
 
@@ -127,21 +127,17 @@ export class Level3 extends BaseScene {
       this.timeLeft = 0;
 
       if (this.objective >= 10) {
-        this.engine.goToScene("levelEnding", {
-          sceneActivationData: {
-            score: this.score,
-          },
-        });
+        this.levelEnding();
       } else {
-        this.engine.goToScene("defeatscreen", {
-          sceneActivationData: {
-            score: this.score,
-            restartScene: "level3",
-          },
-        });
+        this.defeat();
       }
 
       return;
+    }
+
+    const gamepad = engine.input.gamepads.at(0);
+    if (gamepad?.wasButtonPressed(Buttons.Face2)) {
+      engine.goToScene("levels");
     }
   }
 
@@ -176,7 +172,7 @@ export class Level3 extends BaseScene {
     this.intro.anchor = new Vector(0.5, 0.5);
     this.intro.opacity = 0;
 
-    this.ui = new UI();
+    this.ui = new BaseLevelUI({ level: 3 });
     this.ui.z = this.add(this.ui);
 
     this.spawner = new Spawner();
@@ -232,11 +228,7 @@ export class Level3 extends BaseScene {
     this.ui.updateObjective(this.objective);
 
     if (this.objective >= 10) {
-      this.engine.goToScene("levelEnding", {
-        sceneActivationData: {
-          score: this.score,
-        },
-      });
+      this.levelEnding();
     }
   }
 
@@ -267,12 +259,6 @@ export class Level3 extends BaseScene {
       bolt.vel = dir.scale(speed);
       bolt.pos = new Vector(x, y);
       this.add(bolt);
-    }
-  }
-  onPreUpdate(engine) {
-    const gamepad = engine.input.gamepads.at(0);
-    if (gamepad?.wasButtonPressed(Buttons.Face2)) {
-      engine.goToScene("levels");
     }
   }
 }

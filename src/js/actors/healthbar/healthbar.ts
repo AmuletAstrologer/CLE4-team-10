@@ -13,7 +13,7 @@ import { BaseScene } from "../../objects/createGame";
 export class Healthbar extends Actor {
   #health = 3;
 
-  constructor(config: { pos: Vector }) {
+  constructor(config: { pos?: Vector }) {
     super({
       pos: config.pos,
     });
