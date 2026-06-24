@@ -24,13 +24,16 @@ export class Cursor extends Actor {
   }
   onPreUpdate(engine) {
     const gamepad = engine.input.gamepads.at(0);
+    if (!gamepad.connected) {
+      this.graphics.visible = false;
+    } else {
+      const x = gamepad?.getAxes(Axes.LeftStickX) ?? 0;
+      const y = gamepad?.getAxes(Axes.LeftStickY) ?? 0;
 
-    const x = gamepad?.getAxes(Axes.LeftStickX) ?? 0;
-    const y = gamepad?.getAxes(Axes.LeftStickY) ?? 0;
+      const speed = 5;
 
-    const speed = 5;
-
-    this.pos.x += x * speed;
-    this.pos.y += y * speed;
+      this.pos.x += x * speed;
+      this.pos.y += y * speed;
+    }
   }
 }
