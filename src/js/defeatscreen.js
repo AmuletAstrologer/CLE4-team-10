@@ -7,7 +7,7 @@ import {
   FontUnit,
   Color,
   Keys,
-  Buttons
+  Buttons,
 } from "excalibur";
 import { Resources } from "./resources.js";
 
@@ -33,6 +33,8 @@ export class DefeatScreen extends Scene {
       pos: new Vector(0, 0),
       anchor: new Vector(0, 0),
     });
+    const music = Resources.defeatSound;
+    music.play(0.65);
 
     bg.graphics.use(Resources.Background.toSprite());
     this.add(bg);
@@ -249,9 +251,7 @@ export class DefeatScreen extends Scene {
       console.log("Restarting level:", this.levelToRestart);
       engine.goToScene(this.levelToRestart);
     }
-
     const gamepad = engine.input.gamepads.at(0);
-
     if (
       gamepad?.wasButtonPressed(Buttons.Face2) ||
       engine.input.keyboard.wasPressed(Keys.X)

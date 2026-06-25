@@ -73,15 +73,35 @@ export class LevelSummary extends Scene {
       },
     ];
 
-        planets.forEach(p => {
-            const planet = new Planet(p);
-            // planet.pos = p.pos;
-            this.add(planet);
-        });
-           this.add(new Startpoint);
+    planets.forEach((p) => {
+      const planet = new Planet(p);
+      // planet.pos = p.pos;
+      this.add(planet);
+    });
+    this.add(new Startpoint);
+  }
+  onActivate(context) {
+    const music = Resources.levelSelectSound;
+    if (!music.isPlaying()) {
+      music.loop = true;
+      music.play(0);
     }
 
-     onPreUpdate(engine) {
+    let volume = 0;
+    music.volume = 0;
+
+    const interval = setInterval(() => {
+      volume += 0.004;
+
+      if (volume >= 0.65) {
+        volume = 0.65;
+        clearInterval(interval);
+      }
+
+      music.volume = volume;
+    }, 50);
+  }
+  onPreUpdate(engine) {
     this.hovered = null;
     this.hovered = this.actors.find((actor) => {
       if (actor instanceof Cursor) return false;
