@@ -13,10 +13,11 @@ import { BaseScene } from "../../objects/createGame";
 export class Healthbar extends Actor {
   #health = 3;
 
-  constructor(config: { pos?: Vector }) {
+  constructor(config: { pos?: Vector, maxHealth?: number }) {
     super({
       pos: config.pos,
     });
+    this.#health = config.maxHealth ?? 3;
 
     for (let i = 0; i < this.#health; i++) {
       this.addChild(new Heart({ pos: vec(0 + i * 75, 0) }).addTag(`heart${i}`));
