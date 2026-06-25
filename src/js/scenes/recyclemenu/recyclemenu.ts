@@ -10,14 +10,19 @@ import {
   BaseAlign,
   Keys,
   ExcaliburGraphicsContext,
+  Buttons,
+  Actor,
 } from "excalibur";
 import { Background } from "../../background/background.js";
 import { BackgroundBox } from "../../actors/backgroundbox.js";
 import { Resources } from "../../resources.js";
 import { RecycleCard } from "./recyclecard.js";
 import { ScrapManager } from "../../lib/scrapmanager.js";
+import { Cursor } from "../../objects/cursor.js";
 
 export class RecycleMenu extends Scene {
+  hovered: Actor | null = null;
+  cursor!: Cursor;
   #scrapLabel = new Label({
     text: "0",
     pos: vec(75, 120),
@@ -32,6 +37,10 @@ export class RecycleMenu extends Scene {
   });
 
   onInitialize(engine: Engine) {
+    const cursor = new Cursor();
+    this.add(cursor);
+    this.cursor = cursor;
+
     const background = new Background();
     this.add(background);
 
@@ -62,21 +71,13 @@ export class RecycleMenu extends Scene {
 
     this.add(this.#scrapLabel);
 
-    const moreHookSpace = new RecycleCard(
-      vec(engine.halfDrawWidth, engine.halfDrawHeight - 145),
-      650,
-      100,
-      "moreHookSpace",
-    );
-    this.add(moreHookSpace);
-
-    const moreHookGetSpeed = new RecycleCard(
+    const moreHookReturnSpeed = new RecycleCard(
       vec(engine.halfDrawWidth, engine.halfDrawHeight - 35),
       650,
       100,
-      "moreHookGetSpeed",
+      "moreHookReturnSpeed",
     );
-    this.add(moreHookGetSpeed);
+    this.add(moreHookReturnSpeed);
 
     const moreHookThrowSpeed = new RecycleCard(
       vec(engine.halfDrawWidth, engine.halfDrawHeight + 75),
@@ -85,6 +86,14 @@ export class RecycleMenu extends Scene {
       "moreHookThrowSpeed",
     );
     this.add(moreHookThrowSpeed);
+
+    const card2 = new RecycleCard(
+      vec(engine.halfDrawWidth, engine.halfDrawHeight - 145),
+      650,
+      100,
+      "",
+    );
+    this.add(card2);
 
     const card3 = new RecycleCard(
       vec(engine.halfDrawWidth, engine.halfDrawHeight + 185),
@@ -125,5 +134,30 @@ export class RecycleMenu extends Scene {
 
   onPreDraw(ctx: ExcaliburGraphicsContext, elapsed: number): void {
     this.#scrapLabel.text = ScrapManager.getScrap().toString();
+  }
+  onPreUpdate(engine: Engine, elapsed: number): void {
+    const gamepad = engine.input.gamepads.at(0);
+    if (gamepad?.wasButtonPressed(Buttons.Face2)) {
+      engine.goToScene("levels");
+    }
+    this.hovered = null;
+    this.hovered =
+      this.actors.find((actor) => {
+        if (!(actor instanceof RecycleCard)) {
+          return false;
+        }
+
+        return (
+          this.cursor.pos.x >= actor.pos.x - actor.width / 2 &&
+          this.cursor.pos.x <= actor.pos.x + actor.width / 2 &&
+          this.cursor.pos.y >= actor.pos.y - actor.height / 2 &&
+          this.cursor.pos.y <= actor.pos.y + actor.height / 2
+        );
+      }) ?? null;
+    if (gamepad?.wasButtonPressed(Buttons.Face1)) {
+      if (this.hovered instanceof RecycleCard) {
+        console.log(this.hovered.buyItem());
+      }
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { Color, FontUnit, Label, Vector } from "excalibur";
+import { Color, FontUnit, Label, Scene, Vector } from "excalibur";
 import { Background } from "../../background/background";
 import { Resources } from "../../resources";
 import { PlanetSpawner } from "./planetspawner";

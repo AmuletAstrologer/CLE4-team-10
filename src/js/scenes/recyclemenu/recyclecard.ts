@@ -12,6 +12,8 @@ import { Resources } from "../../resources.js";
 import { PlusIcon } from "./plusIcon.js";
 import { UpgradeTypes, ScrapManager } from "../../lib/scrapmanager.js";
 import { GenericCard } from "../../actors/genericcard.js";
+import { AchievementManager } from "../../lib/achievementmanager.js";
+import { AchievementPopup } from "../../actors/achievementPopup.js";
 
 export class RecycleCard extends GenericCard {
   #upgradeType: UpgradeTypes;
@@ -68,8 +70,8 @@ export class RecycleCard extends GenericCard {
       case "moreHookSpace":
         this.#upgradeNameLabel.text = "Hook capacity";
         break;
-      case "moreHookGetSpeed":
-        this.#upgradeNameLabel.text = "Hook get speed";
+      case "moreHookReturnSpeed":
+        this.#upgradeNameLabel.text = "Hook Return speed";
         break;
       case "moreHookThrowSpeed":
         this.#upgradeNameLabel.text = "Hook throw speed";
@@ -87,7 +89,29 @@ export class RecycleCard extends GenericCard {
 
     plus.on("pointerdown", () => {
       ScrapManager.doUpgrade(this.#upgradeType);
+      const music = Resources.soundEffectSound;
+      music.play(0.65);
+      const achievements = AchievementManager.checkAchievements();
+      for (const a of achievements)
+        switch (a) {
+          case 1:
+            engine.currentScene.add(new AchievementPopup("Perfect Hooking"));
+            break;
+          case 2:
+            engine.currentScene.add(new AchievementPopup("Scrap Collector"));
+            break;
+          case 3:
+            engine.currentScene.add(new AchievementPopup("High Score"));
+            break;
+          case 4:
+            engine.currentScene.add(new AchievementPopup("Recycle Master"));
+            break;
+        }
     });
+  }
+
+  buyItem() {
+    ScrapManager.doUpgrade(this.#upgradeType);
   }
 
   onPreUpdate(engine: Engine, elapsed: number): void {

@@ -15,13 +15,14 @@ import { Start } from "./scenes/start.js";
 import { Background } from "./background/background.js";
 import { DefeatScreen } from "./defeatscreen.js";
 import { RecycleMenu } from "./scenes/recyclemenu/recyclemenu.js";
+import { LevelEnding } from "./scenes/levelEnding.js";
+import { LevelSummary } from "./scenes/levelsummary.js";
+import { Level2 } from "./scenes/leveltwo/leveltwo.js";
 import { Level1 } from "./scenes/levelone/levelone.js";
 import { Level3 } from "./scenes/levelthree/levelthree.js";
 import { Level4 } from "./scenes/levelfour/levelfour.js";
-import { LevelEnding } from "./scenes/levelEnding.js";
-import { Level3Ending } from './scenes/levelthree/levelthreeEnding.js'
-import { LevelSummary } from "./scenes/levelsummary.js"
-import { Level2 } from './scenes/leveltwo/leveltwo.js'
+import { Level5 } from "./scenes/levelfive/levelfive.js";
+import { AchievementMenu } from "./scenes/achievementmenu/achievementmenu.js";
 
 export class Game extends Engine {
   constructor() {
@@ -35,17 +36,19 @@ export class Game extends Engine {
     this.start(ResourceLoader).then(() => this.startGame());
   }
 
-    startGame() {
-        this.addScene("start", new Start());
-        this.addScene("levels", new LevelSummary());
-        this.addScene("level1", new Level1());
-        this.addScene("level2", new Level2());
-        this.addScene("level3", new Level3());
-        this.addScene("level4", new Level4());
-        this.addScene("defeatscreen", new DefeatScreen());
-        this.addScene("levelrecyclemenu", new RecycleMenu());
+  startGame() {
+    this.addScene("start", new Start());
+    this.addScene("levels", new LevelSummary());
+    this.addScene("level1", new Level1());
+    this.addScene("level2", new Level2());
+    this.addScene("level3", new Level3());
+    this.addScene("level4", new Level4());
+    this.addScene("level5", new Level5());
+    this.addScene("defeatscreen", new DefeatScreen());
+    this.addScene("recyclemenu", new RecycleMenu());
+    this.addScene("achievements", new AchievementMenu());
 
-    (this.addScene("levelEnding", {
+    this.addScene("levelEnding", {
       scene: new LevelEnding(),
       transitions: {
         in: new FadeInOut({
@@ -59,22 +62,7 @@ export class Game extends Engine {
           color: Color.Black,
         }),
       },
-    }),
-      this.addScene("level3Ending", {
-        scene: new LevelEnding(),
-        transitions: {
-          in: new FadeInOut({
-            duration: 1500,
-            direction: "in",
-            color: Color.Black,
-          }),
-          out: new FadeInOut({
-            duration: 1500,
-            direction: "out",
-            color: Color.Black,
-          }),
-        },
-      }));
+    });
     this.goToScene("start");
   }
 }
