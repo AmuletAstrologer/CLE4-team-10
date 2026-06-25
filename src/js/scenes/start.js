@@ -25,13 +25,13 @@ export class Start extends Scene {
   }
 
   onActivate(context) {
-    const engine = context.engine;
-    const music = Resources.tempMainMenuSong;
+    this.music = Resources.tempMainMenuSong;
 
-    if (!music.isPlaying()) {
-      music.loop = true;
-      music.play(0.65);
+    if (!this.music.isPlaying()) {
+      this.music.loop = true;
+      this.music.play(0.65);
     }
+    const engine = context.engine;
 
     engine.input.keyboard.on("press", (evt) => {
       if (evt.key === "Enter") {
@@ -39,5 +39,21 @@ export class Start extends Scene {
         // engine.goToScene("level3");
       }
     });
+  }
+  onDeactivate(context) {
+    let volume = 0.65;
+    this.music.volume = 0.65;
+
+    const interval = setInterval(() => {
+      volume -= 0.05;
+
+      if (volume <= 0) {
+        volume = 0;
+        clearInterval(interval);
+        Resources.tempMainMenuSong.stop();
+      }
+
+      this.music.volume = volume;
+    }, 50);
   }
 }

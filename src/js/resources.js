@@ -47,6 +47,11 @@ const Resources = {
   hoverachievementPlanet: new ImageSource("images/hoverachievementplanet.png"),
 
   tempMainMenuSong: new Sound("sounds/temp.wav"),
+  achievementSound: new Sound("sounds/cle4-achievement.wav"),
+  defeatSound: new Sound("sounds/cle4-defeat.wav"),
+  levelSelectSound: new Sound("sounds/cle4-menu.wav"),
+  soundEffectSound: new Sound("sounds/cle4-soundeffect.wav"),
+  timeSound: new Sound("sounds/cle4-time.wav"),
 };
 
 const ResourceLoader = new Loader();

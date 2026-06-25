@@ -78,6 +78,27 @@ export class LevelSummary extends Scene {
       this.add(planet);
     });
   }
+  onActivate(context) {
+    const music = Resources.levelSelectSound;
+    if (!music.isPlaying()) {
+      music.loop = true;
+      music.play(0);
+    }
+
+    let volume = 0;
+    music.volume = 0;
+
+    const interval = setInterval(() => {
+      volume += 0.004;
+
+      if (volume >= 0.65) {
+        volume = 0.65;
+        clearInterval(interval);
+      }
+
+      music.volume = volume;
+    }, 50);
+  }
   onPreUpdate(engine) {
     this.hovered = null;
     this.hovered = this.actors.find((actor) => {

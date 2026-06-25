@@ -19,6 +19,7 @@ import { AchievementPopup } from "./achievementPopup";
 export class BaseLevelUI extends ScreenElement {
   healthBar: Healthbar | undefined;
   #timer: Label | undefined;
+  #songPlayed: boolean = false;
 
   #objective = new Label({
     text: "0/10",
@@ -73,6 +74,8 @@ export class BaseLevelUI extends ScreenElement {
   }
 
   onInitialize(engine: Engine) {
+    Resources.levelSelectSound.stop();
+
     this.#objective.pos = vec(engine.halfDrawWidth, 30);
     this.#target.pos = vec(engine.halfDrawWidth, 80);
 
@@ -91,6 +94,25 @@ export class BaseLevelUI extends ScreenElement {
 
   updateTimer(timeLeft: number) {
     if (!this.#timer) return;
+    if (timeLeft <= 15300 && !this.#songPlayed) {
+      this.#songPlayed = true;
+      const music = Resources.timeSound;
+      music.play(0.65);
+      let volume = 0.65;
+      music.volume = 0.65;
+
+      const interval = setInterval(() => {
+        volume -= 0.0022;
+
+        if (volume <= 0) {
+          volume = 0;
+          clearInterval(interval);
+          Resources.tempMainMenuSong.stop();
+        }
+
+        music.volume = volume;
+      }, 50);
+    }
 
     const seconds = Math.ceil(timeLeft / 1000);
     const minutes = Math.floor(seconds / 60);

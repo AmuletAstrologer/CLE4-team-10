@@ -94,11 +94,9 @@ export class RecycleCard extends GenericCard {
         switch (a) {
           case 1:
             engine.currentScene.add(new AchievementPopup("Perfect Hooking"));
-            console.log("works");
             break;
           case 2:
             engine.currentScene.add(new AchievementPopup("Scrap Collector"));
-            console.log("works");
             break;
           case 3:
             engine.currentScene.add(new AchievementPopup("High Score"));
