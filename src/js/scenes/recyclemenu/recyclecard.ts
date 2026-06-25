@@ -89,6 +89,8 @@ export class RecycleCard extends GenericCard {
 
     plus.on("pointerdown", () => {
       ScrapManager.doUpgrade(this.#upgradeType);
+      const music = Resources.soundEffectSound;
+      music.play(0.65);
       const achievements = AchievementManager.checkAchievements();
       for (const a of achievements)
         switch (a) {
