@@ -62,7 +62,7 @@ export class Level4 extends BaseScene {
       engine.goToScene("levels");
     }
 
-    this.ui.z = 100;
+    // this.ui.z = 100;
 
     // Target switching
     this.targetTimer += delta;

@@ -70,8 +70,8 @@ export class RecycleCard extends GenericCard {
       case "moreHookSpace":
         this.#upgradeNameLabel.text = "Hook capacity";
         break;
-      case "moreHookGetSpeed":
-        this.#upgradeNameLabel.text = "Hook get speed";
+      case "moreHookReturnSpeed":
+        this.#upgradeNameLabel.text = "Hook Return speed";
         break;
       case "moreHookThrowSpeed":
         this.#upgradeNameLabel.text = "Hook throw speed";
