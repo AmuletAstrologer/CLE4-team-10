@@ -43,7 +43,7 @@ export class Trash extends Actor {
         const x = (self.x + other.x) / 2;
         const y = (self.y + other.y) / 2;
 
-        this.scene?.onCollision(x, y);
+        this.scene?.onCollision(x, y, e.other.owner);
       }
     });
   }

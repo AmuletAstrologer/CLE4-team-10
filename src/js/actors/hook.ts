@@ -21,6 +21,7 @@ import { BaseScene } from "../objects/createGame.js";
 import { AlteredTrash } from "../scenes/leveltwo/alteredtrash.js";
 import { Level2 } from "../scenes/leveltwo/leveltwo.js";
 import { Level4 } from "../scenes/levelfour/levelfour.js";
+import { Level6 } from "../scenes/levelsix/levelsix.js";
 
 export class Hook extends Actor {
   #moveTime = 0;
@@ -60,7 +61,7 @@ export class Hook extends Actor {
       this.between(this.pos.y, this.y - 5, this.y + 5)
     ) {
       if (this.children.length > 0) {
-        for (const child of this.children) {
+        for (const child in this.children) {
           ScrapManager.addScrap();
 
           if (this.scene instanceof BaseScene) {
@@ -86,6 +87,7 @@ export class Hook extends Actor {
     }
     const gamepad = engine.input.gamepads.at(0);
     const x = gamepad?.getAxes(Axes.LeftStickX) ?? 0;
+    const y = gamepad?.getAxes(Axes.LeftStickY) ?? 0;
     if (!this.#isMoving) {
       this.rotation += x * 0.025;
     }
