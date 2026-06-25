@@ -24,8 +24,6 @@ import { LevelEnding } from "../levelEnding.js";
 import { PlanetSpawner } from "../leveltwo/planetspawner.js";
 import { AlteredTrash } from "../leveltwo/alteredtrash.js";
 
-//Metal Level
-
 export class Level5 extends BaseScene {
   levelNumber = 5;
 
