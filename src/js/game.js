@@ -21,6 +21,7 @@ import { Level2 } from "./scenes/leveltwo/leveltwo.js";
 import { Level1 } from "./scenes/levelone/levelone.js";
 import { Level3 } from "./scenes/levelthree/levelthree.js";
 import { Level4 } from "./scenes/levelfour/levelfour.js";
+import { Level5 } from "./scenes/levelfive/levelfive.js";
 import { AchievementMenu } from "./scenes/achievementmenu/achievementmenu.js";
 
 export class Game extends Engine {
@@ -42,6 +43,7 @@ export class Game extends Engine {
     this.addScene("level2", new Level2());
     this.addScene("level3", new Level3());
     this.addScene("level4", new Level4());
+    this.addScene("level5", new Level5());
     this.addScene("defeatscreen", new DefeatScreen());
     this.addScene("recyclemenu", new RecycleMenu());
     this.addScene("achievements", new AchievementMenu());
