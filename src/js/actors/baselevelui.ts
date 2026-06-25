@@ -73,6 +73,7 @@ export class BaseLevelUI extends ScreenElement {
   }
 
   onInitialize(engine: Engine) {
+    this.z = 100;
     this.#objective.pos = vec(engine.halfDrawWidth, 30);
     this.#target.pos = vec(engine.halfDrawWidth, 80);
 
