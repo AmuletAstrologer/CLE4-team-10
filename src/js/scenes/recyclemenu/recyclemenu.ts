@@ -71,13 +71,13 @@ export class RecycleMenu extends Scene {
 
     this.add(this.#scrapLabel);
 
-    const moreHookGetSpeed = new RecycleCard(
+    const moreHookReturnSpeed = new RecycleCard(
       vec(engine.halfDrawWidth, engine.halfDrawHeight - 35),
       650,
       100,
-      "moreHookGetSpeed",
+      "moreHookReturnSpeed",
     );
-    this.add(moreHookGetSpeed);
+    this.add(moreHookReturnSpeed);
 
     const moreHookThrowSpeed = new RecycleCard(
       vec(engine.halfDrawWidth, engine.halfDrawHeight + 75),
