@@ -3,6 +3,7 @@ import { Background } from "../background/background";
 import { Resources } from "../resources";
 import { ArrowLayer } from "../background/arrowlayer";
 import { Planet } from "../planet";
+import { Startpoint } from "../startpoint";
 import { Cursor } from "../objects/cursor";
 
 export class LevelSummary extends Scene {
@@ -59,7 +60,7 @@ export class LevelSummary extends Scene {
       {
         sprite: Resources.orangePlanet.toSprite(),
         hoversprite: Resources.hoverorangePlanet.toSprite(),
-        level: "five",
+        level: "level5",
         scale: new Vector(0.4, 0.4),
         pos: new Vector(1015, 405),
       },
@@ -77,6 +78,7 @@ export class LevelSummary extends Scene {
       // planet.pos = p.pos;
       this.add(planet);
     });
+    this.add(new Startpoint);
   }
   onActivate(context) {
     const music = Resources.levelSelectSound;
@@ -111,7 +113,8 @@ export class LevelSummary extends Scene {
         ) < 40
       );
     });
-    const gamepad = engine.input.gamepads.at(0);
+
+     const gamepad = engine.input.gamepads.at(0);
     if (gamepad?.wasButtonPressed(Buttons.Face1)) {
       if (this.hovered instanceof Planet) {
         this.hovered.events.emit("pointerup");
@@ -119,3 +122,4 @@ export class LevelSummary extends Scene {
     }
   }
 }
+

@@ -14,6 +14,7 @@ import {
 } from "excalibur";
 import { Resources } from "../resources.js";
 import { Trash } from "../objects/trash.js";
+import { PlanetSpawner } from "../scenes/leveltwo/planetspawner.js";
 import { AlteredTrash } from "../scenes/leveltwo/alteredtrash.js";
 import { Meteor } from "../objects/meteor.js";
 import { ScrapManager } from "../lib/scrapmanager.js";
@@ -24,6 +25,7 @@ export class Hook extends Actor {
   #moveTime = 0;
   #isMoving = false;
   #amountOfObjects = 0;
+  #hasObject = false;
   public x;
   public y;
 
@@ -57,7 +59,7 @@ export class Hook extends Actor {
       this.between(this.pos.y, this.y - 5, this.y + 5)
     ) {
       if (this.children.length > 0) {
-        for (const child in this.children) {
+        for (const child of this.children) {
           ScrapManager.addScrap();
 
           if (this.scene instanceof BaseScene) {
@@ -75,13 +77,15 @@ export class Hook extends Actor {
       this.vel = vec(0, 0);
       this.rotation = 0;
       this.#isMoving = false;
+      this.#hasObject = false;
+      
     }
     const gamepad = engine.input.gamepads.at(0);
     const x = gamepad?.getAxes(Axes.LeftStickX) ?? 0;
-    const y = gamepad?.getAxes(Axes.LeftStickY) ?? 0;
     if (!this.#isMoving) {
       this.rotation += x * 0.025;
     }
+
 
     if (
       (engine.input.keyboard.isHeld(Keys.ArrowLeft) ||
@@ -131,9 +135,7 @@ export class Hook extends Actor {
   ): void {
     if (
       (other.owner instanceof Trash || other.owner instanceof AlteredTrash) &&
-      this.#amountOfObjects <
-        1 + ScrapManager.getUpgradeLevel("moreHookSpace") &&
-      !this.#amountOfObjects
+      this.#amountOfObjects < 1
     ) {
       other.owner.body.collisionType = CollisionType.PreventCollision;
       other.owner.vel = vec(0, 0);
@@ -142,13 +144,27 @@ export class Hook extends Actor {
       this.addChild(other.owner);
       this.#amountOfObjects++;
     }
-
-    if (other.owner instanceof Meteor) {
+       if (other.owner instanceof Meteor) {
       this.#amountOfObjects = 1 + ScrapManager.getUpgradeLevel("moreHookSpace");
-    }
+    // this.#hasObject = true;
+    // this.actions.moveTo(
+    //   this.x,
+    //   this.y,
+    //   500 / 4 +
+    //     RecycleCard.getValueFromLocalStorage("moreHookGetSpeed") * 100,
+    // );
+     }
 
-    // TODO: Change Level4 to Level6 once ready
-    if (this.#amountOfObjects >= 1) {
+ if (other.owner instanceof PlanetSpawner) {
+      return;
+ }
+
+      this.#hasObject = true;
+
+if (
+      this.#amountOfObjects >=
+      1 + ScrapManager.getUpgradeLevel("moreHookSpace")
+    ) {
       this.actions.clearActions();
       this.actions.moveTo(
         this.x,
@@ -156,6 +172,10 @@ export class Hook extends Actor {
         500 / 4 + ScrapManager.getUpgradeLevel("moreHookGetSpeed") * 25,
       );
     }
+  }
+
+  get hasObject() {
+    return this.#hasObject;
   }
 
   between(x: number, min: number, max: number) {
