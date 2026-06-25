@@ -30,41 +30,37 @@ export class Level6 extends BaseScene {
   score = 0;
   timeSurvived = 0;
 
-//   onInitialize(engine) {
-//     this.engine = engine;
-//   }
+  onActivate() {
+    this.score = 0;
+    this.timeSurvived = 0;
 
- onActivate() {
-  this.score = 0;
-  this.timeSurvived = 0;
+    this.actors.forEach((actor) => {
+      actor.kill();
+    });
 
-  this.actors.forEach((actor) => {
-    actor.kill();
-  });
+    this.createLevel();
 
-  this.createLevel();
-
-  if (this.ui) {
-    this.ui.updateScore(0);
-  }
-}
-
-onPreUpdate(engine, delta) {
-  this.ui.z = 100;
-
-  // Count upward forever
-  this.timeSurvived += delta;
-
-  if (this.ui) {
-    this.ui.updateTimer(this.timeSurvived);
+    if (this.ui) {
+      this.ui.updateScore(0);
+    }
   }
 
-  const gamepad = engine.input.gamepads.at(0);
+  onPreUpdate(engine, delta) {
+    this.ui.z = 100;
 
-  if (gamepad?.wasButtonPressed(Buttons.Face2)) {
-    this.engine.goToScene("levels");
+    // Count upward forever
+    this.timeSurvived += delta;
+
+    if (this.ui) {
+      this.ui.updateTimer(this.timeSurvived);
+    }
+
+    const gamepad = engine.input.gamepads.at(0);
+
+    if (gamepad?.wasButtonPressed(Buttons.Face2)) {
+      this.engine.goToScene("levels");
+    }
   }
-}
 
   createLevel() {
     const background = new Background();
@@ -84,48 +80,71 @@ onPreUpdate(engine, delta) {
       levelName: "Endless Level",
     });
     this.add(this.levelStart);
+
+    const backbutton = new Label({
+      text: "⇜",
+      font: Resources.PixelFont.toFont({
+        unit: FontUnit.Px,
+        size: 60,
+        color: Color.White,
+      }),
+    });
+
+    backbutton.anchor = new Vector(0.5, 0.5);
+    backbutton.pos = new Vector(40, 40);
+
+    this.add(backbutton);
+
+    backbutton.on("pointerenter", () => {
+      backbutton.font.color = Color.Orange;
+    });
+
+    backbutton.on("pointerleave", () => {
+      backbutton.font.color = Color.White;
+    });
+
+    backbutton.on("pointerup", () => {
+      this.engine.goToScene("levels");
+    });
   }
 
-  
+  addScore() {
+    const trash = this.hook.children[0];
 
-addScore() {
-  const trash = this.hook.children[0];
+    if (!trash) {
+      console.log("No trash caught");
+      return;
+    }
 
-  if (!trash) {
-    console.log("No trash caught");
-    return;
+    this.score++;
+
+    if (this.ui) {
+      this.ui.updateScore(this.score);
+    } else {
+      this.score--;
+      this.loseHealth();
+      this.removeScore();
+    }
   }
 
-  this.score++;
-
-  if (this.ui) {
-    this.ui.updateScore(this.score);
-  } else {
-
-    this.score--; 
-    this.loseHealth()
-    this.removeScore()
-  }
-} 
-
-loseHealth() {
-  if (this.ui?.health) {
-    this.ui.health.decrease();
-  }
-}
-
-removeScore() {
-  this.score--;
-
-  if (this.score < 0) {
-    this.score = 0;
+  loseHealth() {
+    if (this.ui?.health) {
+      this.ui.health.decrease();
+    }
   }
 
-  if (this.ui) {
-    this.ui.updateScore(this.score);
-    this.ui.health.decrease();
+  removeScore() {
+    this.score--;
+
+    if (this.score < 0) {
+      this.score = 0;
+    }
+
+    if (this.ui) {
+      this.ui.updateScore(this.score);
+      this.ui.health.decrease();
+    }
   }
-}
 
   onCollision(x, y, other) {
     const rand = new Random(1244);
@@ -156,10 +175,10 @@ removeScore() {
       this.add(bolt);
     }
 
-    if (other instanceof Trash){
-        this.score--; 
-        this.loseHealth()
-        this.removeScore()
+    if (!(other instanceof Bolt)) {
+      this.score--;
+      this.loseHealth();
+      this.removeScore();
     }
   }
 }

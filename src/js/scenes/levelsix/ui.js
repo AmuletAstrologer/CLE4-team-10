@@ -39,7 +39,7 @@ export class UI extends Actor {
 
     this.#objective = new Label({
       text: "Collected: 0",
-      pos: new Vector(150, 30),
+      pos: new Vector(190, 35),
       font: Resources.PixelFont.toFont({
         unit: FontUnit.Px,
         size: 32,
@@ -53,7 +53,7 @@ export class UI extends Actor {
 
     this.#timer = new Label({
       text: "00:00",
-      pos: new Vector(1200, 30),
+      pos: new Vector(1200, 35),
       font: Resources.PixelFont.toFont({
         unit: FontUnit.Px,
         size: 32,
