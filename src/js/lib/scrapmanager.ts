@@ -110,14 +110,15 @@ export class ScrapManager {
     return upgradeLevel * upgradeLevel * upgradeMultiplier + upgradeStartValue;
   }
 
-  public static doUpgrade(upgradeType: UpgradeTypes): void {
+  public static doUpgrade(upgradeType: UpgradeTypes): boolean {
     if (!ScrapManager.removeScrap(ScrapManager.getUpgradeCost(upgradeType))) {
-      return;
+      return false;
     }
 
     ScrapManager.setUpgradeLevel(
       upgradeType,
       ScrapManager.getUpgradeLevel(upgradeType) + 1,
     );
+    return true;
   }
 }

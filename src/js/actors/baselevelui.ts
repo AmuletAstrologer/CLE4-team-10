@@ -13,9 +13,12 @@ import {
 import { Resources } from "../resources";
 import { Healthbar } from "./healthbar/healthbar";
 import { Backbutton } from "../backbutton";
+import { AchievementManager } from "../lib/achievementmanager";
+import { AchievementPopup } from "./achievementPopup";
 
 export class BaseLevelUI extends ScreenElement {
   healthBar: Healthbar | undefined;
+  #timer: Label | undefined;
 
   #objective = new Label({
     text: "0/10",
@@ -40,17 +43,6 @@ export class BaseLevelUI extends ScreenElement {
     }),
   });
 
-  #timer = new Label({
-    text: "03:00",
-    font: Resources.PixelFont.toFont({
-      unit: FontUnit.Px,
-      size: 32,
-      color: Color.White,
-      textAlign: TextAlign.Right,
-      baseAlign: BaseAlign.Middle,
-    }),
-  });
-
   #backbutton = new Backbutton();
 
   constructor(config: { level: number }) {
@@ -61,21 +53,34 @@ export class BaseLevelUI extends ScreenElement {
       this.addChild(this.healthBar);
     }
 
+    if (config.level >= 3) {
+      this.#timer = new Label({
+        text: "03:00",
+        font: Resources.PixelFont.toFont({
+          unit: FontUnit.Px,
+          size: 32,
+          color: Color.White,
+          textAlign: TextAlign.Right,
+          baseAlign: BaseAlign.Middle,
+        }),
+      });
+      this.addChild(this.#timer);
+    }
+
     this.addChild(this.#objective);
     this.addChild(this.#target);
-    this.addChild(this.#timer);
     this.addChild(this.#backbutton);
   }
 
   onInitialize(engine: Engine) {
     this.#objective.pos = vec(engine.halfDrawWidth, 30);
-    this.#timer.pos = vec(engine.drawWidth - 40, 30);
+    this.#target.pos = vec(engine.halfDrawWidth, 80);
 
-    if (this.#target) this.#target.pos = vec(engine.halfDrawWidth, 80);
+    if (this.#timer) this.#timer.pos = vec(engine.drawWidth - 40, 30);
     if (this.healthBar) this.healthBar.pos = vec(100, engine.drawHeight - 100);
   }
 
-  updateObjective(objective: string) {
+  updateObjective(objective: number | string) {
     this.#objective.text = `${objective}/10`;
   }
 
@@ -102,5 +107,21 @@ export class BaseLevelUI extends ScreenElement {
     ) {
       engine.goToScene("levels");
     }
+    const achievements = AchievementManager.checkAchievements();
+    for (const a of achievements)
+      switch (a) {
+        case 1:
+          engine.currentScene.add(new AchievementPopup("Perfect Hooking"));
+          break;
+        case 2:
+          engine.currentScene.add(new AchievementPopup("Scrap Collector"));
+          break;
+        case 3:
+          engine.currentScene.add(new AchievementPopup("High Score"));
+          break;
+        case 4:
+          engine.currentScene.add(new AchievementPopup("Recycle Master"));
+          break;
+      }
   }
 }

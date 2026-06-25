@@ -12,6 +12,8 @@ import { Resources } from "../../resources.js";
 import { PlusIcon } from "./plusIcon.js";
 import { UpgradeTypes, ScrapManager } from "../../lib/scrapmanager.js";
 import { GenericCard } from "../../actors/genericcard.js";
+import { AchievementManager } from "../../lib/achievementmanager.js";
+import { AchievementPopup } from "../../actors/achievementPopup.js";
 
 export class RecycleCard extends GenericCard {
   #upgradeType: UpgradeTypes;
@@ -87,6 +89,24 @@ export class RecycleCard extends GenericCard {
 
     plus.on("pointerdown", () => {
       ScrapManager.doUpgrade(this.#upgradeType);
+      const achievements = AchievementManager.checkAchievements();
+      for (const a of achievements)
+        switch (a) {
+          case 1:
+            engine.currentScene.add(new AchievementPopup("Perfect Hooking"));
+            console.log("works");
+            break;
+          case 2:
+            engine.currentScene.add(new AchievementPopup("Scrap Collector"));
+            console.log("works");
+            break;
+          case 3:
+            engine.currentScene.add(new AchievementPopup("High Score"));
+            break;
+          case 4:
+            engine.currentScene.add(new AchievementPopup("Recycle Master"));
+            break;
+        }
     });
   }
 
