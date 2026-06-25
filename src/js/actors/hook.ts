@@ -17,6 +17,7 @@ import { Meteor } from "../objects/meteor.js";
 import { ScrapManager } from "../lib/scrapmanager.js";
 import { BaseScene } from "../objects/createGame.js";
 import { AlteredTrash } from "../scenes/leveltwo/alteredtrash.js";
+import { Level2 } from "../scenes/leveltwo/leveltwo.js";
 
 export class Hook extends Actor {
   #moveTime = 0;
@@ -59,8 +60,12 @@ export class Hook extends Actor {
           ScrapManager.addScrap();
 
           if (this.scene instanceof BaseScene) {
-            this.scene.addScore();
+            // this.scene.addScore();
             this.scene.addObjective();
+            
+            if(this.scene instanceof Level2){
+            this.scene.removeSpawned();
+            }
           }
         }
       }

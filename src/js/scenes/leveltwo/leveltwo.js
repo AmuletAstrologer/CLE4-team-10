@@ -1,4 +1,4 @@
-import { Color, FontUnit, Label, Scene, Vector } from "excalibur";
+import { Color, FontUnit, Label, Vector } from "excalibur";
 import { Background } from "../../background/background";
 import { Resources } from "../../resources";
 import { PlanetSpawner } from "./planetspawner";
@@ -6,8 +6,9 @@ import { Hook } from "../../actors/hook";
 import { Spawner } from "./spawner";
 import { UI } from "./ui";
 import { Backbutton } from "../../backbutton";
+import { BaseScene, createGame } from "../../objects/createGame.ts";
 
-export class Level2 extends Scene {
+export class Level2 extends BaseScene {
     // score = 0;
     objective = 0;
 
@@ -103,7 +104,21 @@ export class Level2 extends Scene {
         this.title.anchor = new Vector(0.5, 0.5);
         this.title.opacity = 0;
 
+        this.intro = new Label({
+            text: "collect trash while preventing collisions with the planet",
+            pos: new Vector(640, 360),
+            font: Resources.PixelFont.toFont({
+                unit: FontUnit.Px,
+                size: 30,
+                color: Color.White
+            })
+        });
+
+        this.intro.anchor = new Vector(0.5, 0.5);
+        this.intro.opacity = 0;
+
         this.add(this.title);
+        this.add(this.intro);
     }
 
     // addScore() {

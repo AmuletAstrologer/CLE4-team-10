@@ -15,7 +15,7 @@ export class LevelSummary extends Scene {
             {
                 sprite: Resources.recyclePlanet.toSprite(),
                 hoversprite: Resources.hoverrecyclePlanet.toSprite(),
-                level: "recyclemenu",
+                level: "levelrecyclemenu",
                 scale: new Vector(0.7, 0.7),
                 pos: new Vector(150, 110),
             },
