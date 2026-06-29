@@ -11,8 +11,9 @@ import { InGameHandleiding } from "../../actors/ingamehandleiding.js";
 import { LevelText } from "../../actors/leveltext.js";
 
 export class Level2 extends BaseScene {
-    // score = 0;
-    objective = 0;
+  levelNumber = 2;
+  // score = 0;
+  objective = 0;
   isPaused = false;
 
   onInitialize(engine) {
@@ -20,26 +21,27 @@ export class Level2 extends BaseScene {
 
     this.createLevel();
 
-        this.spawned = 0;
+    this.spawned = 0;
 
-        this.spawner = new Spawner();
-        this.add(this.spawner);
+    this.spawner = new Spawner();
+    this.add(this.spawner);
 
     this.add(new Backbutton());
 
     this.introTimer = 0;
   }
 
-    addSpawned() {
-        this.spawned++;
-    }
+  addSpawned() {
+    this.spawned++;
+  }
 
-    removeSpawned() {
-        this.spawned--;
-    }
+  removeSpawned() {
+    this.spawned--;
+    console.log("spawned: " + this.spawned);
+  }
 
-    onPreUpdate(engine, delta) {
-        this.introTimer += delta;
+  onPreUpdate(engine, delta) {
+    this.introTimer += delta;
 
     if (this.introTimer < 1000) {
       // Fade in
@@ -107,24 +109,24 @@ export class Level2 extends BaseScene {
       }),
     });
 
-        this.title.anchor = new Vector(0.5, 0.5);
-        this.title.opacity = 0;
+    this.title.anchor = new Vector(0.5, 0.5);
+    this.title.opacity = 0;
 
-        this.intro = new Label({
-            text: "collect trash while preventing collisions with the planet",
-            pos: new Vector(640, 360),
-            font: Resources.PixelFont.toFont({
-                unit: FontUnit.Px,
-                size: 30,
-                color: Color.White
-            })
-        });
+    this.intro = new Label({
+      text: "collect trash while preventing collisions with the planet",
+      pos: new Vector(640, 360),
+      font: Resources.PixelFont.toFont({
+        unit: FontUnit.Px,
+        size: 30,
+        color: Color.White,
+      }),
+    });
 
-        this.intro.anchor = new Vector(0.5, 0.5);
-        this.intro.opacity = 0;
+    this.intro.anchor = new Vector(0.5, 0.5);
+    this.intro.opacity = 0;
 
     this.add(this.title);
-        this.add(this.intro);
+    this.add(this.intro);
   }
 
   // addScore() {
@@ -136,42 +138,23 @@ export class Level2 extends BaseScene {
 
   // }
 
+  addObjective() {
+    this.objective++;
 
+    this.ui.updateObjective(this.objective);
 
-
-    addObjective() {
-
-        this.objective++;
-
-        this.ui.updateObjective(
-            this.objective
-        );
-
-
-
-        if (this.objective >= 10) {
-
-
-            this.engine.goToScene(
-                "level3Ending",
-                {
-                    sceneActivationData: {
-                        score: this.score
-
-                    }
-                }
-            );
-        }
-
+    if (this.objective >= 10) {
+      this.engine.goToScene("level3Ending", {
+        sceneActivationData: {
+          score: this.score,
+        },
+      });
     }
+  }
 
-    removeObjective() {
-        this.objective--;
+  removeObjective() {
+    this.objective--;
 
-        this.ui.updateObjective(
-            this.objective
-        );
-
-
-    }
+    this.ui.updateObjective(this.objective);
+  }
 }
