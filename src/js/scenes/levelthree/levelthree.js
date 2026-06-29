@@ -22,6 +22,7 @@ import { saveScores } from "../../scores.ts";
 import { AchievementManager } from "../../lib/achievementmanager.ts";
 import { LevelEnding } from "../levelEnding.js";
 import { LevelStart } from "../../actors/levelStart.ts";
+import { InGameHandleiding } from "../../actors/ingamehandleiding.js";
 
 //Metal Level
 export class Level3 extends BaseScene {
@@ -99,6 +100,9 @@ export class Level3 extends BaseScene {
   createLevel() {
     const background = new Background();
     this.add(background);
+
+    this.handleiding = new InGameHandleiding();
+    this.add(this.handleiding); 
 
     this.ui = new BaseLevelUI({ level: 3 });
     this.ui.z = this.add(this.ui);

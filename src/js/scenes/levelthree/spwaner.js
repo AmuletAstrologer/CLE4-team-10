@@ -33,6 +33,9 @@ export class Spawner extends Actor {
       interval: 3000,
 
       fcn: () => {
+        if (engine.currentScene.isPaused) {
+          return;
+        }
         const trash = new Trash();
 
         // Pick random trash
