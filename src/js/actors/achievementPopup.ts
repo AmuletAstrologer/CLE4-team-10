@@ -32,6 +32,8 @@ export class AchievementPopup extends Actor {
   }
   onInitialize(engine: Engine): void {
     this.pos = vec(engine.drawWidth - 250, engine.drawHeight - 30);
+    const music = Resources.achievementSound;
+    music.play(0.65);
   }
 
   onPreUpdate(engine: Engine, elapsed: number): void {

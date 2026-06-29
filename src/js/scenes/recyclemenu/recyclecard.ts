@@ -70,8 +70,8 @@ export class RecycleCard extends GenericCard {
       case "moreHookSpace":
         this.#upgradeNameLabel.text = "Hook capacity";
         break;
-      case "moreHookGetSpeed":
-        this.#upgradeNameLabel.text = "Hook get speed";
+      case "moreHookReturnSpeed":
+        this.#upgradeNameLabel.text = "Hook Return speed";
         break;
       case "moreHookThrowSpeed":
         this.#upgradeNameLabel.text = "Hook throw speed";
@@ -89,16 +89,16 @@ export class RecycleCard extends GenericCard {
 
     plus.on("pointerdown", () => {
       ScrapManager.doUpgrade(this.#upgradeType);
+      const music = Resources.soundEffectSound;
+      music.play(0.65);
       const achievements = AchievementManager.checkAchievements();
       for (const a of achievements)
         switch (a) {
           case 1:
             engine.currentScene.add(new AchievementPopup("Perfect Hooking"));
-            console.log("works");
             break;
           case 2:
             engine.currentScene.add(new AchievementPopup("Scrap Collector"));
-            console.log("works");
             break;
           case 3:
             engine.currentScene.add(new AchievementPopup("High Score"));

@@ -5,13 +5,12 @@ import { PlanetSpawner } from "./planetspawner";
 import { Hook } from "../../actors/hook";
 import { Spawner } from "./spawner";
 import { UI } from "./ui";
-import { BaseLevelUI } from "../../actors/baselevelui.ts";
 import { Backbutton } from "../../backbutton";
-import { LevelStart } from "../../actors/levelStart.ts";
+import { BaseScene, createGame } from "../../objects/createGame.ts";
 
-export class Level2 extends Scene {
-  // score = 0;
-  objective = 0;
+export class Level2 extends BaseScene {
+    // score = 0;
+    objective = 0;
 
     onInitialize(engine) {
         this.add(new Background);
@@ -19,39 +18,24 @@ export class Level2 extends Scene {
 
         this.createLevel();
 
-    this.spawned = 0;
+        this.spawned = 0;
 
-    this.spawner = new Spawner();
-    this.add(this.spawner);
+        this.spawner = new Spawner();
+        this.add(this.spawner);
 
         this.add(new Backbutton);
 
         this.introTimer = 0;
     }
 
-  addSpawned() {
-    this.spawned++;
-  }
+    addSpawned() {
+        this.spawned++;
+    }
 
-  removeSpawned() {
-    this.spawned--;
-  }
+    removeSpawned() {
+        this.spawned--;
+    }
 
-  createLevel() {
-    this.add(new PlanetSpawner());
-    this.add(new Hook());
-
-    this.levelStart = new LevelStart({
-      levelNumber: "Level 2",
-      levelName: "Metal Level",
-    });
-    this.add(this.levelStart);
-
-    this.ui = new BaseLevelUI({ level: 2 });
-    this.add(this.ui);
-  }
-
-  
     onPreUpdate(engine, delta) {
         this.introTimer += delta;
 
@@ -120,7 +104,21 @@ export class Level2 extends Scene {
         this.title.anchor = new Vector(0.5, 0.5);
         this.title.opacity = 0;
 
+        this.intro = new Label({
+            text: "collect trash while preventing collisions with the planet",
+            pos: new Vector(640, 360),
+            font: Resources.PixelFont.toFont({
+                unit: FontUnit.Px,
+                size: 30,
+                color: Color.White
+            })
+        });
+
+        this.intro.anchor = new Vector(0.5, 0.5);
+        this.intro.opacity = 0;
+
         this.add(this.title);
+        this.add(this.intro);
     }
 
     // addScore() {
@@ -135,23 +133,39 @@ export class Level2 extends Scene {
 
 
 
-  addObjective() {
-    this.objective++;
+    addObjective() {
 
-    this.ui.updateObjective(this.objective);
+        this.objective++;
 
-    if (this.objective >= 10) {
-      this.engine.goToScene("level3Ending", {
-        sceneActivationData: {
-          score: this.score,
-        },
-      });
+        this.ui.updateObjective(
+            this.objective
+        );
+
+
+
+        if (this.objective >= 10) {
+
+
+            this.engine.goToScene(
+                "level3Ending",
+                {
+                    sceneActivationData: {
+                        score: this.score
+
+                    }
+                }
+            );
+        }
+
     }
-  }
 
-  removeObjective() {
-    this.objective--;
+    removeObjective() {
+        this.objective--;
 
-    this.ui.updateObjective(this.objective);
-  }
+        this.ui.updateObjective(
+            this.objective
+        );
+
+
+    }
 }
