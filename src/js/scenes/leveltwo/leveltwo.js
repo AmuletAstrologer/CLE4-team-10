@@ -9,6 +9,7 @@ import { Backbutton } from "../../backbutton";
 import { BaseScene, createGame } from "../../objects/createGame.ts";
 import { InGameHandleiding } from "../../actors/ingamehandleiding.js";
 import { LevelText } from "../../actors/leveltext.js";
+import { BaseLevelUI } from "../../actors/baselevelui.ts";
 
 export class Level2 extends BaseScene {
   levelNumber = 2;
@@ -88,10 +89,10 @@ export class Level2 extends BaseScene {
     }
   }
 
-  createLevel() {
+    createLevel() {
     this.add(new PlanetSpawner());
     this.add(new Hook());
-    this.ui = new UI();
+    this.ui = new BaseLevelUI({ level: 2 });
     this.add(this.ui);
 
     this.handleiding = new InGameHandleiding();
