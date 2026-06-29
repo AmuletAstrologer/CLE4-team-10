@@ -49,6 +49,10 @@ export class Hook extends Actor {
   }
 
   onPreUpdate(engine: Engine, delta: number): void {
+    if (this.scene instanceof BaseScene && this.scene.isPaused) {
+      return;
+    }
+
     if (this.#moveTime >= 0 && this.#isMoving) {
       this.#moveTime -= delta;
     }
@@ -80,7 +84,6 @@ export class Hook extends Actor {
       this.rotation = 0;
       this.#isMoving = false;
       this.#hasObject = false;
-      
     }
     const gamepad = engine.input.gamepads.at(0);
     const x = gamepad?.getAxes(Axes.LeftStickX) ?? 0;
@@ -88,7 +91,6 @@ export class Hook extends Actor {
     if (!this.#isMoving) {
       this.rotation += x * 0.025;
     }
-
 
     if (
       (engine.input.keyboard.isHeld(Keys.ArrowLeft) ||
@@ -147,24 +149,24 @@ export class Hook extends Actor {
       this.addChild(other.owner);
       this.#amountOfObjects++;
     }
-       if (other.owner instanceof Meteor) {
+    if (other.owner instanceof Meteor) {
       this.#amountOfObjects = 1 + ScrapManager.getUpgradeLevel("moreHookSpace");
-    // this.#hasObject = true;
-    // this.actions.moveTo(
-    //   this.x,
-    //   this.y,
-    //   500 / 4 +
-    //     RecycleCard.getValueFromLocalStorage("moreHookGetSpeed") * 100,
-    // );
-     }
+      // this.#hasObject = true;
+      // this.actions.moveTo(
+      //   this.x,
+      //   this.y,
+      //   500 / 4 +
+      //     RecycleCard.getValueFromLocalStorage("moreHookGetSpeed") * 100,
+      // );
+    }
 
- if (other.owner instanceof PlanetSpawner) {
+    if (other.owner instanceof PlanetSpawner) {
       return;
- }
+    }
 
-      this.#hasObject = true;
+    this.#hasObject = true;
 
-if (
+    if (
       this.#amountOfObjects >=
       1 + ScrapManager.getUpgradeLevel("moreHookSpace")
     ) {

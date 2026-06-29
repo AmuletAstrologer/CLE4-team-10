@@ -22,6 +22,7 @@ import { saveScores } from "../../scores.ts";
 import { AchievementManager } from "../../lib/achievementmanager.ts";
 import { LevelEnding } from "../levelEnding.js";
 import { LevelStart } from "../../actors/levelStart.ts";
+import { InGameHandleiding } from "../../actors/ingamehandleiding.js";
 
 //Metal Level
 export class Level6 extends BaseScene {
@@ -29,6 +30,8 @@ export class Level6 extends BaseScene {
 
   score = 0;
   timeSurvived = 0;
+
+  isPaused = false;
 
   onActivate() {
     this.score = 0;
@@ -48,7 +51,10 @@ export class Level6 extends BaseScene {
   onPreUpdate(engine, delta) {
     this.ui.z = 100;
 
-    // Count upward forever
+    if (this.isPaused) {
+      return;
+    }
+
     this.timeSurvived += delta;
 
     if (this.ui) {
@@ -68,6 +74,9 @@ export class Level6 extends BaseScene {
 
     this.ui = new UI();
     this.add(this.ui);
+
+    this.handleiding = new InGameHandleiding();
+    this.add(this.handleiding);
 
     this.spawner = new Spawner();
     this.add(this.spawner);
@@ -130,6 +139,10 @@ export class Level6 extends BaseScene {
   loseHealth() {
     if (this.ui?.health) {
       this.ui.health.decrease();
+    }
+
+    if (this.scene?.isPaused) {
+      return;
     }
   }
 
