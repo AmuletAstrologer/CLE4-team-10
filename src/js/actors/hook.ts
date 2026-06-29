@@ -15,6 +15,7 @@ import {
 import { Resources } from "../resources.js";
 import { Trash } from "../objects/trash.js";
 import { PlanetSpawner } from "../scenes/leveltwo/planetspawner.js";
+// import { AlteredTrash } from "../scenes/leveltwo/alteredtrash.js";
 import { Meteor } from "../objects/meteor.js";
 import { ScrapManager } from "../lib/scrapmanager.js";
 import { BaseScene } from "../objects/createGame.js";
@@ -144,7 +145,7 @@ export class Hook extends Actor {
   ): void {
     if (
       (other.owner instanceof Trash || other.owner instanceof AlteredTrash) &&
-      this.#amountOfObjects <= 1
+      this.#amountOfObjects < 1
     ) {
       other.owner.body.collisionType = CollisionType.PreventCollision;
       other.owner.vel = vec(0, 0);
