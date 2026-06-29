@@ -71,6 +71,14 @@ export class RecycleMenu extends Scene {
 
     this.add(this.#scrapLabel);
 
+    const card2 = new RecycleCard(
+      vec(engine.halfDrawWidth, engine.halfDrawHeight - 145),
+      650,
+      100,
+      "moreHookThrowSpeed",
+    );
+    this.add(card2);
+
     const moreHookReturnSpeed = new RecycleCard(
       vec(engine.halfDrawWidth, engine.halfDrawHeight - 35),
       650,
@@ -79,29 +87,21 @@ export class RecycleMenu extends Scene {
     );
     this.add(moreHookReturnSpeed);
 
-    const moreHookThrowSpeed = new RecycleCard(
-      vec(engine.halfDrawWidth, engine.halfDrawHeight + 75),
-      650,
-      100,
-      "moreHookThrowSpeed",
-    );
-    this.add(moreHookThrowSpeed);
+    // const moreHookThrowSpeed = new RecycleCard(
+    //   vec(engine.halfDrawWidth, engine.halfDrawHeight + 75),
+    //   650,
+    //   100,
+    //   "moreHookThrowSpeed",
+    // );
+    // this.add(moreHookThrowSpeed);
 
-    const card2 = new RecycleCard(
-      vec(engine.halfDrawWidth, engine.halfDrawHeight - 145),
-      650,
-      100,
-      "",
-    );
-    this.add(card2);
-
-    const card3 = new RecycleCard(
-      vec(engine.halfDrawWidth, engine.halfDrawHeight + 185),
-      650,
-      100,
-      "",
-    );
-    this.add(card3);
+    // const card3 = new RecycleCard(
+    //   vec(engine.halfDrawWidth, engine.halfDrawHeight + 185),
+    //   650,
+    //   100,
+    //   "",
+    // );
+    // this.add(card3);
 
     const backLabel = new Label({
       text: "Press X to go back",

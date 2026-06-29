@@ -146,10 +146,28 @@ export class Level4 extends BaseScene {
     console.log("Target:", this.currentTarget);
   }
 
-  addScore() {
-    if (this.scene?.isPaused) {
-      return;
-    }
+  // addScore() {
+  //   const trash = this.hook.children[0];
+
+  //   if (!trash) {
+  //     console.log("No trash caught");
+  //     return;
+  //   }
+
+  //   //Only plus points for correct trash
+  //   if (trash.type === this.currentTarget) {
+  //     console.log("Correct trash");
+  //   } else {
+  //     console.log("Wrong trash:", trash.type, "Needed:", this.currentTarget);
+  //     this.objective--;
+  //     this.ui.healthBar.decrease();
+  //   }
+
+  //   this.ui.updateObjective(this.objective);
+  // }
+
+  addObjective() {
+    if (this.scene?.isPaused) return;
 
     const trash = this.hook.children[0];
 
@@ -160,25 +178,16 @@ export class Level4 extends BaseScene {
 
     //Only plus points for correct trash
     if (trash.type === this.currentTarget) {
+      this.objective++;
       console.log("Correct trash");
     } else {
       console.log("Wrong trash:", trash.type, "Needed:", this.currentTarget);
-      this.objective--;
+      this.objective > 0 && this.objective--;
       this.ui.healthBar.decrease();
     }
 
     this.ui.updateObjective(this.objective);
-  }
-
-  addObjective() {
-    if (this.scene?.isPaused) {
-      return;
-    }
-
-    this.objective++;
-
-    this.ui.updateObjective(this.objective);
-
+    
     if (this.objective >= 10) {
       this.levelEnding();
     }
