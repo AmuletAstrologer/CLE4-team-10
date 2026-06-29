@@ -64,6 +64,8 @@ export class Spawner extends Actor {
         engine.currentScene.add(trash);
       },
 
+      //Higer chance of currentTarget showing up
+
       repeats: true,
     });
 
