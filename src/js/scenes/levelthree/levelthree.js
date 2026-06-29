@@ -37,7 +37,7 @@ export class Level3 extends BaseScene {
   targetTimer = 0;
   targetChangeTime = 30000; //30 seconden
 
-  metalTrash = ["Airtank", "Cilinder", "Plaat", "Satelliet", "Piece"];
+  metalTrash = ["Airtank", "Cilinder", "Plate", "Satellite", "Piece"];
 
   currentTarget = "";
 
@@ -149,10 +149,8 @@ export class Level3 extends BaseScene {
     console.log("Target:", this.currentTarget);
   }
 
-  addScore() {
-    if (this.scene?.isPaused) {
-      return;
-    }
+  addObjective() {
+    if (this.scene?.isPaused) return;
 
     const trash = this.hook.children[0];
 
@@ -163,21 +161,13 @@ export class Level3 extends BaseScene {
 
     //Only plus points for correct trash
     if (trash.type === this.currentTarget) {
+      this.objective++;
       console.log("Correct trash");
     } else {
       console.log("Wrong trash:", trash.type, "Needed:", this.currentTarget);
-      this.objective--;
+      this.objective > 0 && this.objective--;
+      // this.ui.healthBar.decrease();
     }
-
-    this.ui.updateObjective(this.objective);
-  }
-
-  addObjective() {
-    if (this.scene?.isPaused) {
-      return;
-    }
-
-    this.objective++;
 
     this.ui.updateObjective(this.objective);
 

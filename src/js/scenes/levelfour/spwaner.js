@@ -29,7 +29,7 @@ export class Spawner extends Actor {
       },
       {
         sprite: Resources.AfvalPaneel.toSprite(),
-        type: "Plaat",
+        type: "Plate",
       },
       {
         sprite: Resources.AfvalPlaat.toSprite(),
@@ -37,7 +37,7 @@ export class Spawner extends Actor {
       },
       {
         sprite: Resources.AfvalSatelliet.toSprite(),
-        type: "Satelliet",
+        type: "Satellite",
       },
     ];
 
@@ -45,32 +45,36 @@ export class Spawner extends Actor {
       interval: 3000,
 
       fcn: () => {
-
-         if (engine.currentScene.isPaused) {
+        if (engine.currentScene.isPaused) {
           return;
         }
-        
+
         const trash = new Trash();
 
-        const chosen =
-          trashTypes[rand.integer(0, trashTypes.length - 1)];
+        if (Math.random() < 0.35 && engine.currentScene.currentTarget) {
+          const chosen = trashTypes.find(
+            (trash) => trash.type === engine.currentScene.currentTarget,
+          );
 
-        trash.type = chosen.type;
-        trash.graphics.use(chosen.sprite);
+          trash.type = chosen.type;
+          trash.graphics.use(chosen.sprite);
+        } else {
+          const index = rand.integer(0, trashTypes.length - 1);
 
-        trash.pos = new Vector(
-          1240,
-          Math.random() * 400 + 50
-        );
+          const chosen = trashTypes[index];
+
+          trash.type = chosen.type;
+          trash.graphics.use(chosen.sprite);
+        }
 
         trash.vel = new Vector(
           Math.random() * 30 - 180,
-          Math.random() * 90 - 45
+          Math.random() * 90 - 45,
         );
 
-        trash.setTargetTint(
-          engine.currentScene.currentTarget === trash.type
-        );
+        trash.pos = new Vector(1240, Math.random() * 400 + 50);
+
+        trash.setTargetTint(engine.currentScene.currentTarget === trash.type);
 
         engine.currentScene.add(trash);
       },

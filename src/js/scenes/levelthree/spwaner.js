@@ -17,7 +17,7 @@ export class Spawner extends Actor {
       },
       {
         sprite: Resources.AfvalPaneel.toSprite(),
-        type: "Plaat",
+        type: "Plate",
       },
       {
         sprite: Resources.AfvalPlaat.toSprite(),
@@ -25,7 +25,7 @@ export class Spawner extends Actor {
       },
       {
         sprite: Resources.AfvalSatelliet.toSprite(),
-        type: "Satelliet",
+        type: "Satellite",
       },
     ];
 
@@ -36,18 +36,24 @@ export class Spawner extends Actor {
         if (engine.currentScene.isPaused) {
           return;
         }
+
         const trash = new Trash();
 
-        // Pick random trash
-        const index = rand.integer(0, trashTypes.length - 1);
+        if (Math.random() < 0.4 && engine.currentScene.currentTarget) {
+          const chosen = trashTypes.find(
+            (trash) => trash.type === engine.currentScene.currentTarget,
+          );
 
-        const chosen = trashTypes[index];
+          trash.type = chosen.type;
+          trash.graphics.use(chosen.sprite);
+        } else {
+          const index = rand.integer(0, trashTypes.length - 1);
 
-        // Give trash identity
-        trash.type = chosen.type;
+          const chosen = trashTypes[index];
 
-        // Give sprite
-        trash.graphics.use(chosen.sprite);
+          trash.type = chosen.type;
+          trash.graphics.use(chosen.sprite);
+        }
 
         trash.vel = new Vector(
           Math.random() * 30 - 180,
@@ -63,8 +69,6 @@ export class Spawner extends Actor {
 
         engine.currentScene.add(trash);
       },
-
-      //Higer chance of currentTarget showing up
 
       repeats: true,
     });

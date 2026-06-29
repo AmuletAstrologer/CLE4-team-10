@@ -62,8 +62,8 @@ export class UI extends Actor {
 
     this.addChild(this.#timer);
 
-    this.health = new Healthbar({ pos: vec(40, engine.drawHeight - 50) });
-    this.addChild(this.health);
+    this.healthBar = new Healthbar({ pos: vec(40, engine.drawHeight - 50) });
+    this.addChild(this.healthBar);
   }
 
   updateObjective(objective) {

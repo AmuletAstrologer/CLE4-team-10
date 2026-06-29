@@ -9,6 +9,7 @@ import {
   Engine,
   Buttons,
   Keys,
+  Actor,
 } from "excalibur";
 import { Resources } from "../resources";
 import { Healthbar } from "./healthbar/healthbar";
@@ -23,6 +24,7 @@ export class BaseLevelUI extends ScreenElement {
   #songPlayed: boolean = false;
   #timeProgress: ProgressBar | undefined;
   #maxTime: number | undefined;
+  #targetIcon: Actor | undefined;
 
   #objective = new Label({
     text: "0/10",
@@ -85,6 +87,15 @@ export class BaseLevelUI extends ScreenElement {
       });
       this.#timeProgress.progressBarColor = "#FFA500";
       this.addChild(this.#timeProgress);
+
+      this.#targetIcon = new Actor({
+      width: 80,
+      height: 80,
+    });
+    this.#targetIcon.scale = vec(0.15, 0.15);
+
+    this.addChild(this.#targetIcon);
+    
     }
 
     this.addChild(this.#objective);
@@ -99,6 +110,10 @@ export class BaseLevelUI extends ScreenElement {
     this.#objective.pos = vec(engine.halfDrawWidth, 675);
     this.#target.pos = vec(engine.halfDrawWidth, 30);
 
+    if (this.#targetIcon) {
+    this.#targetIcon.pos = vec(engine.halfDrawWidth + 250, 40);
+   }
+
     this.#objectiveProgress.setProgress(0);
 
     if (this.#timer) this.#timer.pos = vec(engine.drawWidth - 40, 30);
@@ -110,10 +125,27 @@ export class BaseLevelUI extends ScreenElement {
     this.#objectiveProgress.setProgress(Number(objective) / 10);
   }
 
-  updateTarget(target: string) {
-    if (!this.#target) return;
-    this.#target.text = `Objective: ${target}`;
+ updateTarget(target: string) {
+  this.#target.text = `Objective: ${target}`;
+
+  if (!this.#targetIcon) return;
+
+  const icons = {
+    Airtank: Resources.AfvalAirtank,
+    Cilinder: Resources.AfvalCilinder,
+    Plate: Resources.AfvalPaneel,
+    Satellite: Resources.AfvalSatelliet,
+    Piece: Resources.AfvalPlaat,
+  };
+
+  if (icons[target]) {
+    this.#targetIcon.graphics.use(
+      icons[target].toSprite()
+    );
+
+    this.#targetIcon.graphics.opacity = 1;
   }
+}
 
   updateTimer(timeLeft: number) {
     if (!this.#timer || !this.#timeProgress) return;

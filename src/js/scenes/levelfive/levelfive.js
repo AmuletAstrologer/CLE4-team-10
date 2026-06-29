@@ -18,6 +18,7 @@ import { Background } from "../../background/background.js";
 import { DefeatScreen } from "../../defeatscreen.js";
 import { Trash } from "../../objects/trash.js";
 import { BaseScene, createGame } from "../../objects/createGame.ts";
+import { BaseLevelUI } from "../../actors/baselevelui.ts";
 import { saveScores } from "../../scores.ts";
 import { AchievementManager } from "../../lib/achievementmanager.ts";
 import { LevelEnding } from "../levelEnding.js";
@@ -25,6 +26,7 @@ import { PlanetSpawner } from "../leveltwo/planetspawner.js";
 import { LevelFiveTrash } from "./levelfivethrash.js";
 import { InGameHandleiding } from "../../actors/ingamehandleiding.js";
 import { LevelText } from "../../actors/leveltext.js";
+import { LevelStart } from "../../actors/levelStart.ts";
 
 export class Level5 extends BaseScene {
   levelNumber = 5;
@@ -41,8 +43,8 @@ export class Level5 extends BaseScene {
   metalTrash = [
     "Airtank",
     "Cilinder",
-    "Plaat",
-    "Satelliet",
+    "Plate",
+    "Satellite",
     "Piece",
     "Fragment",
     "Helm",
@@ -73,11 +75,13 @@ export class Level5 extends BaseScene {
   }
 
   onPreUpdate(engine, delta) {
+
+    this.ui.z = 100;
+
     if (this.isPaused) {
       return;
     }
 
-    this.ui.z = 100;
     // Intro animation
     this.introTimer += delta;
 
@@ -162,37 +166,19 @@ export class Level5 extends BaseScene {
     const background = new Background();
     this.add(background);
 
+    this.ui = new BaseLevelUI({ level: 4 });
+    this.ui.z = this.add(this.ui);
+
     this.handleiding = new InGameHandleiding();
     this.add(this.handleiding);
 
     this.handleiding.updateObjective(LevelText.level5.objective);
 
-    // Level intro
-    this.title = new Label({
-      text: "Level Five",
-      pos: new Vector(640, 280),
-      font: Resources.PixelFont.toFont({
-        unit: FontUnit.Px,
-        size: 60,
-        color: Color.White,
-      }),
+    this.levelStart = new LevelStart({
+      levelNumber: "Level 5",
+      levelName: "Combination Level",
     });
-
-    this.title.anchor = new Vector(0.5, 0.5);
-    this.title.opacity = 0;
-
-    this.intro = new Label({
-      text: "Combination Level",
-      pos: new Vector(640, 360),
-      font: Resources.PixelFont.toFont({
-        unit: FontUnit.Px,
-        size: 40,
-        color: Color.White,
-      }),
-    });
-
-    this.intro.anchor = new Vector(0.5, 0.5);
-    this.intro.opacity = 0;
+    this.add(this.levelStart);
 
     const backbutton = new Label({
       text: "⇜",
@@ -220,8 +206,6 @@ export class Level5 extends BaseScene {
       this.engine.goToScene("levels");
     });
 
-    this.ui = new UI();
-    this.ui.z = this.add(this.ui);
 
     this.add(new PlanetSpawner());
 
@@ -231,8 +215,7 @@ export class Level5 extends BaseScene {
     this.hook = new Hook();
     this.add(this.hook);
 
-    this.add(this.title);
-    this.add(this.intro);
+  
   }
 
   //CHECK
@@ -256,7 +239,9 @@ export class Level5 extends BaseScene {
     console.log("Target:", this.currentTarget);
   }
 
-  addScore() {
+  addObjective() {
+    if (this.scene?.isPaused) return;
+
     const trash = this.hook.children[0];
 
     if (!trash) {
@@ -264,29 +249,15 @@ export class Level5 extends BaseScene {
       return;
     }
 
-    if (this.scene?.isPaused) {
-      return;
-    }
-
-    ///Check
     //Only plus points for correct trash
     if (trash.type === this.currentTarget) {
+      this.objective++;
       console.log("Correct trash");
     } else {
       console.log("Wrong trash:", trash.type, "Needed:", this.currentTarget);
-      this.objective--;
-      this.ui.health.decrease();
+      this.objective > 0 && this.objective--;
+      this.ui.healthBar.decrease();
     }
-
-    this.ui.updateObjective(this.objective);
-  }
-
-  addObjective() {
-    if (this.scene?.isPaused) {
-      return;
-    }
-
-    this.objective++;
 
     this.ui.updateObjective(this.objective);
 

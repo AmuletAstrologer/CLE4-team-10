@@ -29,6 +29,8 @@ export class Level1 extends BaseScene {
 
     this.clear();
     this.createLevel();
+
+     this.ui.z = 100;
   }
   createLevel() {
     if (this.isPaused) {

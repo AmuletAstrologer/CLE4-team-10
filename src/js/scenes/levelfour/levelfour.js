@@ -33,7 +33,7 @@ export class Level4 extends BaseScene {
   targetTimer = 0;
   targetChangeTime = 30000; //30 seconden
 
-  metalTrash = ["Airtank", "Cilinder", "Plaat", "Satelliet", "Piece"];
+  metalTrash = ["Airtank", "Cilinder", "Plate", "Satellite", "Piece"];
 
   currentTarget = "";
 
@@ -65,7 +65,7 @@ export class Level4 extends BaseScene {
       engine.goToScene("levels");
     }
 
-    // this.ui.z = 100;
+    this.ui.z = 100;
 
     if (this.isPaused) {
       return;
@@ -119,7 +119,7 @@ export class Level4 extends BaseScene {
 
     this.levelStart = new LevelStart({
       levelNumber: "Level 4",
-      levelName: "Metal Level",
+      levelName: "Caution Level",
     });
     this.add(this.levelStart);
   }
@@ -145,26 +145,6 @@ export class Level4 extends BaseScene {
 
     console.log("Target:", this.currentTarget);
   }
-
-  // addScore() {
-  //   const trash = this.hook.children[0];
-
-  //   if (!trash) {
-  //     console.log("No trash caught");
-  //     return;
-  //   }
-
-  //   //Only plus points for correct trash
-  //   if (trash.type === this.currentTarget) {
-  //     console.log("Correct trash");
-  //   } else {
-  //     console.log("Wrong trash:", trash.type, "Needed:", this.currentTarget);
-  //     this.objective--;
-  //     this.ui.healthBar.decrease();
-  //   }
-
-  //   this.ui.updateObjective(this.objective);
-  // }
 
   addObjective() {
     if (this.scene?.isPaused) return;
