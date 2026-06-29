@@ -1,6 +1,7 @@
 import { getScores, LevelScores } from "../scores";
 import { ScrapManager, upgradeTypes } from "./scrapmanager";
 import { AchievementPopup } from "../actors/achievementPopup";
+import { Engine } from "excalibur";
 
 export type AchievementNames =
   | "Perfect Hooking"
@@ -15,8 +16,6 @@ type Achievement = {
 };
 
 type Achievements = {
-  totalScrap: number;
-  totalScore: number;
   achievements: Achievement[];
 };
 
@@ -26,8 +25,6 @@ export class AchievementManager {
 
     if (!achievements) {
       return {
-        totalScore: 0,
-        totalScrap: 0,
         achievements: [
           {
             name: "Perfect Hooking",
@@ -58,7 +55,6 @@ export class AchievementManager {
   public static checkAchievements(): number[] {
     const unlocked: number[] = [];
     const achievements = AchievementManager.getAchievements();
-    // const scores = getScores();
     if (this.checkAchievement1(achievements)) unlocked.push(1);
     if (this.checkAchievement2(achievements)) unlocked.push(2);
     // if (this.checkAchievement3(score)) unlocked.push(3);
@@ -67,22 +63,23 @@ export class AchievementManager {
     return unlocked;
   }
 
-  static checkAchievement1(
-    // scores: LevelScores,
-    achievements: Partial<Achievements>,
-  ): boolean {
-    // if (scores.levelOne === 10) {
-    //   const perfectHooking = achievements.achievements?.find(
-    //     (achievement) => achievement.name === "Perfect Hooking",
-    //   );
+  static checkAchievement1(achievements: Partial<Achievements>): boolean {
+    const levelCompletion = this.getLevelCompletion();
+    const levelOne = levelCompletion.levels?.find(
+      (level: any) => level.number === 1,
+    );
+    if (levelOne?.completed) {
+      const perfectHooking = achievements.achievements?.find(
+        (achievement) => achievement.name === "Perfect Hooking",
+      );
 
-    //   if (perfectHooking) {
-    //     if (perfectHooking.unlocked !== true) {
-    //       perfectHooking.unlocked = true;
-    //       return true;
-    //     }
-    //   }
-    // }
+      if (perfectHooking) {
+        if (perfectHooking.unlocked !== true) {
+          perfectHooking.unlocked = true;
+          return true;
+        }
+      }
+    }
     return false;
   }
   static checkAchievement2(achievements: Partial<Achievements>): boolean {
@@ -145,5 +142,62 @@ export class AchievementManager {
       this.getAchievements().achievements?.find((a) => a.name === name)
         ?.unlocked ?? false
     );
+  }
+
+  public static getLevelCompletion() {
+    const levels = localStorage.getItem("levels");
+    if (!levels) {
+      return {
+        levels: [
+          {
+            number: 1,
+            completed: false,
+          },
+          {
+            number: 2,
+            completed: false,
+          },
+          {
+            number: 3,
+            completed: false,
+          },
+          {
+            number: 4,
+            completed: false,
+          },
+        ],
+      };
+    }
+    return JSON.parse(levels);
+  }
+  public static completeLevel(levelNumber: number) {
+    const data = this.getLevelCompletion();
+
+    const levels = data.levels ?? [];
+
+    const level = levels.find((l: any) => l.number === levelNumber);
+
+    if (level) {
+      level.completed = true;
+    }
+    localStorage.setItem("levels", JSON.stringify(data));
+  }
+  public static addAchievementPopup(engine: Engine) {
+    const achievements = AchievementManager.checkAchievements();
+    for (const a of achievements)
+      switch (a) {
+        case 1:
+          engine.currentScene.add(new AchievementPopup("Perfect Hooking"));
+          break;
+        case 2:
+          engine.currentScene.add(new AchievementPopup("Scrap Collector"));
+          break;
+        case 3:
+          engine.currentScene.add(new AchievementPopup("High Score"));
+          break;
+        case 4:
+          engine.currentScene.add(new AchievementPopup("Recycle Master"));
+          break;
+      }
   }
 }
