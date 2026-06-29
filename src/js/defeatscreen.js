@@ -12,11 +12,9 @@ import {
 import { Resources } from "./resources.js";
 
 export class DefeatScreen extends Scene {
-  // levelToRestart = null;
 
   constructor() {
     super();
-    // this.levelToRestart = null;
   }
 
   onActivate(context) {
@@ -28,7 +26,7 @@ export class DefeatScreen extends Scene {
   }
 
   onInitialize(engine) {
-    console.log("Restart scene:", this.levelToRestart);
+    // console.log("Restart scene:", this.levelToRestart);
     const bg = new Actor({
       pos: new Vector(0, 0),
       anchor: new Vector(0, 0),
@@ -164,7 +162,7 @@ export class DefeatScreen extends Scene {
 
     this.add(this.returnMenu);
 
-    console.log("I AM DEFEAT!!!");
+    // console.log("I AM DEFEAT!!!");
   }
 
   onPreUpdate(engine, delta) {
