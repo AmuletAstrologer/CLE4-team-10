@@ -19,6 +19,7 @@ import {
 
 export class ProgressBar extends ScreenElement {
   private progress: number = 1.0; // Value between 0 and 1
+  progressBarColor = "#00ff00";
   //   width: number;
   //   height: number;
   private canvasGraphic!: Canvas;
@@ -51,7 +52,7 @@ export class ProgressBar extends ScreenElement {
     ctx.fillRect(0, 0, this.width, this.height);
 
     // 2. Draw Filled Progress Bar (Green)
-    ctx.fillStyle = "#00ff00";
+    ctx.fillStyle = this.progressBarColor;
     const filledWidth = this.width * this.progress;
     ctx.fillRect(0, 0, filledWidth, this.height);
 

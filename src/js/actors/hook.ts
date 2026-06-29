@@ -67,10 +67,10 @@ export class Hook extends Actor {
           if (this.scene instanceof BaseScene) {
             // this.scene.addScore();
             this.scene.addObjective();
-            
-            if(this.scene instanceof Level2){
-            this.scene.removeSpawned();
-            }
+
+            // if(this.scene instanceof Level2){
+            // this.scene.removeSpawned();
+            // }
           }
         }
       }
@@ -83,7 +83,7 @@ export class Hook extends Actor {
       this.vel = vec(0, 0);
       this.rotation = 0;
       this.#isMoving = false;
-//      this.#hasObject = false;
+      //      this.#hasObject = false;
     }
     const gamepad = engine.input.gamepads.at(0);
     const x = gamepad?.getAxes(Axes.LeftStickX) ?? 0;

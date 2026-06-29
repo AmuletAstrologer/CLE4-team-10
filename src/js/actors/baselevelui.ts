@@ -35,6 +35,13 @@ export class BaseLevelUI extends ScreenElement {
     }),
   });
 
+  #objectiveProgress = new ProgressBar({
+    x: 0,
+    y: 710,
+    width: 1280,
+    height: 10,
+  });
+
   #target = new Label({
     // @ts-expect-error
     text: `Objective: ${this.scene?.currentTarget ?? "None"}`,
@@ -76,10 +83,12 @@ export class BaseLevelUI extends ScreenElement {
         width: 1280,
         height: 10,
       });
+      this.#timeProgress.progressBarColor = "#FFA500";
       this.addChild(this.#timeProgress);
     }
 
     this.addChild(this.#objective);
+    this.addChild(this.#objectiveProgress);
     this.addChild(this.#target);
     this.addChild(this.#backbutton);
   }
@@ -87,16 +96,18 @@ export class BaseLevelUI extends ScreenElement {
   onInitialize(engine: Engine) {
     Resources.levelSelectSound.stop();
 
-    this.#objective.pos = vec(engine.halfDrawWidth, 30);
-    this.#target.pos = vec(engine.halfDrawWidth, 80);
+    this.#objective.pos = vec(engine.halfDrawWidth, 675);
+    this.#target.pos = vec(engine.halfDrawWidth, 30);
 
-    // if (this.#timeProgress) this.#timeProgress.width = engine.drawWidth;
+    this.#objectiveProgress.setProgress(0);
+
     if (this.#timer) this.#timer.pos = vec(engine.drawWidth - 40, 30);
     if (this.healthBar) this.healthBar.pos = vec(100, engine.drawHeight - 100);
   }
 
   updateObjective(objective: number | string) {
     this.#objective.text = `${objective}/10`;
+    this.#objectiveProgress.setProgress(Number(objective) / 10);
   }
 
   updateTarget(target: string) {
@@ -109,6 +120,7 @@ export class BaseLevelUI extends ScreenElement {
     if (!this.#maxTime) this.#maxTime = timeLeft;
 
     if (timeLeft <= 15300 && !this.#songPlayed) {
+      this.#timeProgress.progressBarColor = "#FF0000";
       this.#songPlayed = true;
       const music = Resources.timeSound;
       music.play(0.65);
@@ -133,9 +145,7 @@ export class BaseLevelUI extends ScreenElement {
     const remainingSeconds = seconds % 60;
 
     this.#timer.text = `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
-    if (this.#maxTime !== undefined) {
-      this.#timeProgress.setProgress(timeLeft / this.#maxTime);
-    }
+    this.#timeProgress.setProgress(timeLeft / this.#maxTime);
   }
 
   onPreUpdate(engine: Engine, elapsed: number): void {
