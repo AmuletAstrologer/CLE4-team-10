@@ -18,9 +18,12 @@ import { Trash } from "../../objects/trash.js";
 import { saveScores } from "../../scores.ts";
 import { BaseLevelUI } from "../../actors/baselevelui.ts";
 import { LevelStart } from "../../actors/levelStart.ts";
+import { InGameHandleiding } from "../../actors/ingamehandleiding.js";
+import { LevelText } from "../../actors/leveltext.js";
 
 export class Level4 extends BaseScene {
   levelNumber = 4;
+  isPaused = false;
 
   //Game Timer
   gameTime = 180000; // 3 minutes
@@ -64,6 +67,10 @@ export class Level4 extends BaseScene {
 
     this.ui.z = 100;
 
+    if (this.isPaused) {
+      return;
+    }
+
     // Target switching
     this.targetTimer += delta;
 
@@ -99,6 +106,11 @@ export class Level4 extends BaseScene {
     this.ui = new BaseLevelUI({ level: 4 });
     this.ui.z = this.add(this.ui);
 
+    this.handleiding = new InGameHandleiding();
+    this.add(this.handleiding);
+
+    this.handleiding.updateObjective(LevelText.level4.objective);
+
     this.spawner = new Spawner();
     this.add(this.spawner);
 
@@ -113,6 +125,10 @@ export class Level4 extends BaseScene {
   }
 
   pickNewTarget() {
+    if (this.scene?.isPaused) {
+      return;
+    }
+
     const index = Math.floor(Math.random() * this.metalTrash.length);
 
     this.currentTarget = this.metalTrash[index];
@@ -131,6 +147,10 @@ export class Level4 extends BaseScene {
   }
 
   addScore() {
+    if (this.scene?.isPaused) {
+      return;
+    }
+
     const trash = this.hook.children[0];
 
     if (!trash) {
@@ -151,6 +171,10 @@ export class Level4 extends BaseScene {
   }
 
   addObjective() {
+    if (this.scene?.isPaused) {
+      return;
+    }
+
     this.objective++;
 
     this.ui.updateObjective(this.objective);

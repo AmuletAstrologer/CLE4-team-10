@@ -8,26 +8,28 @@ import { UI } from "./ui";
 import { BaseLevelUI } from "../../actors/baselevelui.ts";
 import { Backbutton } from "../../backbutton";
 import { LevelStart } from "../../actors/levelStart.ts";
+import { InGameHandleiding } from "../../actors/ingamehandleiding.js";
+import { LevelText } from "../../actors/leveltext.js";
 
 export class Level2 extends Scene {
   // score = 0;
   objective = 0;
+  isPaused = false;
 
-    onInitialize(engine) {
-        this.add(new Background);
+  onInitialize(engine) {
+    this.add(new Background());
 
-
-        this.createLevel();
+    this.createLevel();
 
     this.spawned = 0;
 
     this.spawner = new Spawner();
     this.add(this.spawner);
 
-        this.add(new Backbutton);
+    this.add(new Backbutton());
 
-        this.introTimer = 0;
-    }
+    this.introTimer = 0;
+  }
 
   addSpawned() {
     this.spawned++;
@@ -37,103 +39,89 @@ export class Level2 extends Scene {
     this.spawned--;
   }
 
+  onPreUpdate(engine, delta) {
+    this.introTimer += delta;
+
+    if (this.introTimer < 1000) {
+      // Fade in
+      const alpha = this.introTimer / 1000;
+
+      if (this.title) {
+        this.title.opacity = alpha;
+      }
+
+      if (this.intro) {
+        this.intro.opacity = alpha;
+      }
+    } else if (this.introTimer < 3000) {
+      // Stay visible
+      if (this.title) {
+        this.title.opacity = 1;
+      }
+
+      if (this.intro) {
+        this.intro.opacity = 1;
+      }
+    } else if (this.introTimer < 4000) {
+      // Fade out
+      const alpha = 1 - (this.introTimer - 3000) / 1000;
+
+      if (this.title) {
+        this.title.opacity = alpha;
+      }
+
+      if (this.intro) {
+        this.intro.opacity = alpha;
+      }
+    } else {
+      // Remove intro labels
+      if (this.title) {
+        this.title.kill();
+        this.title = null;
+      }
+
+      if (this.intro) {
+        this.intro.kill();
+        this.intro = null;
+      }
+    }
+  }
+
   createLevel() {
     this.add(new PlanetSpawner());
     this.add(new Hook());
-
-    this.levelStart = new LevelStart({
-      levelNumber: "Level 2",
-      levelName: "Metal Level",
-    });
-    this.add(this.levelStart);
-
-    this.ui = new BaseLevelUI({ level: 2 });
+    this.ui = new UI();
     this.add(this.ui);
+
+    this.handleiding = new InGameHandleiding();
+    this.add(this.handleiding);
+
+    this.handleiding.updateObjective(LevelText.level2.objective);
+
+    this.title = new Label({
+      text: "Level Two",
+      pos: new Vector(640, 280),
+      font: Resources.PixelFont.toFont({
+        unit: FontUnit.Px,
+        size: 60,
+        color: Color.White,
+      }),
+    });
+
+    this.title.anchor = new Vector(0.5, 0.5);
+    this.title.opacity = 0;
+
+    this.add(this.title);
   }
 
-  
-    onPreUpdate(engine, delta) {
-        this.introTimer += delta;
+  // addScore() {
+  //     this.score++;
 
-        if (this.introTimer < 1000) {
-            // Fade in
-            const alpha = this.introTimer / 1000;
+  //     this.ui.updateScore(
+  //         this.score
+  //     );
 
-            if (this.title) {
-                this.title.opacity = alpha;
-            }
-
-            if (this.intro) {
-                this.intro.opacity = alpha;
-            }
-        } else if (this.introTimer < 3000) {
-            // Stay visible
-            if (this.title) {
-                this.title.opacity = 1;
-            }
-
-            if (this.intro) {
-                this.intro.opacity = 1;
-            }
-        } else if (this.introTimer < 4000) {
-            // Fade out
-            const alpha = 1 - (this.introTimer - 3000) / 1000;
-
-            if (this.title) {
-                this.title.opacity = alpha;
-            }
-
-            if (this.intro) {
-                this.intro.opacity = alpha;
-            }
-        } else {
-            // Remove intro labels
-            if (this.title) {
-                this.title.kill();
-                this.title = null;
-            }
-
-            if (this.intro) {
-                this.intro.kill();
-                this.intro = null;
-            }
-        }
-    }
-
-
-    createLevel() {
-        this.add(new PlanetSpawner);
-        this.add(new Hook);
-        this.ui = new UI();
-        this.add(this.ui);
-
-        this.title = new Label({
-            text: "Level Two",
-            pos: new Vector(640, 280),
-            font: Resources.PixelFont.toFont({
-                unit: FontUnit.Px,
-                size: 60,
-                color: Color.White
-            })
-        });
-
-        this.title.anchor = new Vector(0.5, 0.5);
-        this.title.opacity = 0;
-
-        this.add(this.title);
-    }
-
-    // addScore() {
-    //     this.score++;
-
-    //     this.ui.updateScore(
-    //         this.score
-    //     );
-
-    // }
-
-
-
+  // }
 
   addObjective() {
     this.objective++;

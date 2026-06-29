@@ -23,8 +23,8 @@ import { AchievementManager } from "../../lib/achievementmanager.ts";
 import { LevelEnding } from "../levelEnding.js";
 import { LevelStart } from "../../actors/levelStart.ts";
 import { InGameHandleiding } from "../../actors/ingamehandleiding.js";
+import { LevelText } from "../../actors/leveltext.js";
 
-//Metal Level
 export class Level6 extends BaseScene {
   levelNumber = 6;
 
@@ -77,6 +77,8 @@ export class Level6 extends BaseScene {
 
     this.handleiding = new InGameHandleiding();
     this.add(this.handleiding);
+
+    this.handleiding.updateObjective(LevelText.level6.objective);
 
     this.spawner = new Spawner();
     this.add(this.spawner);

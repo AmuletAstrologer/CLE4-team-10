@@ -4,14 +4,13 @@ import { Hook } from "../../actors/hook";
 import { PlanetSpawner } from "../leveltwo/planetspawner";
 
 export class LevelFiveTrash extends AlteredTrash {
-
   onCollisionStart(self, other) {
-
     if (other.owner instanceof PlanetSpawner) {
+      if (this.scene?.isPaused) {
+        return;
+      }
 
-      const hook = this.scene.actors.find(
-        a => a instanceof Hook
-      );
+      const hook = this.scene.actors.find((a) => a instanceof Hook);
 
       if (hook?.hasObject) {
         return;
@@ -26,21 +25,16 @@ export class LevelFiveTrash extends AlteredTrash {
       return;
     }
 
-
     // IMPORTANT:
     // Keep the normal AlteredTrash behavior
     super.onCollisionStart(self, other);
-
   }
-
 
   setTargetTint(isTarget) {
     this.graphics.tint = isTarget ? Color.Yellow : Color.White;
 
     if (this.graphics.current) {
-      this.graphics.current.tint =
-        isTarget ? Color.Yellow : Color.White;
+      this.graphics.current.tint = isTarget ? Color.Yellow : Color.White;
     }
   }
-
 }

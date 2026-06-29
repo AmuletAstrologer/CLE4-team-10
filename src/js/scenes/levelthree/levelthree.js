@@ -23,6 +23,7 @@ import { AchievementManager } from "../../lib/achievementmanager.ts";
 import { LevelEnding } from "../levelEnding.js";
 import { LevelStart } from "../../actors/levelStart.ts";
 import { InGameHandleiding } from "../../actors/ingamehandleiding.js";
+import { LevelText } from "../../actors/leveltext.js";
 
 //Metal Level
 export class Level3 extends BaseScene {
@@ -64,6 +65,10 @@ export class Level3 extends BaseScene {
   onPreUpdate(engine, delta) {
     this.ui.z = 100;
 
+    if (this.isPaused) {
+      return;
+    }
+
     // Target switching
     this.targetTimer += delta;
 
@@ -102,7 +107,9 @@ export class Level3 extends BaseScene {
     this.add(background);
 
     this.handleiding = new InGameHandleiding();
-    this.add(this.handleiding); 
+    this.add(this.handleiding);
+
+    this.handleiding.updateObjective(LevelText.level3.objective);
 
     this.ui = new BaseLevelUI({ level: 3 });
     this.ui.z = this.add(this.ui);
@@ -121,6 +128,10 @@ export class Level3 extends BaseScene {
   }
 
   pickNewTarget() {
+    if (this.scene?.isPaused) {
+      return;
+    }
+
     const index = Math.floor(Math.random() * this.metalTrash.length);
 
     this.currentTarget = this.metalTrash[index];
@@ -139,6 +150,10 @@ export class Level3 extends BaseScene {
   }
 
   addScore() {
+    if (this.scene?.isPaused) {
+      return;
+    }
+
     const trash = this.hook.children[0];
 
     if (!trash) {
@@ -158,6 +173,10 @@ export class Level3 extends BaseScene {
   }
 
   addObjective() {
+    if (this.scene?.isPaused) {
+      return;
+    }
+
     this.objective++;
 
     this.ui.updateObjective(this.objective);
