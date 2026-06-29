@@ -89,7 +89,7 @@ export class Level2 extends BaseScene {
     }
   }
 
-    createLevel() {
+  createLevel() {
     this.add(new PlanetSpawner());
     this.add(new Hook());
     this.ui = new BaseLevelUI({ level: 2 });
@@ -99,6 +99,7 @@ export class Level2 extends BaseScene {
     this.add(this.handleiding);
 
     this.handleiding.updateObjective(LevelText.level2.objective);
+    this.ui.updateTarget("trash can't hit the planet");
 
     this.title = new Label({
       text: "Level Two",
