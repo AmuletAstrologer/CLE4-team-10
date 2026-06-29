@@ -1,20 +1,36 @@
-import { Scene, Label, Vector, Random, Font, FontUnit, Color } from "excalibur";
+import {
+  Scene,
+  Label,
+  Vector,
+  Random,
+  Font,
+  FontUnit,
+  Color,
+  Buttons,
+} from "excalibur";
 import { Bolt } from "../../objects/bolts.js";
 import { Spawner } from "./spwaner.js";
-import { UI } from "./ui.js";
 import { Hook } from "../../actors/hook.ts";
 import { Resources } from "../../resources.js";
 import { Background } from "../../background/background.js";
-import { BaseScene, createGame } from "../../objects/createGame.ts";
-// Metal Level
+import { BaseScene } from "../../objects/createGame.ts";
+import { Trash } from "../../objects/trash.js";
+import { saveScores } from "../../scores.ts";
+import { BaseLevelUI } from "../../actors/baselevelui.ts";
+import { LevelStart } from "../../actors/levelStart.ts";
 
 export class Level4 extends BaseScene {
   levelNumber = 4;
 
+  //Game Timer
+  gameTime = 1800000; // 3 minutes
+  timeLeft = 120000;
+
+  //Trash Timer
   targetTimer = 0;
   targetChangeTime = 30000; //30 seconden
 
-  metalTrash = ["Airtank", "Cilinder", "Plaat", "Satelliet"];
+  metalTrash = ["Airtank", "Cilinder", "Plaat", "Satelliet", "Piece"];
 
   currentTarget = "";
 
@@ -23,9 +39,11 @@ export class Level4 extends BaseScene {
   }
 
   onActivate() {
-    this.score = 0;
+    // this.score = 0;
     this.objective = 0;
-    this.introTimer = 0;
+    // this.introTimer = 0;
+
+    this.timeLeft = this.gameTime;
 
     // Remove old actors
     this.actors.forEach((actor) => {
@@ -39,52 +57,12 @@ export class Level4 extends BaseScene {
   }
 
   onPreUpdate(engine, delta) {
-    // Intro animation
-    this.introTimer += delta;
-
-    if (this.introTimer < 1000) {
-      // Fade in
-      const alpha = this.introTimer / 1000;
-
-      if (this.title) {
-        this.title.opacity = alpha;
-      }
-
-      if (this.intro) {
-        this.intro.opacity = alpha;
-      }
-    } else if (this.introTimer < 3000) {
-      // Stay visible
-      if (this.title) {
-        this.title.opacity = 1;
-      }
-
-      if (this.intro) {
-        this.intro.opacity = 1;
-      }
-    } else if (this.introTimer < 4000) {
-      // Fade out
-      const alpha = 1 - (this.introTimer - 3000) / 1000;
-
-      if (this.title) {
-        this.title.opacity = alpha;
-      }
-
-      if (this.intro) {
-        this.intro.opacity = alpha;
-      }
-    } else {
-      // Remove intro labels
-      if (this.title) {
-        this.title.kill();
-        this.title = null;
-      }
-
-      if (this.intro) {
-        this.intro.kill();
-        this.intro = null;
-      }
+    const gamepad = engine.input.gamepads.at(0);
+    if (gamepad?.wasButtonPressed(Buttons.Face2)) {
+      engine.goToScene("levels");
     }
+
+    // this.ui.z = 100;
 
     // Target switching
     this.targetTimer += delta;
@@ -94,43 +72,32 @@ export class Level4 extends BaseScene {
 
       this.pickNewTarget();
     }
-    // console.log("Title exists:", this.title, "Killed:", this.title?.isKilled());
+
+    this.timeLeft -= delta;
+
+    if (this.ui) {
+      this.ui.updateTimer(this.timeLeft);
+    }
+
+    if (this.timeLeft <= 0) {
+      this.timeLeft = 0;
+
+      if (this.objective >= 10) {
+        this.levelEnding();
+      } else {
+        this.defeat();
+      }
+
+      return;
+    }
   }
 
   createLevel() {
     const background = new Background();
     this.add(background);
 
-    // Level intro
-    this.title = new Label({
-      text: "Level Four",
-      pos: new Vector(640, 280),
-      font: new Font({
-        size: 60,
-        unit: FontUnit.Px,
-        color: Color.White,
-      }),
-    });
-
-    this.title.anchor = new Vector(0.5, 0.5);
-    this.title.opacity = 0;
-
-    this.intro = new Label({
-      text: "Metal Level",
-      pos: new Vector(640, 360),
-      font: new Font({
-        size: 40,
-        unit: FontUnit.Px,
-        color: Color.White,
-      }),
-    });
-
-    this.intro.anchor = new Vector(0.5, 0.5);
-    this.intro.opacity = 0;
-
-    this.ui = new UI();
-    this.ui.z = 100; // Ensure UI is on top of other actors
-    this.add(this.ui);
+    this.ui = new BaseLevelUI({ level: 4 });
+    this.ui.z = this.add(this.ui);
 
     this.spawner = new Spawner();
     this.add(this.spawner);
@@ -138,11 +105,11 @@ export class Level4 extends BaseScene {
     this.hook = new Hook();
     this.add(this.hook);
 
-    this.add(this.title);
-    this.add(this.intro);
-
-    // console.log("Title added:", this.title);
-    // console.log("Intro added:", this.intro);
+    this.levelStart = new LevelStart({
+      levelNumber: "Level 4",
+      levelName: "Metal Level",
+    });
+    this.add(this.levelStart);
   }
 
   pickNewTarget() {
@@ -150,12 +117,17 @@ export class Level4 extends BaseScene {
 
     this.currentTarget = this.metalTrash[index];
 
-    //Immeadantly remove old targets' tint color
     if (this.ui) {
       this.ui.updateTarget(this.currentTarget);
     }
 
-    // console.log("Target:", this.currentTarget);
+    for (const actor of this.actors) {
+      if (actor instanceof Trash) {
+        actor.setTargetTint(actor.type === this.currentTarget);
+      }
+    }
+
+    console.log("Target:", this.currentTarget);
   }
 
   addScore() {
@@ -169,17 +141,12 @@ export class Level4 extends BaseScene {
     //Only plus points for correct trash
     if (trash.type === this.currentTarget) {
       console.log("Correct trash");
-
-      this.score++;
     } else {
       console.log("Wrong trash:", trash.type, "Needed:", this.currentTarget);
-
-      this.ui.health.decrease();
-      this.score--;
       this.objective--;
+      this.ui.healthBar.decrease();
     }
 
-    this.ui.updateScore(this.score);
     this.ui.updateObjective(this.objective);
   }
 
@@ -188,24 +155,9 @@ export class Level4 extends BaseScene {
 
     this.ui.updateObjective(this.objective);
 
-    //Add minus score for collecting wrong thrash
     if (this.objective >= 10) {
-      this.engine.goToScene("level3Ending", {
-        sceneActivationData: {
-          score: this.score,
-        },
-      });
+      this.levelEnding();
     }
-
-    // Add proper condition for losing later
-    // if (this.objective === 1) {
-    //   this.engine.goToScene("defeatscreen", {
-    //     sceneActivationData: {
-    //       score: this.score,
-    //       restartScene: "level3",
-    //     },
-    //   });
-    // }
   }
 
   onCollision(x, y) {
@@ -236,13 +188,5 @@ export class Level4 extends BaseScene {
       bolt.pos = new Vector(x, y);
       this.add(bolt);
     }
-
-    this.removeScore();
-  }
-
-  removeScore() {
-    this.score--;
-
-    this.ui.updateScore(this.score);
   }
 }
