@@ -15,11 +15,14 @@ import { Healthbar } from "./healthbar/healthbar";
 import { Backbutton } from "../backbutton";
 import { AchievementManager } from "../lib/achievementmanager";
 import { AchievementPopup } from "./achievementPopup";
+import { ProgressBar } from "./progressbar";
 
 export class BaseLevelUI extends ScreenElement {
   healthBar: Healthbar | undefined;
   #timer: Label | undefined;
   #songPlayed: boolean = false;
+  #timeProgress: ProgressBar | undefined;
+  #maxTime: number | undefined;
 
   #objective = new Label({
     text: "0/10",
@@ -66,6 +69,14 @@ export class BaseLevelUI extends ScreenElement {
         }),
       });
       this.addChild(this.#timer);
+
+      this.#timeProgress = new ProgressBar({
+        x: 0,
+        y: 0,
+        width: 1280,
+        height: 10,
+      });
+      this.addChild(this.#timeProgress);
     }
 
     this.addChild(this.#objective);
@@ -79,6 +90,7 @@ export class BaseLevelUI extends ScreenElement {
     this.#objective.pos = vec(engine.halfDrawWidth, 30);
     this.#target.pos = vec(engine.halfDrawWidth, 80);
 
+    // if (this.#timeProgress) this.#timeProgress.width = engine.drawWidth;
     if (this.#timer) this.#timer.pos = vec(engine.drawWidth - 40, 30);
     if (this.healthBar) this.healthBar.pos = vec(100, engine.drawHeight - 100);
   }
@@ -93,7 +105,9 @@ export class BaseLevelUI extends ScreenElement {
   }
 
   updateTimer(timeLeft: number) {
-    if (!this.#timer) return;
+    if (!this.#timer || !this.#timeProgress) return;
+    if (!this.#maxTime) this.#maxTime = timeLeft;
+
     if (timeLeft <= 15300 && !this.#songPlayed) {
       this.#songPlayed = true;
       const music = Resources.timeSound;
@@ -119,6 +133,9 @@ export class BaseLevelUI extends ScreenElement {
     const remainingSeconds = seconds % 60;
 
     this.#timer.text = `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
+    if (this.#maxTime !== undefined) {
+      this.#timeProgress.setProgress(timeLeft / this.#maxTime);
+    }
   }
 
   onPreUpdate(engine: Engine, elapsed: number): void {
