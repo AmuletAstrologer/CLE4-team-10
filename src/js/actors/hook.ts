@@ -72,9 +72,9 @@ export class Hook extends Actor {
             // this.scene.addScore();
             this.scene.addObjective();
             
-            if(this.scene instanceof Level2){
-            this.scene.removeSpawned();
-            }
+            // if(this.scene instanceof Level2){
+            // this.scene.removeSpawned();
+            // }
           }
         }
       }
