@@ -15,11 +15,14 @@ import { Healthbar } from "./healthbar/healthbar";
 import { Backbutton } from "../backbutton";
 import { AchievementManager } from "../lib/achievementmanager";
 import { AchievementPopup } from "./achievementPopup";
+import { ProgressBar } from "./progressbar";
 
 export class BaseLevelUI extends ScreenElement {
   healthBar: Healthbar | undefined;
   #timer: Label | undefined;
   #songPlayed: boolean = false;
+  #timeProgress: ProgressBar | undefined;
+  #maxTime: number | undefined;
 
   #objective = new Label({
     text: "0/10",
@@ -30,6 +33,13 @@ export class BaseLevelUI extends ScreenElement {
       textAlign: TextAlign.Center,
       baseAlign: BaseAlign.Middle,
     }),
+  });
+
+  #objectiveProgress = new ProgressBar({
+    x: 0,
+    y: 710,
+    width: 1280,
+    height: 10,
   });
 
   #target = new Label({
@@ -66,9 +76,19 @@ export class BaseLevelUI extends ScreenElement {
         }),
       });
       this.addChild(this.#timer);
+
+      this.#timeProgress = new ProgressBar({
+        x: 0,
+        y: 0,
+        width: 1280,
+        height: 10,
+      });
+      this.#timeProgress.progressBarColor = "#FFA500";
+      this.addChild(this.#timeProgress);
     }
 
     this.addChild(this.#objective);
+    this.addChild(this.#objectiveProgress);
     this.addChild(this.#target);
     this.addChild(this.#backbutton);
   }
@@ -76,8 +96,10 @@ export class BaseLevelUI extends ScreenElement {
   onInitialize(engine: Engine) {
     Resources.levelSelectSound.stop();
 
-    this.#objective.pos = vec(engine.halfDrawWidth, 30);
-    this.#target.pos = vec(engine.halfDrawWidth, 80);
+    this.#objective.pos = vec(engine.halfDrawWidth, 675);
+    this.#target.pos = vec(engine.halfDrawWidth, 30);
+
+    this.#objectiveProgress.setProgress(0);
 
     if (this.#timer) this.#timer.pos = vec(engine.drawWidth - 40, 30);
     if (this.healthBar) this.healthBar.pos = vec(100, engine.drawHeight - 100);
@@ -85,6 +107,7 @@ export class BaseLevelUI extends ScreenElement {
 
   updateObjective(objective: number | string) {
     this.#objective.text = `${objective}/10`;
+    this.#objectiveProgress.setProgress(Number(objective) / 10);
   }
 
   updateTarget(target: string) {
@@ -93,8 +116,11 @@ export class BaseLevelUI extends ScreenElement {
   }
 
   updateTimer(timeLeft: number) {
-    if (!this.#timer) return;
+    if (!this.#timer || !this.#timeProgress) return;
+    if (!this.#maxTime) this.#maxTime = timeLeft;
+
     if (timeLeft <= 15300 && !this.#songPlayed) {
+      this.#timeProgress.progressBarColor = "#FF0000";
       this.#songPlayed = true;
       const music = Resources.timeSound;
       music.play(0.65);
@@ -119,6 +145,7 @@ export class BaseLevelUI extends ScreenElement {
     const remainingSeconds = seconds % 60;
 
     this.#timer.text = `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
+    this.#timeProgress.setProgress(timeLeft / this.#maxTime);
   }
 
   onPreUpdate(engine: Engine, elapsed: number): void {
@@ -129,21 +156,6 @@ export class BaseLevelUI extends ScreenElement {
     ) {
       engine.goToScene("levels");
     }
-    const achievements = AchievementManager.checkAchievements();
-    for (const a of achievements)
-      switch (a) {
-        case 1:
-          engine.currentScene.add(new AchievementPopup("Perfect Hooking"));
-          break;
-        case 2:
-          engine.currentScene.add(new AchievementPopup("Scrap Collector"));
-          break;
-        case 3:
-          engine.currentScene.add(new AchievementPopup("High Score"));
-          break;
-        case 4:
-          engine.currentScene.add(new AchievementPopup("Recycle Master"));
-          break;
-      }
+    AchievementManager.addAchievementPopup(engine);
   }
 }

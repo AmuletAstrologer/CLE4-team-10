@@ -16,6 +16,7 @@ import {
 } from "excalibur";
 import { Resources, ResourceLoader } from "../resources.js";
 import { Background } from "../background/background.js";
+import { AchievementManager } from "../lib/achievementmanager.js";
 
 export class LevelEnding extends Scene {
   onInitialize(engine) {
@@ -71,6 +72,9 @@ export class LevelEnding extends Scene {
     const data = ctx.data;
     this.score = data?.score ?? 0;
     this.levelNumber = data?.levelNumber ?? 0;
+
+    AchievementManager.completeLevel(this.levelNumber);
+
     this.title.text = `You completed level ${this.levelNumber}!`;
     if (this.levelNumber === 6) {
       this.title.text += ` Your score is ${this.score}`;

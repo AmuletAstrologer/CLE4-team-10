@@ -30,7 +30,7 @@ export class Level3 extends BaseScene {
   levelNumber = 3;
 
   //Game Timer
-  gameTime = 18000; // 3 minutes
+  gameTime = 180000; // 3 minutes
   timeLeft = 120000;
 
   //Trash Timer
