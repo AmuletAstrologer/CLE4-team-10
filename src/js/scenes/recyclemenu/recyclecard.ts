@@ -91,22 +91,7 @@ export class RecycleCard extends GenericCard {
       ScrapManager.doUpgrade(this.#upgradeType);
       const music = Resources.soundEffectSound;
       music.play(0.65);
-      const achievements = AchievementManager.checkAchievements();
-      for (const a of achievements)
-        switch (a) {
-          case 1:
-            engine.currentScene.add(new AchievementPopup("Perfect Hooking"));
-            break;
-          case 2:
-            engine.currentScene.add(new AchievementPopup("Scrap Collector"));
-            break;
-          case 3:
-            engine.currentScene.add(new AchievementPopup("High Score"));
-            break;
-          case 4:
-            engine.currentScene.add(new AchievementPopup("Recycle Master"));
-            break;
-        }
+      AchievementManager.addAchievementPopup(engine);
     });
   }
 

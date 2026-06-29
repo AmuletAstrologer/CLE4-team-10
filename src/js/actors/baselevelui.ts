@@ -156,21 +156,6 @@ export class BaseLevelUI extends ScreenElement {
     ) {
       engine.goToScene("levels");
     }
-    const achievements = AchievementManager.checkAchievements();
-    for (const a of achievements)
-      switch (a) {
-        case 1:
-          engine.currentScene.add(new AchievementPopup("Perfect Hooking"));
-          break;
-        case 2:
-          engine.currentScene.add(new AchievementPopup("Scrap Collector"));
-          break;
-        case 3:
-          engine.currentScene.add(new AchievementPopup("High Score"));
-          break;
-        case 4:
-          engine.currentScene.add(new AchievementPopup("Recycle Master"));
-          break;
-      }
+    AchievementManager.addAchievementPopup(engine);
   }
 }

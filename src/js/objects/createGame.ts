@@ -25,7 +25,9 @@ export abstract class BaseScene extends Scene {
     this.objective++;
     this.ui.updateObjective(this.objective);
     console.log(this.levelNumber);
-    if (this.objective >= 10) this.levelEnding();
+    if (this.objective >= 10) {
+      this.levelEnding();
+    }
   }
 
   levelEnding() {
