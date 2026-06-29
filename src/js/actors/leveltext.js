@@ -24,7 +24,7 @@ export const LevelText = {
   },
 
   level5: {
-    objective: "Protect the planet while \n collecting highlighted trash.",
+    objective: "Protect the planet while \ncollecting highlighted trash.",
     intro: "Everything you've learned comes together in this mission.",
     summary: "You mastered both protection and recycling."
   },
@@ -40,7 +40,7 @@ export const LevelText = {
       "Click a planet to begin.\nPress O anytime to view the controls.",
 
     intro:
-      "Welcome, Sustainer!\n\n Your mission is to restore our \nsolar system by completing \neach planet's objective.",
+      "Welcome, Sustainer!\n\nYour mission is to restore our \nsolar system by completing \neach planet's objective.",
 
     summary: ""
   }
