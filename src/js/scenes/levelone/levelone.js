@@ -27,11 +27,7 @@ export class Level1 extends BaseScene {
     this.score = 0;
     this.objective = 0;
 
-    // Remove old actors
-    this.actors.forEach((actor) => {
-      actor.kill();
-    });
-
+    this.clear();
     this.createLevel();
   }
   createLevel() {

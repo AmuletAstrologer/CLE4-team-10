@@ -26,7 +26,7 @@ export class Level4 extends BaseScene {
   isPaused = false;
 
   //Game Timer
-  gameTime = 1800000; // 3 minutes
+  gameTime = 180000; // 3 minutes
   timeLeft = 120000;
 
   //Trash Timer

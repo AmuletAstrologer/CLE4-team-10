@@ -7,6 +7,8 @@ import { Startpoint } from "../startpoint";
 import { Cursor } from "../objects/cursor";
 import { InGameHandleiding } from "../actors/ingamehandleiding";
 import { LevelText } from "../actors/leveltext";
+import { AchievementManager } from "../lib/achievementmanager";
+import { AchievementPopup } from "../actors/achievementPopup";
 
 export class LevelSummary extends Scene {
   inGameHandleiding = new InGameHandleiding();
@@ -86,9 +88,10 @@ export class LevelSummary extends Scene {
       // planet.pos = p.pos;
       this.add(planet);
     });
-    this.add(new Startpoint);
+    this.add(new Startpoint());
   }
   onActivate(context) {
+    AchievementManager.addAchievementPopup(context.engine);
     const music = Resources.levelSelectSound;
     if (!music.isPlaying()) {
       music.loop = true;
