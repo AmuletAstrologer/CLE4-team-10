@@ -5,6 +5,8 @@ import { ArrowLayer } from "../background/arrowlayer";
 import { Planet } from "../planet";
 import { Startpoint } from "../startpoint";
 import { Cursor } from "../objects/cursor";
+import { AchievementManager } from "../lib/achievementmanager";
+import { AchievementPopup } from "../actors/achievementPopup";
 
 export class LevelSummary extends Scene {
   onInitialize(engine) {
@@ -78,9 +80,10 @@ export class LevelSummary extends Scene {
       // planet.pos = p.pos;
       this.add(planet);
     });
-    this.add(new Startpoint);
+    this.add(new Startpoint());
   }
   onActivate(context) {
+    AchievementManager.addAchievementPopup(context.engine);
     const music = Resources.levelSelectSound;
     if (!music.isPlaying()) {
       music.loop = true;
@@ -114,7 +117,7 @@ export class LevelSummary extends Scene {
       );
     });
 
-     const gamepad = engine.input.gamepads.at(0);
+    const gamepad = engine.input.gamepads.at(0);
     if (gamepad?.wasButtonPressed(Buttons.Face1)) {
       if (this.hovered instanceof Planet) {
         this.hovered.events.emit("pointerup");
@@ -122,4 +125,3 @@ export class LevelSummary extends Scene {
     }
   }
 }
-
