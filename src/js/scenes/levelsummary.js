@@ -5,16 +5,24 @@ import { ArrowLayer } from "../background/arrowlayer";
 import { Planet } from "../planet";
 import { Startpoint } from "../startpoint";
 import { Cursor } from "../objects/cursor";
+import { InGameHandleiding } from "../actors/ingamehandleiding";
+import { LevelText } from "../actors/leveltext";
 import { AchievementManager } from "../lib/achievementmanager";
 import { AchievementPopup } from "../actors/achievementPopup";
 
 export class LevelSummary extends Scene {
+  inGameHandleiding = new InGameHandleiding();
+
   onInitialize(engine) {
     this.cursor = new Cursor();
     this.add(this.cursor);
     this.add(new Background());
 
     this.add(new ArrowLayer());
+
+    this.add(this.inGameHandleiding);
+
+    this.inGameHandleiding.updateText(LevelText.worldMap.intro, LevelText.worldMap.objective);
 
     const planets = [
       {

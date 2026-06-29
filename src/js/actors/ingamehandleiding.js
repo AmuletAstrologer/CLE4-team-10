@@ -11,12 +11,22 @@ import {
 } from "excalibur";
 import { Resources } from "../resources";
 import { GenericCard } from "./genericcard";
+import { LevelText } from "./leveltext";
 
 export class InGameHandleiding extends ScreenElement {
   open = false;
 
   overlay;
-  label;
+
+  label = new Label({
+    text: "",
+    pos: new Vector(350, 160),
+    color: Color.White,
+    font: Resources.PixelFont.toFont({
+      size: 28,
+      unit: FontUnit.Px,
+    }),
+  });
   card;
   helpButton;
   helpCard;
@@ -42,26 +52,6 @@ export class InGameHandleiding extends ScreenElement {
       pos: new Vector(640, 360),
       width: 700,
       height: 500,
-    });
-
-    // Controls text
-    this.label = new Label({
-      text:
-        "CONTROLS\n\n" +
-        "Move: WASD / Stick\n" +
-        "Hook: Space / A\n\n" +
-        "OBJECTIVE\n" +
-        "Protect the planet!\n\n" +
-        "Press O to close",
-
-      pos: new Vector(350, 160),
-
-      color: Color.White,
-
-      font: Resources.PixelFont.toFont({
-        size: 28,
-        unit: FontUnit.Px,
-      }),
     });
 
     this.helpCard = new GenericCard({
@@ -126,4 +116,36 @@ export class InGameHandleiding extends ScreenElement {
       console.log("Handleiding:", this.open);
     }
   }
+
+  //Welcome text (Dialoge)
+  //"Welcome Sustainer! So glad to have you."
+  //"Your objective is to save the sphere we call home!"
+  //"Go from planet to planet and complete the objectives"
+  //"The fate of our world and future is in your hands now"
+  // "Press O to close"
+
+  //Alternative text
+  //"Click a the first planet to start"
+  //"If you ever forget the controls press "O"
+  //"Warning: planet 6 is a Endeless level"
+  // "Press O to close"
+
+  updateObjective(objective) {
+    this.label.text =
+      "CONTROLS\n\n" +
+      "Move: WASD / Stick\n" +
+      "Hook: Space / A\n\n" +
+      "OBJECTIVE\n\n" +
+      objective +
+      "\n\n" +
+      "Press O to close";
+  }
+
+  updateText(title, text) {
+  this.label.text =
+    `${title}\n\n` +
+    `${text}\n\n` +
+    "Press O to close";
+}
+
 }

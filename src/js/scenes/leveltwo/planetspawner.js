@@ -3,27 +3,44 @@ import { Resources } from "../../resources";
 import { Hook } from "../../actors/hook";
 
 export class PlanetSpawner extends Actor {
-    constructor() {
-        super({ radius: Resources.yellowringPlanet.height / 2});
+  savedVelocity = null;
+
+  constructor() {
+    super({ radius: Resources.yellowringPlanet.height / 2 });
+  }
+
+  onInitialize(engine) {
+    this.rand = new Random();
+    this.graphics.use(Resources.yellowringPlanet.toSprite());
+    this.scale = new Vector(0.5, 0.5);
+    this.pos = new Vector(
+      this.rand.integer(this.width, engine.drawWidth - this.width),
+      this.rand.integer(this.height, engine.drawHeight - this.height),
+    );
+    this.vel = new Vector(this.rand.integer(30, 60), this.rand.integer(30, 60));
+  }
+
+  onPostUpdate(engine) {
+    if (this.scene?.isPaused) {
+
+        if (!this.savedVelocity) {
+            this.savedVelocity = this.vel.clone();
+            this.vel = Vector.Zero;
+        }
+
+        return;
     }
 
-    onInitialize(engine) {
-        this.rand = new Random();
-        this.graphics.use(Resources.yellowringPlanet.toSprite());
-        this.scale = new Vector(0.5, 0.5);
-        this.pos = new Vector(
-            this.rand.integer(this.width, engine.drawWidth - this.width),
-            this.rand.integer(this.height, engine.drawHeight - this.height),
-        );
-        this.vel = new Vector(this.rand.integer(30, 60), this.rand.integer(30, 60));
+    if (this.savedVelocity) {
+        this.vel = this.savedVelocity;
+        this.savedVelocity = null;
     }
 
-    onPostUpdate(engine) {
-        if (this.pos.x < 0 || this.pos.x + this.width > engine.drawWidth) {
-            this.vel.x = -this.vel.x;
-        }
-        if (this.pos.y < 0 || this.pos.y + this.height > engine.drawHeight) {
-            this.vel.y = -this.vel.y;
-        }
+    if (this.pos.x < 0 || this.pos.x + this.width > engine.drawWidth) {
+      this.vel.x = -this.vel.x;
     }
+    if (this.pos.y < 0 || this.pos.y + this.height > engine.drawHeight) {
+      this.vel.y = -this.vel.y;
+    }
+  }
 }

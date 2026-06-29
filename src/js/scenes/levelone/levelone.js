@@ -9,10 +9,14 @@ import { Background } from "../../background/background.js";
 import { saveScores } from "../../scores.ts";
 import { BaseScene, createGame } from "../../objects/createGame.ts";
 import { LevelStart } from "../../actors/levelStart.ts";
+import { InGameHandleiding } from "../../actors/ingamehandleiding.js";
+import { LevelText } from "../../actors/leveltext.js";
 
 export class Level1 extends BaseScene {
   levelNumber = 1;
   objective = 0;
+  isPaused = false;
+  inGameHandleiding = new InGameHandleiding();
 
   onInitialize(engine) {
     this.engine = engine;
@@ -27,8 +31,17 @@ export class Level1 extends BaseScene {
     this.createLevel();
   }
   createLevel() {
+    if (this.isPaused) {
+      return;
+    }
+
     this.ui = new BaseLevelUI({ level: 1 });
     this.ui.updateTarget("Grab the trash!");
+
+    this.handleiding = new InGameHandleiding();
+    this.add(this.handleiding);
+
+    this.handleiding.updateObjective(LevelText.level1.objective);
 
     this.levelStart = new LevelStart({
       levelNumber: "Level 1",

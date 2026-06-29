@@ -23,9 +23,12 @@ import { AchievementManager } from "../../lib/achievementmanager.ts";
 import { LevelEnding } from "../levelEnding.js";
 import { PlanetSpawner } from "../leveltwo/planetspawner.js";
 import { LevelFiveTrash } from "./levelfivethrash.js";
+import { InGameHandleiding } from "../../actors/ingamehandleiding.js";
+import { LevelText } from "../../actors/leveltext.js";
 
 export class Level5 extends BaseScene {
   levelNumber = 5;
+  isPaused = false;
 
   //Game Timer
   gameTime = 120000; // 2 minutes
@@ -70,6 +73,10 @@ export class Level5 extends BaseScene {
   }
 
   onPreUpdate(engine, delta) {
+    if (this.isPaused) {
+      return;
+    }
+
     this.ui.z = 100;
     // Intro animation
     this.introTimer += delta;
@@ -154,6 +161,11 @@ export class Level5 extends BaseScene {
   createLevel() {
     const background = new Background();
     this.add(background);
+
+    this.handleiding = new InGameHandleiding();
+    this.add(this.handleiding);
+
+    this.handleiding.updateObjective(LevelText.level5.objective);
 
     // Level intro
     this.title = new Label({
@@ -252,6 +264,10 @@ export class Level5 extends BaseScene {
       return;
     }
 
+    if (this.scene?.isPaused) {
+      return;
+    }
+
     ///Check
     //Only plus points for correct trash
     if (trash.type === this.currentTarget) {
@@ -266,6 +282,10 @@ export class Level5 extends BaseScene {
   }
 
   addObjective() {
+    if (this.scene?.isPaused) {
+      return;
+    }
+
     this.objective++;
 
     this.ui.updateObjective(this.objective);
@@ -276,6 +296,10 @@ export class Level5 extends BaseScene {
   }
 
   removeObjective() {
+    if (this.scene?.isPaused) {
+      return;
+    }
+
     this.objective--;
 
     if (this.objective < 0) {
