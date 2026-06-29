@@ -1,6 +1,6 @@
 export const upgradeTypes = [
   "moreHookSpace",
-  "moreHookGetSpeed",
+  "moreHookReturnSpeed",
   "moreHookThrowSpeed",
   "",
 ] as const;

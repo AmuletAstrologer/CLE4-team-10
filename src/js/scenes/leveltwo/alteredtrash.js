@@ -1,6 +1,5 @@
 import { Actor, Shape, Vector } from "excalibur";
 import { PlanetSpawner } from "./planetspawner";
-import { Hook } from "../../actors/hook";
 
 export class AlteredTrash extends Actor {
   #speed = 200;
@@ -58,11 +57,11 @@ export class AlteredTrash extends Actor {
 
     const bounds = engine.screen;
 
-    if (this.pos.x < 0 || this.pos.x > engine.drawWidth) {
-      this.vel.x *= -1;
-    }
-    if (this.pos.y < 0 || this.pos.y > engine.drawHeight) {
-      this.vel.y *= -1;
-    }
+        if (this.pos.x < 0 || this.pos.x > engine.drawWidth) {
+          this.vel.x *= -1;
+        }
+        if (this.pos.y < 0 || this.pos.y > engine.drawHeight) {
+          this.vel.y *= -1;
+        }
   }
 }

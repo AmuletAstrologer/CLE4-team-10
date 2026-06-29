@@ -15,10 +15,11 @@ import {
 import { Resources } from "../resources.js";
 import { Trash } from "../objects/trash.js";
 import { PlanetSpawner } from "../scenes/leveltwo/planetspawner.js";
-import { AlteredTrash } from "../scenes/leveltwo/alteredtrash.js";
 import { Meteor } from "../objects/meteor.js";
 import { ScrapManager } from "../lib/scrapmanager.js";
 import { BaseScene } from "../objects/createGame.js";
+import { AlteredTrash } from "../scenes/leveltwo/alteredtrash.js";
+import { Level2 } from "../scenes/leveltwo/leveltwo.js";
 import { Level4 } from "../scenes/levelfour/levelfour.js";
 import { Level6 } from "../scenes/levelsix/levelsix.js";
 
@@ -68,9 +69,12 @@ export class Hook extends Actor {
           ScrapManager.addScrap();
 
           if (this.scene instanceof BaseScene) {
-            this.scene.addScore();
-
+            // this.scene.addScore();
             this.scene.addObjective();
+            
+            if(this.scene instanceof Level2){
+            this.scene.removeSpawned();
+            }
           }
         }
       }
@@ -140,7 +144,7 @@ export class Hook extends Actor {
   ): void {
     if (
       (other.owner instanceof Trash || other.owner instanceof AlteredTrash) &&
-      this.#amountOfObjects < 1
+      this.#amountOfObjects <= 1
     ) {
       other.owner.body.collisionType = CollisionType.PreventCollision;
       other.owner.vel = vec(0, 0);
@@ -166,22 +170,19 @@ export class Hook extends Actor {
 
     this.#hasObject = true;
 
-    if (
-      this.#amountOfObjects >=
-      1 + ScrapManager.getUpgradeLevel("moreHookSpace")
-    ) {
+    if (this.#amountOfObjects >= 1) {
       this.actions.clearActions();
       this.actions.moveTo(
         this.x,
         this.y,
-        500 / 4 + ScrapManager.getUpgradeLevel("moreHookGetSpeed") * 25,
+        500 / 4 + ScrapManager.getUpgradeLevel("moreHookReturnSpeed") * 25,
       );
     }
   }
 
-  get hasObject() {
-    return this.#hasObject;
-  }
+  // get hasObject() {
+  //   return this.#hasObject;
+  // }
 
   between(x: number, min: number, max: number) {
     return x >= min && x <= max;
