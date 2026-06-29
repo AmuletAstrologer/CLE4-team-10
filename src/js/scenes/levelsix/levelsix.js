@@ -10,8 +10,8 @@ import {
   Engine,
 } from "excalibur";
 import { Bolt } from "../../objects/bolts.js";
-import { Spawner } from "./spwaner.js";
-import { BaseLevelUI } from "../../actors/baselevelui.ts";
+import { Spawner } from "./spawner.js";
+import { UI } from "./ui.js";
 import { Hook } from "../../actors/hook.ts";
 import { Resources } from "../../resources.js";
 import { Background } from "../../background/background.js";
@@ -25,73 +25,44 @@ import { LevelStart } from "../../actors/levelStart.ts";
 import { InGameHandleiding } from "../../actors/ingamehandleiding.js";
 
 //Metal Level
-export class Level3 extends BaseScene {
-  levelNumber = 3;
+export class Level6 extends BaseScene {
+  levelNumber = 6;
 
-  //Game Timer
-  gameTime = 18000; // 3 minutes
-  timeLeft = 120000;
+  score = 0;
+  timeSurvived = 0;
 
-  //Trash Timer
-  targetTimer = 0;
-  targetChangeTime = 30000; //30 seconden
+  isPaused = false;
 
-  metalTrash = ["Airtank", "Cilinder", "Plaat", "Satelliet", "Piece"];
+  onActivate() {
+    this.score = 0;
+    this.timeSurvived = 0;
 
-  currentTarget = "";
-
-  onInitialize(engine) {
-    this.engine = engine;
-  }
-
-  onActivate(engine) {
-    this.objective = 0;
-    this.introTimer = 0;
-
-    this.timeLeft = this.gameTime;
-
-    // Remove old actors
     this.actors.forEach((actor) => {
       actor.kill();
     });
 
-    this.createLevel(engine);
+    this.createLevel();
 
-    this.targetTimer = 0;
-    this.pickNewTarget();
+    if (this.ui) {
+      this.ui.updateScore(0);
+    }
   }
 
   onPreUpdate(engine, delta) {
     this.ui.z = 100;
 
-    // Target switching
-    this.targetTimer += delta;
-
-    if (this.targetTimer >= this.targetChangeTime) {
-      this.targetTimer = 0;
-
-      this.pickNewTarget();
-    }
-
-    this.timeLeft -= delta;
-
-    if (this.ui) {
-      this.ui.updateTimer(this.timeLeft);
-    }
-
-    if (this.timeLeft <= 0) {
-      this.timeLeft = 0;
-
-      if (this.objective >= 10) {
-        this.levelEnding();
-      } else {
-        this.defeat();
-      }
-
+    if (this.isPaused) {
       return;
     }
 
+    this.timeSurvived += delta;
+
+    if (this.ui) {
+      this.ui.updateTimer(this.timeSurvived);
+    }
+
     const gamepad = engine.input.gamepads.at(0);
+
     if (gamepad?.wasButtonPressed(Buttons.Face2)) {
       this.engine.goToScene("levels");
     }
@@ -101,11 +72,11 @@ export class Level3 extends BaseScene {
     const background = new Background();
     this.add(background);
 
-    this.handleiding = new InGameHandleiding();
-    this.add(this.handleiding); 
+    this.ui = new UI();
+    this.add(this.ui);
 
-    this.ui = new BaseLevelUI({ level: 3 });
-    this.ui.z = this.add(this.ui);
+    this.handleiding = new InGameHandleiding();
+    this.add(this.handleiding);
 
     this.spawner = new Spawner();
     this.add(this.spawner);
@@ -114,28 +85,36 @@ export class Level3 extends BaseScene {
     this.add(this.hook);
 
     this.levelStart = new LevelStart({
-      levelNumber: "Level 3",
-      levelName: "Metal Level",
+      levelNumber: "Level 6",
+      levelName: "Endless Level",
     });
     this.add(this.levelStart);
-  }
 
-  pickNewTarget() {
-    const index = Math.floor(Math.random() * this.metalTrash.length);
+    const backbutton = new Label({
+      text: "⇜",
+      font: Resources.PixelFont.toFont({
+        unit: FontUnit.Px,
+        size: 60,
+        color: Color.White,
+      }),
+    });
 
-    this.currentTarget = this.metalTrash[index];
+    backbutton.anchor = new Vector(0.5, 0.5);
+    backbutton.pos = new Vector(40, 40);
 
-    if (this.ui) {
-      this.ui.updateTarget(this.currentTarget);
-    }
+    this.add(backbutton);
 
-    for (const actor of this.actors) {
-      if (actor instanceof Trash) {
-        actor.setTargetTint(actor.type === this.currentTarget);
-      }
-    }
+    backbutton.on("pointerenter", () => {
+      backbutton.font.color = Color.Orange;
+    });
 
-    console.log("Target:", this.currentTarget);
+    backbutton.on("pointerleave", () => {
+      backbutton.font.color = Color.White;
+    });
+
+    backbutton.on("pointerup", () => {
+      this.engine.goToScene("levels");
+    });
   }
 
   addScore() {
@@ -146,28 +125,41 @@ export class Level3 extends BaseScene {
       return;
     }
 
-    //Only plus points for correct trash
-    if (trash.type === this.currentTarget) {
-      console.log("Correct trash");
+    this.score++;
+
+    if (this.ui) {
+      this.ui.updateScore(this.score);
     } else {
-      console.log("Wrong trash:", trash.type, "Needed:", this.currentTarget);
-      this.objective--;
-    }
-
-    this.ui.updateObjective(this.objective);
-  }
-
-  addObjective() {
-    this.objective++;
-
-    this.ui.updateObjective(this.objective);
-
-    if (this.objective >= 10) {
-      this.levelEnding();
+      this.score--;
+      this.loseHealth();
+      this.removeScore();
     }
   }
 
-  onCollision(x, y) {
+  loseHealth() {
+    if (this.ui?.health) {
+      this.ui.health.decrease();
+    }
+
+    if (this.scene?.isPaused) {
+      return;
+    }
+  }
+
+  removeScore() {
+    this.score--;
+
+    if (this.score < 0) {
+      this.score = 0;
+    }
+
+    if (this.ui) {
+      this.ui.updateScore(this.score);
+      this.ui.health.decrease();
+    }
+  }
+
+  onCollision(x, y, other) {
     const rand = new Random(1244);
     const speed = 200;
 
@@ -194,6 +186,12 @@ export class Level3 extends BaseScene {
       bolt.vel = dir.scale(speed);
       bolt.pos = new Vector(x, y);
       this.add(bolt);
+    }
+
+    if (!(other instanceof Bolt)) {
+      this.score--;
+      this.loseHealth();
+      this.removeScore();
     }
   }
 }

@@ -15,11 +15,13 @@ import {
 import { Resources } from "../resources.js";
 import { Trash } from "../objects/trash.js";
 import { PlanetSpawner } from "../scenes/leveltwo/planetspawner.js";
-import { AlteredTrash } from "../scenes/leveltwo/alteredtrash.js";
 import { Meteor } from "../objects/meteor.js";
 import { ScrapManager } from "../lib/scrapmanager.js";
 import { BaseScene } from "../objects/createGame.js";
+import { AlteredTrash } from "../scenes/leveltwo/alteredtrash.js";
+import { Level2 } from "../scenes/leveltwo/leveltwo.js";
 import { Level4 } from "../scenes/levelfour/levelfour.js";
+import { Level6 } from "../scenes/levelsix/levelsix.js";
 
 export class Hook extends Actor {
   #moveTime = 0;
@@ -48,6 +50,10 @@ export class Hook extends Actor {
   }
 
   onPreUpdate(engine: Engine, delta: number): void {
+    if (this.scene instanceof BaseScene && this.scene.isPaused) {
+      return;
+    }
+
     if (this.#moveTime >= 0 && this.#isMoving) {
       this.#moveTime -= delta;
     }
@@ -59,12 +65,16 @@ export class Hook extends Actor {
       this.between(this.pos.y, this.y - 5, this.y + 5)
     ) {
       if (this.children.length > 0) {
-        for (const child of this.children) {
+        for (const child in this.children) {
           ScrapManager.addScrap();
 
           if (this.scene instanceof BaseScene) {
-            this.scene.addScore();
+            // this.scene.addScore();
             this.scene.addObjective();
+            
+            if(this.scene instanceof Level2){
+            this.scene.removeSpawned();
+            }
           }
         }
       }
@@ -81,6 +91,7 @@ export class Hook extends Actor {
     }
     const gamepad = engine.input.gamepads.at(0);
     const x = gamepad?.getAxes(Axes.LeftStickX) ?? 0;
+    const y = gamepad?.getAxes(Axes.LeftStickY) ?? 0;
     if (!this.#isMoving) {
       this.rotation += x * 0.025;
     }
@@ -143,7 +154,7 @@ export class Hook extends Actor {
       this.#amountOfObjects++;
     }
     if (other.owner instanceof Meteor) {
-      this.#amountOfObjects = 1;
+      this.#amountOfObjects = 1 + ScrapManager.getUpgradeLevel("moreHookSpace");
       // this.#hasObject = true;
       // this.actions.moveTo(
       //   this.x,
@@ -169,9 +180,9 @@ export class Hook extends Actor {
     }
   }
 
-  get hasObject() {
-    return this.#hasObject;
-  }
+  // get hasObject() {
+  //   return this.#hasObject;
+  // }
 
   between(x: number, min: number, max: number) {
     return x >= min && x <= max;

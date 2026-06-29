@@ -1,6 +1,6 @@
 import { Actor, Timer, Vector, Random } from "excalibur";
 import { Resources } from "../../resources";
-import { Trash } from "../../objects/trash";
+import { LevelFiveTrash } from "./levelfivethrash";
 import { Meteor } from "../../objects/meteor";
 
 export class Spawner extends Actor {
@@ -50,7 +50,7 @@ export class Spawner extends Actor {
       interval: 3600,
 
       fcn: () => {
-        const trash = new Trash();
+        const trash = new LevelFiveTrash();
 
         const chosen =
           trashTypes[rand.integer(0, trashTypes.length - 1)];

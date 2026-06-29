@@ -1,14 +1,9 @@
-import {
-  Actor,
-  Vector,
-  Shape,
-  CollisionType,
-  Color
-} from "excalibur";
+import { Actor, Vector, Shape, CollisionType, Color } from "excalibur";
 import { Resources } from "../resources.js";
 
 export class Trash extends Actor {
   #speed = 200;
+  #oldVelocity = null;
 
   constructor() {
     super({
@@ -31,31 +26,54 @@ export class Trash extends Actor {
     this.scale = new Vector(0.12, 0.12);
 
     this.on("collisionstart", (e) => {
+      if (this.scene?.isPaused) {
+        return;
+      }
+
       if (e.other.owner instanceof Trash) {
         if (this.scene?.allowTrashDestruction === false) {
           return;
         }
+
         this.kill();
         e.other.owner.kill();
+
         const self = this.pos;
         const other = e.other.owner.pos;
 
         const x = (self.x + other.x) / 2;
         const y = (self.y + other.y) / 2;
 
-        this.scene?.onCollision(x, y);
+        this.scene?.onCollision(x, y, e.other.owner);
       }
     });
   }
+
   onPostUpdate(engine, delta) {
+    // Pause movement
+    if (this.scene?.isPaused) {
+      if (this.#oldVelocity === null) {
+        this.#oldVelocity = this.vel.clone();
+        this.vel = Vector.Zero;
+      }
+
+      return;
+    }
+
+    // Resume movement
+    if (this.#oldVelocity !== null) {
+      this.vel = this.#oldVelocity;
+      this.#oldVelocity = null;
+    }
+
     const bounds = engine.screen;
 
     if (this.pos.x < 0 || this.pos.x > engine.drawWidth) {
       this.vel.x *= -1;
     }
+
     if (this.pos.y < 0 || this.pos.y > engine.drawHeight) {
       this.vel.y *= -1;
     }
-    
   }
 }

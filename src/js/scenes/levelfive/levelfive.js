@@ -7,7 +7,7 @@ import {
   FontUnit,
   Color,
   Buttons,
-  Engine
+  Engine,
 } from "excalibur";
 import { Bolt } from "../../objects/bolts.js";
 import { Spawner } from "./spawner.js";
@@ -22,9 +22,7 @@ import { saveScores } from "../../scores.ts";
 import { AchievementManager } from "../../lib/achievementmanager.ts";
 import { LevelEnding } from "../levelEnding.js";
 import { PlanetSpawner } from "../leveltwo/planetspawner.js";
-import { AlteredTrash } from "../leveltwo/alteredtrash.js";
-
-//Metal Level
+import { LevelFiveTrash } from "./levelfivethrash.js";
 
 export class Level5 extends BaseScene {
   levelNumber = 5;
@@ -37,7 +35,16 @@ export class Level5 extends BaseScene {
   targetTimer = 0;
   targetChangeTime = 30000; //30 seconden
 
-  metalTrash = ["Airtank", "Cilinder", "Plaat", "Satelliet", "Piece", "Fragment", "Helm", "Module"];
+  metalTrash = [
+    "Airtank",
+    "Cilinder",
+    "Plaat",
+    "Satelliet",
+    "Piece",
+    "Fragment",
+    "Helm",
+    "Module",
+  ];
 
   currentTarget = "";
 
@@ -175,7 +182,7 @@ export class Level5 extends BaseScene {
     this.intro.anchor = new Vector(0.5, 0.5);
     this.intro.opacity = 0;
 
-      const backbutton = new Label({
+    const backbutton = new Label({
       text: "⇜",
       font: Resources.PixelFont.toFont({
         unit: FontUnit.Px,
@@ -198,7 +205,7 @@ export class Level5 extends BaseScene {
     });
 
     backbutton.on("pointerup", () => {
-       this.engine.goToScene("levels");
+      this.engine.goToScene("levels");
     });
 
     this.ui = new UI();
@@ -229,7 +236,7 @@ export class Level5 extends BaseScene {
     }
 
     for (const actor of this.actors) {
-      if (actor instanceof Trash) {
+      if (actor instanceof LevelFiveTrash) {
         actor.setTargetTint(actor.type === this.currentTarget);
       }
     }
@@ -245,7 +252,7 @@ export class Level5 extends BaseScene {
       return;
     }
 
-    ///Check 
+    ///Check
     //Only plus points for correct trash
     if (trash.type === this.currentTarget) {
       console.log("Correct trash");
@@ -266,6 +273,16 @@ export class Level5 extends BaseScene {
     if (this.objective >= 10) {
       this.levelEnding();
     }
+  }
+
+  removeObjective() {
+    this.objective--;
+
+    if (this.objective < 0) {
+      this.objective = 0;
+    }
+
+    this.ui.updateObjective(this.objective);
   }
 
   onCollision(x, y) {
