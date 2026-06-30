@@ -114,7 +114,7 @@ export class InGameHandleiding extends ScreenElement {
     const gamepad = engine.input.gamepads.at(0);
     if (
       engine.input.keyboard.wasPressed(Keys.O) ||
-      gamepad?.wasButtonPressed(Buttons.Face3)
+      gamepad?.wasButtonPressed(Buttons.Face4)
     ) {
       this.toggleMenu(engine);
 
