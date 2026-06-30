@@ -10,6 +10,7 @@ import { BaseScene, createGame } from "../../objects/createGame.ts";
 import { InGameHandleiding } from "../../actors/ingamehandleiding.js";
 import { LevelText } from "../../actors/leveltext.js";
 import { BaseLevelUI } from "../../actors/baselevelui.ts";
+import { LevelEnding } from "../levelEnding.js";
 
 export class Level2 extends BaseScene {
   levelNumber = 2;
@@ -146,11 +147,7 @@ export class Level2 extends BaseScene {
     this.ui.updateObjective(this.objective);
 
     if (this.objective >= 10) {
-      this.engine.goToScene("level3Ending", {
-        sceneActivationData: {
-          score: this.score,
-        },
-      });
+      this.levelEnding();
     }
   }
 
