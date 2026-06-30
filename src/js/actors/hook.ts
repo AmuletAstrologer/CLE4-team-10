@@ -112,8 +112,9 @@ export class Hook extends Actor {
     }
 
     if (
-      engine.input.keyboard.isHeld(Keys.Space) ||
-      (gamepad?.wasButtonPressed(Buttons.Face1) && !this.#isMoving)
+      (engine.input.keyboard.isHeld(Keys.Space) ||
+        gamepad?.wasButtonPressed(Buttons.Face1)) &&
+      !this.#isMoving
     ) {
       const dx = Math.sin(this.rotation);
       const dy = -Math.cos(this.rotation);

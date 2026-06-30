@@ -42,16 +42,11 @@ export class Level4 extends BaseScene {
   }
 
   onActivate() {
-    // this.score = 0;
     this.objective = 0;
-    // this.introTimer = 0;
-
     this.timeLeft = this.gameTime;
 
     // Remove old actors
-    this.actors.forEach((actor) => {
-      actor.kill();
-    });
+    this.clear();
 
     this.createLevel();
 
@@ -64,8 +59,6 @@ export class Level4 extends BaseScene {
     if (gamepad?.wasButtonPressed(Buttons.Face2)) {
       engine.goToScene("levels");
     }
-
-    // this.ui.z = 100;
 
     if (this.isPaused) {
       return;
@@ -187,7 +180,7 @@ export class Level4 extends BaseScene {
     }
 
     this.ui.updateObjective(this.objective);
-    
+
     if (this.objective >= 10) {
       this.levelEnding();
     }
