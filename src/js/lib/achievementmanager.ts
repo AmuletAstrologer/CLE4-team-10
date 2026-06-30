@@ -57,7 +57,7 @@ export class AchievementManager {
     const achievements = AchievementManager.getAchievements();
     if (this.checkAchievement1(achievements)) unlocked.push(1);
     if (this.checkAchievement2(achievements)) unlocked.push(2);
-    // if (this.checkAchievement3(score)) unlocked.push(3);
+    if (this.checkAchievement3(achievements)) unlocked.push(3);
     if (this.checkAchievement4(achievements)) unlocked.push(4);
     localStorage.setItem("achievements", JSON.stringify(achievements));
     return unlocked;
@@ -98,11 +98,12 @@ export class AchievementManager {
     }
     return false;
   }
-  static checkAchievement3(
-    achievements: Partial<Achievements>,
-    score: number,
-  ): boolean {
-    if (score > 14) {
+  static checkAchievement3(achievements: Partial<Achievements>): boolean {
+    const levelScore = this.getLevelCompletion();
+    const levelSix = levelScore.levels?.find(
+      (level: any) => level.number === 6,
+    );
+    if (levelSix.score > 12) {
       const highscore = achievements.achievements?.find(
         (achievement) => achievement.name === "High Score",
       );
@@ -165,20 +166,33 @@ export class AchievementManager {
             number: 4,
             completed: false,
           },
+          {
+            number: 5,
+            completed: false,
+          },
+          {
+            number: 6,
+            score: 0,
+          },
         ],
       };
     }
     return JSON.parse(levels);
   }
-  public static completeLevel(levelNumber: number) {
+  public static completeLevel(levelNumber: number, score?: number) {
     const data = this.getLevelCompletion();
 
     const levels = data.levels ?? [];
 
     const level = levels.find((l: any) => l.number === levelNumber);
-
-    if (level) {
-      level.completed = true;
+    if (levelNumber === 6) {
+      if (level.score < score) {
+        level.score = score;
+      }
+    } else {
+      if (level) {
+        level.completed = true;
+      }
     }
     localStorage.setItem("levels", JSON.stringify(data));
   }

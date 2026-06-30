@@ -8,6 +8,7 @@ import {
   Vector,
   Actor,
   Rectangle,
+  Buttons,
 } from "excalibur";
 import { Resources } from "../resources";
 import { GenericCard } from "./genericcard";
@@ -110,7 +111,11 @@ export class InGameHandleiding extends ScreenElement {
   }
 
   onPreUpdate(engine) {
-    if (engine.input.keyboard.wasPressed(Keys.O)) {
+    const gamepad = engine.input.gamepads.at(0);
+    if (
+      engine.input.keyboard.wasPressed(Keys.O) ||
+      gamepad?.wasButtonPressed(Buttons.Face4)
+    ) {
       this.toggleMenu(engine);
 
       console.log("Handleiding:", this.open);
@@ -142,10 +147,6 @@ export class InGameHandleiding extends ScreenElement {
   }
 
   updateText(title, text) {
-  this.label.text =
-    `${title}\n\n` +
-    `${text}\n\n` +
-    "Press O to close";
-}
-
+    this.label.text = `${title}\n\n` + `${text}\n\n` + "Press O to close";
+  }
 }
