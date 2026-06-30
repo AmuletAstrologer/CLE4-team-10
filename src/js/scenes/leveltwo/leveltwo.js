@@ -39,7 +39,6 @@ export class Level2 extends BaseScene {
 
   removeSpawned() {
     this.spawned--;
-    console.log("spawned: " + this.spawned);
   }
 
   onPreUpdate(engine, delta) {

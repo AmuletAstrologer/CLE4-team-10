@@ -24,7 +24,7 @@ export const LevelText = {
   },
 
   level5: {
-    objective: "Protect the planet while \ncollecting highlighted trash.",
+    objective: "Protect the planet while \ncollecting highlighted trash. \nOnly highlighted trash\ncan harm the planet.",
     intro: "Everything you've learned comes together in this mission.",
     summary: "You mastered both protection and recycling."
   },
