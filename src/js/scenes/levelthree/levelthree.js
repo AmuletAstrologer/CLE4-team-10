@@ -52,9 +52,7 @@ export class Level3 extends BaseScene {
     this.timeLeft = this.gameTime;
 
     // Remove old actors
-    this.actors.forEach((actor) => {
-      actor.kill();
-    });
+    this.clear();
 
     this.createLevel(engine);
 

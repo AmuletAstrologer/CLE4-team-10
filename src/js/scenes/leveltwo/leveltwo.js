@@ -9,8 +9,11 @@ import { Backbutton } from "../../backbutton";
 import { BaseScene, createGame } from "../../objects/createGame.ts";
 import { InGameHandleiding } from "../../actors/ingamehandleiding.js";
 import { LevelText } from "../../actors/leveltext.js";
+import { BaseLevelUI } from "../../actors/baselevelui.ts";
+import { LevelEnding } from "../levelEnding.js";
 
 export class Level2 extends BaseScene {
+  levelNumber = 2;
   // score = 0;
   objective = 0;
   isPaused = false;
@@ -89,13 +92,14 @@ export class Level2 extends BaseScene {
   createLevel() {
     this.add(new PlanetSpawner());
     this.add(new Hook());
-    this.ui = new UI();
+    this.ui = new BaseLevelUI({ level: 2 });
     this.add(this.ui);
 
     this.handleiding = new InGameHandleiding();
     this.add(this.handleiding);
 
     this.handleiding.updateObjective(LevelText.level2.objective);
+    this.ui.updateTarget("trash can't hit the planet");
 
     this.title = new Label({
       text: "Level Two",
@@ -142,11 +146,7 @@ export class Level2 extends BaseScene {
     this.ui.updateObjective(this.objective);
 
     if (this.objective >= 10) {
-      this.engine.goToScene("level3Ending", {
-        sceneActivationData: {
-          score: this.score,
-        },
-      });
+      this.levelEnding();
     }
   }
 
