@@ -37,9 +37,7 @@ export class Level6 extends BaseScene {
     this.score = 0;
     this.timeSurvived = 0;
 
-    this.actors.forEach((actor) => {
-      actor.kill();
-    });
+    this.clear();
 
     this.createLevel();
 
@@ -141,6 +139,7 @@ export class Level6 extends BaseScene {
   loseHealth() {
     if (this.ui?.health) {
       this.ui.health.decrease();
+      AchievementManager.completeLevel(this.levelNumber, this.score);
     }
 
     if (this.scene?.isPaused) {
@@ -148,6 +147,9 @@ export class Level6 extends BaseScene {
     }
   }
 
+  addObjective() {
+    return;
+  }
 
   onCollision(x, y, other) {
     const rand = new Random(1244);
