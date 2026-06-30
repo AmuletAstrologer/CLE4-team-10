@@ -165,6 +165,14 @@ export class AchievementManager {
             number: 4,
             completed: false,
           },
+          {
+            number: 5,
+            completed: false,
+          },
+          {
+            number: 6,
+            score: 0,
+          },
         ],
       };
     }
