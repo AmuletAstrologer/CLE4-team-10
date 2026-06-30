@@ -21,8 +21,6 @@ import { ScrapManager } from "../lib/scrapmanager.js";
 import { BaseScene } from "../objects/createGame.js";
 import { AlteredTrash } from "../scenes/leveltwo/alteredtrash.js";
 import { Level2 } from "../scenes/leveltwo/leveltwo.js";
-import { Level4 } from "../scenes/levelfour/levelfour.js";
-import { Level6 } from "../scenes/levelsix/levelsix.js";
 
 export class Hook extends Actor {
   #moveTime = 0;
@@ -51,6 +49,7 @@ export class Hook extends Actor {
   }
 
   onPreUpdate(engine: Engine, delta: number): void {
+    // @ts-expect-error
     if (this.scene instanceof BaseScene && this.scene.isPaused) {
       return;
     }
@@ -72,10 +71,10 @@ export class Hook extends Actor {
           if (this.scene instanceof BaseScene) {
             // this.scene.addScore();
             this.scene.addObjective();
+          }
 
-            // if(this.scene instanceof Level2){
-            // this.scene.removeSpawned();
-            // }
+          if (this.scene.levelNumber === 2) {
+            this.scene?.removeSpawned();
           }
         }
       }
@@ -114,8 +113,9 @@ export class Hook extends Actor {
     }
 
     if (
-      engine.input.keyboard.isHeld(Keys.Space) ||
-      (gamepad?.wasButtonPressed(Buttons.Face1) && !this.#isMoving)
+      (engine.input.keyboard.isHeld(Keys.Space) ||
+        gamepad?.wasButtonPressed(Buttons.Face1)) &&
+      !this.#isMoving
     ) {
       const dx = Math.sin(this.rotation);
       const dy = -Math.cos(this.rotation);
