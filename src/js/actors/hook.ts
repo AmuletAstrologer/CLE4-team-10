@@ -76,6 +76,10 @@ export class Hook extends Actor {
             // if(this.scene instanceof Level2){
             // this.scene.removeSpawned();
             // }
+
+            if (this.scene.levelNumber === 6) {
+                 this.scene?.addScore();
+            }
           }
         }
       }
