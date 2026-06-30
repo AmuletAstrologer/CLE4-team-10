@@ -148,18 +148,6 @@ export class Level6 extends BaseScene {
     }
   }
 
-  removeScore() {
-    this.score--;
-
-    if (this.score < 0) {
-      this.score = 0;
-    }
-
-    if (this.ui) {
-      this.ui.updateScore(this.score);
-      this.ui.health.decrease();
-    }
-  }
 
   onCollision(x, y, other) {
     const rand = new Random(1244);
@@ -193,7 +181,6 @@ export class Level6 extends BaseScene {
     if (!(other instanceof Bolt)) {
       this.score--;
       this.loseHealth();
-      this.removeScore();
     }
   }
 }
