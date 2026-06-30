@@ -39,7 +39,7 @@ export class Spawner extends Actor {
 
         const trash = new Trash();
 
-        if (Math.random() < 0.4 && engine.currentScene.currentTarget) {
+        if (Math.random() < 0.49 && engine.currentScene.currentTarget) {
           const chosen = trashTypes.find(
             (trash) => trash.type === engine.currentScene.currentTarget,
           );

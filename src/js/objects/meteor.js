@@ -14,6 +14,8 @@ import { Trash } from "./trash.js";
 
 export class Meteor extends Actor {
   #speed = 200;
+  #oldVelocity = null;
+
   constructor() {
     super({
       width: 1,
@@ -29,6 +31,10 @@ export class Meteor extends Actor {
 
   onInitialize(engine) {
     this.on("collisionstart", (evt) => {
+      if (this.scene?.isPaused) {
+        return;
+      }
+
       const other = evt.other.owner;
 
       if (other instanceof Trash) {
@@ -38,5 +44,23 @@ export class Meteor extends Actor {
         // this.kill();
       }
     });
+  }
+
+  onPostUpdate(engine) {
+    // Pause
+    if (this.scene?.isPaused) {
+      if (this.#oldVelocity === null) {
+        this.#oldVelocity = this.vel.clone();
+        this.vel = Vector.Zero;
+      }
+
+      return;
+    }
+
+    // Resume
+    if (this.#oldVelocity !== null) {
+      this.vel = this.#oldVelocity;
+      this.#oldVelocity = null;
+    }
   }
 }

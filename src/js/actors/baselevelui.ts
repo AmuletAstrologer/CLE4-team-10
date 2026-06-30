@@ -136,6 +136,9 @@ export class BaseLevelUI extends ScreenElement {
     Plate: Resources.AfvalPaneel,
     Satellite: Resources.AfvalSatelliet,
     Piece: Resources.AfvalPlaat,
+    Helm: Resources.AfvalHelm,
+    Fragment: Resources.AfvalFragment,
+    Module: Resources.AfvalModule,
   };
 
   if (icons[target]) {
